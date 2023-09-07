@@ -3,3 +3,4 @@
 - Blackboard clone / student app
 - Stratbook for Counter-Strike
 - Equipment booking app
+- Social GeoGuessr app
