@@ -21,7 +21,7 @@ It should contain course information and notifications about deadlines for assig
   - Communicating with lecturers about courses
 - Push notifications
 - Storing data
-  - Remotely in Firebase
+  - Remotely in backend
   - Forms with validation logic
 - Authentication
   - Login
@@ -34,5 +34,5 @@ It should contain course information and notifications about deadlines for assig
 
 ## Architecture
 
-Our architecture is a simple model where we utilize Firebase as a backend, which the app communicates with through the Firebase SDK.
+Our architecture is a simple model where we utilize a backend as a service, which the app communicates with through an SDK.
 The app is built with React Native, with the goal of being able to cross-compile the application to both iOS and Android platforms.
