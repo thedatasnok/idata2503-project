@@ -1,4 +1,5 @@
 import type { ExpoConfig } from '@expo/config';
+import 'dotenv/config';
 
 export default {
   expo: {
@@ -32,5 +33,11 @@ export default {
       favicon: './assets/favicon.png',
     },
     plugins: ['expo-router'],
+    extra: {
+      supabase: {
+        url: process.env.SUPABASE_URL,
+        anonKey: process.env.SUPABASE_ANON_KEY,
+      },
+    },
   } satisfies ExpoConfig,
 };
