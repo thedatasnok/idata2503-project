@@ -1,5 +1,5 @@
 import i18n from '@/i18n';
-import { config } from '@/theme';
+import config from '@/theme';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
