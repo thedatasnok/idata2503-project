@@ -7,8 +7,12 @@ import {
   MessageSquareIcon,
   SettingsIcon,
 } from 'lucide-react-native';
+import { usePathname, useRouter } from 'expo-router';
 
 const NavigationBar = () => {
+  const path = usePathname();
+  const router = useRouter();
+
   return (
     <Box
       display='flex'
@@ -20,11 +24,40 @@ const NavigationBar = () => {
       borderTopWidth={1}
       borderTopColor='$gray300'
     >
-      <Tab icon={HomeIcon} label='Home' />
-      <Tab active icon={BookMarkedIcon} label='Courses' />
-      <Tab icon={CalendarDaysIcon} label='Schedule' />
-      <Tab icon={MessageSquareIcon} label='Messages' />
-      <Tab icon={SettingsIcon} label='Settings' />
+      <Tab
+        active={path === '/'}
+        icon={HomeIcon}
+        label='Home'
+        onPress={() => router.push('/')}
+      />
+
+      <Tab
+        active={path.startsWith('/courses')}
+        icon={BookMarkedIcon}
+        label='Courses'
+        onPress={() => router.push('/courses/')}
+      />
+
+      <Tab
+        active={path.startsWith('/schedule')}
+        icon={CalendarDaysIcon}
+        label='Schedule'
+        onPress={() => router.push('/schedule')}
+      />
+
+      <Tab
+        active={path.startsWith('/messages')}
+        icon={MessageSquareIcon}
+        label='Messages'
+        onPress={() => router.push('/messages/')}
+      />
+
+      <Tab
+        active={path.startsWith('/settings')}
+        icon={SettingsIcon}
+        label='Settings'
+        onPress={() => router.push('/settings')}
+      />
     </Box>
   );
 };

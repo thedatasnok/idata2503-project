@@ -4,7 +4,7 @@
 ## Useful resources
 
 - [Use case diagram](docs/diagrams/use-cases.drawio.svg)
-- [Figma wireframe](https://www.figma.com/file/bxtclztaQN2EbRWWXXD8Kh/Wireframe?type=design&node-id=3%3A55&mode=design&t=QLLdFZxCFHf8rqwO-1)
+- [Figma wireframe](https://www.figma.com/file/bxtclztaQN2EbRWWXXD8Kh/Wireframe?type=design&node-id=0-1&mode=design)
 
 ## Contributing
 

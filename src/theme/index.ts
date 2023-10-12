@@ -1,4 +1,11 @@
-import { createConfig, config as defaultConfig } from '@gluestack-ui/themed';
+import {
+  createComponents,
+  createConfig,
+  config as defaultConfig,
+} from '@gluestack-ui/themed';
+import * as customComponents from './components';
+
+export const components = createComponents(customComponents);
 
 export const config = createConfig({
   ...defaultConfig.theme,
@@ -64,4 +71,9 @@ export const getToken = <TokenType extends keyof Config['tokens']>(
   value: keyof Config['tokens'][TokenType]
 ) => {
   return config.tokens[type][value];
+};
+
+export default {
+  ...config,
+  components,
 };
