@@ -42,7 +42,7 @@ const NavigationBar = () => {
         active={path.startsWith('/schedule')}
         icon={CalendarDaysIcon}
         label='Schedule'
-        onPress={() => router.push('/schedule')}
+        onPress={() => router.push('/schedule/')}
       />
 
       <Tab
@@ -84,6 +84,7 @@ const TabContainer = styled(Pressable, {
   },
 });
 
+// @ts-ignore
 const TabIcon = styled(Icon, {
   color: '$gray800',
   ':active': {
