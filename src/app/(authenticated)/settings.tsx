@@ -1,7 +1,11 @@
-import { Text } from '@gluestack-ui/themed';
+import Header from '@/components/navigation/Header';
 
 const SettingsScreen = () => {
-  return <Text>Settings</Text>;
+  return (
+    <>
+      <Header title='Settings' />
+    </>
+  );
 };
 
 export default SettingsScreen;
