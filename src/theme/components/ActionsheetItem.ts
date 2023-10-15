@@ -1,6 +1,6 @@
 import { createStyle } from '@gluestack-style/react';
 
-export const SelectActionsheetItem = createStyle({
+export const ActionsheetItem = createStyle({
   p: '$3',
   flexDirection: 'row',
   alignItems: 'center',
@@ -12,11 +12,11 @@ export const SelectActionsheetItem = createStyle({
   },
 
   ':hover': {
-    bg: '$gray100',
+    bg: '$gray50',
   },
 
   ':active': {
-    bg: '$gray200',
+    bg: '$gray100',
   },
 
   ':focus': {
