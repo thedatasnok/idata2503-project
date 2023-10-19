@@ -1,11 +1,13 @@
+import { useEvent } from '@/services/schedule';
 import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { XIcon } from 'lucide-react-native';
 import { WebView } from 'react-native-webview';
 
 const ScheduleEventScreen = () => {
-  const { id: _id } = useLocalSearchParams();
+  const { id: eventId } = useLocalSearchParams();
   const router = useRouter();
+  const { data } = useEvent(eventId as string);
 
   const onCancel = () => {
     router.back();
@@ -30,12 +32,7 @@ const ScheduleEventScreen = () => {
         </Pressable>
       </Box>
 
-      <WebView
-        source={{
-          // TODO: Read this from the found event
-          uri: 'https://google.com/',
-        }}
-      />
+      {data && <WebView source={{ uri: data.map_url }} />}
     </>
   );
 };

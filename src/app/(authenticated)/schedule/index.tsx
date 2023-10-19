@@ -1,5 +1,6 @@
 import Header from '@/components/navigation/Header';
 import { IconType } from '@/icon';
+import { useEvents } from '@/services/schedule';
 import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
@@ -19,42 +20,21 @@ const enum EventType {
   EXAM = 'EXAM',
 }
 
-// TODO: Replace these with data loaded from backend
-const events = [
-  {
-    id: 'temp',
-    courseCode: 'IDATA2503',
-    eventType: EventType.LAB,
-    startsAt: dayjs('2023-10-16 08:15').toDate(),
-    endsAt: dayjs('2023-10-16 10:00').toDate(),
-    locationCode: 'L167',
-  },
-  {
-    id: 'temp2',
-    courseCode: 'IDATA2505',
-    eventType: EventType.LAB,
-    startsAt: dayjs('2023-10-16 10:15').toDate(),
-    endsAt: dayjs('2023-10-16 12:00').toDate(),
-    locationCode: 'L167',
-  },
-  {
-    id: 'temp3',
-    courseCode: 'IDATA2502',
-    eventType: EventType.LECTURE,
-    startsAt: dayjs('2023-10-17 08:15').toDate(),
-    endsAt: dayjs('2023-10-17 14:00').toDate(),
-    locationCode: 'L167',
-  },
-] as const;
-
 const ScheduleScreen = () => {
   const [period, setPeriod] = useState(new Date());
+  const { data: events, isError, error } = useEvents({ month: period });
   const listRef = useRef<FlatList>(null);
   const router = useRouter();
 
   useEffect(() => {
+    console.log(isError, error);
+  }, [error]);
+
+  useEffect(() => {
+    if (!events) return;
+
     const index = events.findIndex((e) =>
-      dayjs(e.startsAt).isSame(new Date(), 'day')
+      dayjs(e.starts_at).isSame(new Date(), 'day')
     );
 
     if (index !== -1) {
@@ -83,15 +63,15 @@ const ScheduleScreen = () => {
         }}
         renderItem={({ item: event, index: i }) => (
           <ScheduleEvent
-            key={event.id}
-            previousEventDate={events[i - 1]?.startsAt}
-            nextEventDate={events[i + 1]?.endsAt}
-            courseCode={event.courseCode}
-            startsAt={event.startsAt}
-            endsAt={event.endsAt}
-            eventType={event.eventType}
-            locationCode={event.locationCode}
-            onPress={() => router.push(`/schedule/${event.id}`)}
+            key={event.course_event_id}
+            previousEventDate={events?.[i - 1]?.starts_at}
+            nextEventDate={events?.[i + 1]?.starts_at}
+            courseCode={event.course_code}
+            startsAt={event.starts_at}
+            endsAt={event.ends_at}
+            eventType={event.event_type}
+            locationCode={event.room_number}
+            onPress={() => router.push(`/schedule/${event.course_event_id}`)}
           />
         )}
       />
@@ -135,11 +115,11 @@ const PeriodSelector: React.FC<PeriodSelectorProps> = ({
 };
 
 interface ScheduleEventProps {
-  previousEventDate?: Date;
-  nextEventDate?: Date;
+  previousEventDate?: string;
+  nextEventDate?: string;
   courseCode: string;
-  startsAt: Date;
-  endsAt: Date;
+  startsAt: string;
+  endsAt: string;
   eventType: EventType;
   locationCode: string;
   onPress?: () => void;
