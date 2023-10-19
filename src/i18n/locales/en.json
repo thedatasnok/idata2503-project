@@ -1,3 +1,5 @@
 {
-  "welcome": "Welcome to Whiteboard App {{name}}!"
+  "welcome": "Welcome to Whiteboard App {{name}}!",
+  "userprofile": "User Profile",
+  "settings": "Settings"
 }
