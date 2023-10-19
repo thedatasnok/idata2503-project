@@ -44,7 +44,8 @@
     "react-native-svg": "13.9.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-webview": "^13.6.2",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
