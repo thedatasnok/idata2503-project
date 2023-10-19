@@ -1,4 +1,4 @@
-# Sprint 2
+# Sprint 2 (Sep 28 - Oct 11)
 
 ## Sprint review
 
