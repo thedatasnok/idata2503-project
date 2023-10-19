@@ -4,14 +4,31 @@ import dayjs from 'dayjs';
 import { FlatList } from 'react-native';
 
 // TODO: Replace these with data loaded from backend
-const lastMessages = [
+const messages = [
   {
     id: 'temp',
     receiverUserId: 'MyId',
-    senderUserId: 'YourId',
+    senderUserId: 'SenderId1',
     content: 'Hello man',
     attachments: 'This is a picture, trust',
+    createdAt: dayjs('2023-10-15 08:15').toDate(),
+  },
+  {
+    id: 'temp2',
+    receiverUserId: 'MyId',
+    senderUserId: 'SenderId1',
+    content: 'Hello man from the other side',
+    attachments: 'This is several dog a pictures, trust',
     createdAt: dayjs('2023-10-16 08:15').toDate(),
+  },
+  {
+    id: 'temp3',
+    receiverUserId: 'MyId',
+    senderUserId: 'SenderId2',
+    content:
+      'Third message that is a very long message because i need to check the styling is correct',
+    attachments: 'This is several cat a pictures, trust',
+    createdAt: dayjs('2023-10-16 07:15').toDate(),
   },
 ] as const;
 
@@ -19,9 +36,8 @@ const MessagesScreen = () => {
   return (
     <>
       <Header title='Messages' />
-      <Text>Messages</Text>
       <FlatList
-        data={lastMessages}
+        data={messages}
         keyExtractor={(i) => i.id}
         style={{
           paddingHorizontal: 12,
@@ -29,8 +45,10 @@ const MessagesScreen = () => {
         renderItem={({ item: message, index: i }) => (
           <Message
             key={message.id}
+            createdAt={message.createdAt}
+            nextCreatedAt={messages?.[i + 1]?.createdAt}
             senderName={message.senderUserId}
-            lastMessageContent={message.content}
+            content={message.content}
             // onPress={() => router.push(`/announcements/${announcement.id}`)}
           />
         )}
@@ -41,17 +59,26 @@ const MessagesScreen = () => {
 
 interface MessageProps {
   senderName: string;
-  lastMessageContent: string;
-  lastMessageCreatedAt?: Date;
+  nextCreatedAt?: Date;
+  content: string;
+  createdAt: Date;
   onPress?: () => void;
 }
 
+const MAX_TEXT_LENGTH = 45;
+
 const Message: React.FC<MessageProps> = ({
   senderName,
-  lastMessageContent,
-  lastMessageCreatedAt,
+  nextCreatedAt,
+  content,
+  createdAt,
   onPress,
 }) => {
+  const truncatedContent =
+    content.length > MAX_TEXT_LENGTH
+      ? content.slice(0, MAX_TEXT_LENGTH) + '...' // Truncate text and add ellipsis
+      : content;
+
   return (
     <>
       <Pressable
@@ -63,16 +90,24 @@ const Message: React.FC<MessageProps> = ({
         my='$1'
         onPress={onPress}
       >
-        <Box flex={1} gap={-4}>
-          <Box display='flex' flexDirection='row'>
-            <Text fontSize='$xs'>{senderName}</Text>
-            <Text fontSize='$xs'>{lastMessageContent}</Text>
+        <Box
+          flex={1}
+          gap={-4}
+          display='flex'
+          flexDirection='row'
+          alignItems='center'
+        >
+          <Box display='flex' flexDirection='column' flexGrow={1}>
+            <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
+              {senderName}
+            </Text>
+            <Text fontSize='$xs'>{truncatedContent}</Text>
           </Box>
-          <Text color='$primary600' fontWeight='$semibold' fontSize='$md'>
-            {dayjs(lastMessageCreatedAt).format('LT')}
-          </Text>
+          <Text fontSize='$sm'>Day{dayjs(createdAt).format('DD  LT')}</Text>
         </Box>
       </Pressable>
+
+      {nextCreatedAt && <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />}
     </>
   );
 };
