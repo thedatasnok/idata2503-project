@@ -46,6 +46,7 @@ const AnnouncementsScreen = () => {
         renderItem={({ item: announcement, index: i }) => (
           <Announcement
             key={announcement.id}
+            nextCreatedAt={announcements?.[i + 1]?.createdAt}
             announcedBy={announcement.annoucedBy}
             body={announcement.body}
             header={announcement.header}
@@ -59,7 +60,8 @@ const AnnouncementsScreen = () => {
 };
 
 interface AnnouncementProps {
-  createdAt?: Date;
+  nextCreatedAt?: Date;
+  createdAt: Date;
   announcedBy: string;
   header: string;
   body: string;
@@ -67,6 +69,7 @@ interface AnnouncementProps {
 }
 
 const Announcement: React.FC<AnnouncementProps> = ({
+  nextCreatedAt,
   createdAt,
   announcedBy,
   header,
@@ -95,6 +98,8 @@ const Announcement: React.FC<AnnouncementProps> = ({
           </Box>
         </Box>
       </Pressable>
+
+      {nextCreatedAt && <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />}
     </>
   );
 };
