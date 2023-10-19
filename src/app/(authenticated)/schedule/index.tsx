@@ -57,13 +57,12 @@ const ScheduleScreen = () => {
       <FlatList
         ref={listRef}
         data={events}
-        keyExtractor={(i) => i.id}
+        keyExtractor={(i) => i.course_event_id}
         style={{
           paddingHorizontal: 12,
         }}
         renderItem={({ item: event, index: i }) => (
           <ScheduleEvent
-            key={event.course_event_id}
             previousEventDate={events?.[i - 1]?.starts_at}
             nextEventDate={events?.[i + 1]?.starts_at}
             courseCode={event.course_code}
