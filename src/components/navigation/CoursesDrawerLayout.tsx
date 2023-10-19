@@ -61,7 +61,7 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
 
   return (
     <Box pt='$2'>
-      {activeCourses.length > 0 && (
+      {activeCourses && activeCourses?.length > 0 && (
         <>
           <Text fontWeight='$semibold' fontSize='$md' px='$2'>
             Active courses
@@ -72,18 +72,18 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
       )}
 
       <VStack my='$1'>
-        {activeCourses.map((course) => (
+        {activeCourses?.map((course) => (
           <CourseDrawerItem
-            key={course.id}
+            key={course.course_id}
             active
-            courseCode={course.courseCode}
+            courseCode={course.course_code}
             name={course.name}
-            onPress={() => gotoCourse(course.id)}
+            onPress={() => gotoCourse(course.course_id)}
           />
         ))}
       </VStack>
 
-      {otherCourses.length > 0 && (
+      {otherCourses && otherCourses?.length > 0 && (
         <>
           <Text fontWeight='$semibold' fontSize='$md' mt='$2' px='$2'>
             Previous courses
@@ -94,12 +94,12 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
       )}
 
       <VStack my='$1'>
-        {otherCourses.map((course) => (
+        {otherCourses?.map((course) => (
           <CourseDrawerItem
-            key={course.id}
-            courseCode={course.courseCode}
+            key={course.course_id}
+            courseCode={course.course_code}
             name={course.name}
-            onPress={() => gotoCourse(course.id)}
+            onPress={() => gotoCourse(course.course_id)}
           />
         ))}
       </VStack>

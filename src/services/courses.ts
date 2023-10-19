@@ -1,3 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from './supabase';
+
 export interface UseCoursesParams {
   active?: boolean;
   enrolled?: boolean;
@@ -5,33 +8,39 @@ export interface UseCoursesParams {
   searchString?: string;
 }
 
+export interface CourseListItem {
+  course_id: string;
+  course_code: string;
+  name: string;
+  starts_at: string;
+  ends_at: string;
+  active: boolean;
+  enrolled: boolean;
+}
+
 /**
  * Hook to fetch courses from Supabase.
  */
 export const useCourses = (params: UseCoursesParams) => {
-  // TODO: Wire up Supabase to fetch courses
-  const data = [
-    {
-      id: 'placeholder',
-      courseCode: 'IDATA2503',
-      name: 'Mobile applications',
-    },
-    {
-      id: 'placeholder2',
-      courseCode: 'IDATA2502',
-      name: 'Cloud services administration',
-    },
-    {
-      id: 'placeholder3',
-      courseCode: 'INFT2503',
-      name: 'C++ for programmers',
-    },
-    {
-      id: 'placeholder4',
-      courseCode: 'IDATA2505',
-      name: 'Internship',
-    },
-  ];
+  const { active, enrolled, limit, searchString } = params;
 
-  return { data };
+  return useQuery({
+    queryKey: ['whiteboardapp/courses', active, enrolled, limit, searchString],
+    queryFn: async () => {
+      let query = supabase
+        .from('course_membership_view')
+        .select(
+          'course_id, course_code, name, starts_at, ends_at, active, enrolled'
+        );
+
+      if (active !== undefined) query = query.eq('active', active);
+      if (enrolled !== undefined) query = query.eq('enrolled', enrolled);
+
+      query = query.ilike('searchable_name', `%${searchString ?? ''}%`);
+
+      if (limit !== undefined) query = query.limit(limit);
+
+      return query.throwOnError().then((res) => res.data as CourseListItem[]);
+    },
+  });
 };
