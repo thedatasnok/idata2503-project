@@ -20,6 +20,9 @@ dependencies:
   '@gluestack-ui/themed':
     specifier: ^1.0.4
     version: 1.0.4(@gluestack-style/react@1.0.3)(@types/react-native@0.72.3)(expo@49.0.9)(nativewind@2.0.11)(react-dom@18.2.0)(react-native-svg@13.9.0)(react-native-web@0.19.9)(react-native@0.72.5)(react@18.2.0)
+  '@hookform/resolvers':
+    specifier: ^3.3.2
+    version: 3.3.2(react-hook-form@7.47.0)
   '@react-native-async-storage/async-storage':
     specifier: 1.18.2
     version: 1.18.2(react-native@0.72.5)
@@ -74,6 +77,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  react-hook-form:
+    specifier: ^7.47.0
+    version: 7.47.0(react@18.2.0)
   react-i18next:
     specifier: ^13.2.2
     version: 13.2.2(i18next@23.5.1)(react-dom@18.2.0)(react-native@0.72.5)(react@18.2.0)
@@ -104,6 +110,9 @@ dependencies:
   react-native-webview:
     specifier: ^13.6.2
     version: 13.6.2(react-native@0.72.5)(react@18.2.0)
+  zod:
+    specifier: ^3.22.4
+    version: 3.22.4
 
 devDependencies:
   '@babel/core':
@@ -3310,6 +3319,14 @@ packages:
     resolution: {integrity: sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==}
     dependencies:
       '@hapi/hoek': 9.3.0
+    dev: false
+
+  /@hookform/resolvers@3.3.2(react-hook-form@7.47.0):
+    resolution: {integrity: sha512-Tw+GGPnBp+5DOsSg4ek3LCPgkBOuOgS5DsDV7qsWNH9LZc433kgsWICjlsh2J9p04H2K66hsXPPb9qn9ILdUtA==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.47.0(react@18.2.0)
     dev: false
 
   /@internationalized/date@3.5.0:
@@ -9199,6 +9216,15 @@ packages:
       shallowequal: 1.1.0
     dev: false
 
+  /react-hook-form@7.47.0(react@18.2.0):
+    resolution: {integrity: sha512-F/TroLjTICipmHeFlMrLtNLceO2xr1jU3CyiNla5zdwsGUGu2UOxxR4UyJgLlhMwLW/Wzp4cpJ7CPfgJIeKdSg==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /react-i18next@13.2.2(i18next@23.5.1)(react-dom@18.2.0)(react-native@0.72.5)(react@18.2.0):
     resolution: {integrity: sha512-+nFUkbRByFwnrfDcYqvzBuaeZb+nACHx+fAWN/pZMddWOCJH5hoc21+Sa/N/Lqi6ne6/9wC/qRGOoQhJa6IkEQ==}
     peerDependencies:
@@ -10838,4 +10864,8 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: false
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false

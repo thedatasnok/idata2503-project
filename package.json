@@ -14,6 +14,7 @@
     "@gluestack-style/react": "^1.0.3",
     "@gluestack-ui/config": "^1.0.1",
     "@gluestack-ui/themed": "^1.0.4",
+    "@hookform/resolvers": "^3.3.2",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^6.3.18",
@@ -32,6 +33,7 @@
     "lucide-react-native": "^0.284.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.47.0",
     "react-i18next": "^13.2.2",
     "react-native": "0.72.5",
     "react-native-drawer-layout": "4.0.0-alpha.1",
@@ -41,7 +43,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "react-native-url-polyfill": "^2.0.0",
-    "react-native-webview": "^13.6.2"
+    "react-native-webview": "^13.6.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
