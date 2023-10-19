@@ -1,6 +1,6 @@
 import Header from '@/components/navigation/Header';
 import { IconType } from '@/icon';
-import { useEvents } from '@/services/schedule';
+import { EventType, useEvents, type ScheduleEvent } from '@/services/schedule';
 import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
@@ -13,12 +13,6 @@ import {
 } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList } from 'react-native';
-
-const enum EventType {
-  LAB = 'LAB',
-  LECTURE = 'LECTURE',
-  EXAM = 'EXAM',
-}
 
 const ScheduleScreen = () => {
   const [period, setPeriod] = useState(new Date());
@@ -51,7 +45,7 @@ const ScheduleScreen = () => {
         onNext={() => setPeriod((prev) => dayjs(prev).add(1, 'month').toDate())}
       />
 
-      <FlatList
+      <FlatList<ScheduleEvent>
         ref={listRef}
         data={events}
         keyExtractor={(i) => i.course_event_id}
@@ -59,7 +53,7 @@ const ScheduleScreen = () => {
           paddingHorizontal: 12,
         }}
         renderItem={({ item: event, index: i }) => (
-          <ScheduleEvent
+          <ScheduleEventEntry
             previousEventDate={events?.[i - 1]?.starts_at}
             nextEventDate={events?.[i + 1]?.starts_at}
             courseCode={event.course_code}
@@ -110,7 +104,7 @@ const PeriodSelector: React.FC<PeriodSelectorProps> = ({
   );
 };
 
-interface ScheduleEventProps {
+interface ScheduleEventEntryProps {
   previousEventDate?: string;
   nextEventDate?: string;
   courseCode: string;
@@ -121,7 +115,7 @@ interface ScheduleEventProps {
   onPress?: () => void;
 }
 
-const ScheduleEvent: React.FC<ScheduleEventProps> = ({
+const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
   previousEventDate,
   nextEventDate,
   courseCode,
