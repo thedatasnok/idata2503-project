@@ -22,16 +22,13 @@ const enum EventType {
 
 const ScheduleScreen = () => {
   const [period, setPeriod] = useState(new Date());
-  const { data: events, isError, error } = useEvents({ month: period });
+  const { data: events } = useEvents({ month: period });
   const listRef = useRef<FlatList>(null);
   const router = useRouter();
 
   useEffect(() => {
-    console.log(isError, error);
-  }, [error]);
-
-  useEffect(() => {
     if (!events) return;
+    if (!dayjs().isSame(period, 'month')) return;
 
     const index = events.findIndex((e) =>
       dayjs(e.starts_at).isSame(new Date(), 'day')
@@ -40,7 +37,7 @@ const ScheduleScreen = () => {
     if (index !== -1) {
       listRef.current?.scrollToIndex({ index, animated: false });
     }
-  }, []);
+  }, [events]);
 
   return (
     <>
