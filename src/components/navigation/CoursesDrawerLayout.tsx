@@ -12,6 +12,7 @@ import {
 import { useRouter } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
 import { useState } from 'react';
+import { SafeAreaView } from 'react-native';
 import { Drawer as NavigationDrawer } from 'react-native-drawer-layout';
 
 export interface CoursesDrawerLayoutProps {
@@ -60,50 +61,52 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
   };
 
   return (
-    <Box pt='$2'>
-      {activeCourses && activeCourses?.length > 0 && (
-        <>
-          <Text fontWeight='$semibold' fontSize='$md' px='$2'>
-            Active courses
-          </Text>
+    <SafeAreaView>
+      <Box pt='$2'>
+        {activeCourses && activeCourses?.length > 0 && (
+          <>
+            <Text fontWeight='$semibold' fontSize='$md' px='$2'>
+              Active courses
+            </Text>
 
-          <Divider px='$2' />
-        </>
-      )}
+            <Divider px='$2' />
+          </>
+        )}
 
-      <VStack my='$1'>
-        {activeCourses?.map((course) => (
-          <CourseDrawerItem
-            key={course.course_id}
-            active
-            courseCode={course.course_code}
-            name={course.name}
-            onPress={() => gotoCourse(course.course_id)}
-          />
-        ))}
-      </VStack>
+        <VStack my='$1'>
+          {activeCourses?.map((course) => (
+            <CourseDrawerItem
+              key={course.course_id}
+              active
+              courseCode={course.course_code}
+              name={course.name}
+              onPress={() => gotoCourse(course.course_id)}
+            />
+          ))}
+        </VStack>
 
-      {otherCourses && otherCourses?.length > 0 && (
-        <>
-          <Text fontWeight='$semibold' fontSize='$md' mt='$2' px='$2'>
-            Previous courses
-          </Text>
+        {otherCourses && otherCourses?.length > 0 && (
+          <>
+            <Text fontWeight='$semibold' fontSize='$md' mt='$2' px='$2'>
+              Previous courses
+            </Text>
 
-          <Divider px='$2' />
-        </>
-      )}
+            <Divider px='$2' />
+          </>
+        )}
 
-      <VStack my='$1'>
-        {otherCourses?.map((course) => (
-          <CourseDrawerItem
-            key={course.course_id}
-            courseCode={course.course_code}
-            name={course.name}
-            onPress={() => gotoCourse(course.course_id)}
-          />
-        ))}
-      </VStack>
-    </Box>
+        <VStack my='$1'>
+          {otherCourses?.map((course) => (
+            <CourseDrawerItem
+              key={course.course_id}
+              courseCode={course.course_code}
+              name={course.name}
+              onPress={() => gotoCourse(course.course_id)}
+            />
+          ))}
+        </VStack>
+      </Box>
+    </SafeAreaView>
   );
 };
 
