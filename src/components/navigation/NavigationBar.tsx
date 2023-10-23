@@ -1,5 +1,6 @@
 import { IconType } from '@/icon';
 import { Box, Icon, Pressable, Text, styled } from '@gluestack-ui/themed';
+import { usePathname, useRouter } from 'expo-router';
 import {
   BookMarkedIcon,
   CalendarDaysIcon,
@@ -7,11 +8,12 @@ import {
   MessageSquareIcon,
   SettingsIcon,
 } from 'lucide-react-native';
-import { usePathname, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const NavigationBar = () => {
   const path = usePathname();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
     <Box
@@ -21,6 +23,7 @@ const NavigationBar = () => {
       alignItems='center'
       justifyContent='space-between'
       px='$3'
+      pb={insets.bottom}
       borderTopWidth={1}
       borderTopColor='$gray300'
     >

@@ -1,6 +1,8 @@
 import { IconType } from '@/icon';
+import { getToken } from '@/theme';
 import { Box, Icon, Text } from '@gluestack-ui/themed';
 import { BellIcon, MenuIcon } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export interface HeaderProps {
   leftIcon?: IconType;
@@ -15,14 +17,19 @@ const Header: React.FC<HeaderProps> = ({
   context,
   title,
 }) => {
+  const insets = useSafeAreaInsets();
+  const height = (getToken('space', '12') as number) + insets.top;
+
   return (
     <Box
-      h='$12'
       bg='$primary600'
       display='flex'
       flexDirection='row'
+      h={height}
       alignItems='center'
       justifyContent='space-evenly'
+      pt={insets.top}
+      pb='$2'
       px='$4'
     >
       <Icon as={leftIcon ?? MenuIcon} color='$primary50' />

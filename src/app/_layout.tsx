@@ -6,6 +6,7 @@ import { Slot, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { I18nextProvider } from 'react-i18next';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { supabase } from '@/services/supabase';
 import dayjs from 'dayjs';
@@ -54,13 +55,15 @@ const RootLayout = () => {
   return (
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>
-        <GluestackUIProvider config={config}>
-          <View flex={1} onLayout={onAppReady}>
-            <Slot />
-          </View>
+        <SafeAreaProvider>
+          <GluestackUIProvider config={config}>
+            <View flex={1} onLayout={onAppReady}>
+              <Slot />
+            </View>
 
-          <StatusBar />
-        </GluestackUIProvider>
+            <StatusBar />
+          </GluestackUIProvider>
+        </SafeAreaProvider>
       </QueryClientProvider>
     </I18nextProvider>
   );
