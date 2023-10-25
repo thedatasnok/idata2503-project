@@ -2,13 +2,14 @@ import i18n from '@/i18n';
 import config from '@/theme';
 import { GluestackUIProvider, View } from '@gluestack-ui/themed';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Slot, router } from 'expo-router';
+import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { I18nextProvider } from 'react-i18next';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { supabase } from '@/services/supabase';
+import { useAuth } from '@/store/global';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nb';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
@@ -26,12 +27,13 @@ const queryClient = new QueryClient();
 
 const RootLayout = () => {
   const [ready, setReady] = useState(false);
+  const { login, logout } = useAuth();
 
   useEffect(() => {
     const prepare = async () => {
       try {
-        const { data: session } = await supabase.auth.getSession();
-        if (!session) router.replace('/sign-in');
+        const { data } = await supabase.auth.getSession();
+        if (data.session) login(data.session);
       } catch (error) {
         console.warn(error);
       } finally {
@@ -40,7 +42,11 @@ const RootLayout = () => {
     };
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) router.replace('/sign-in');
+      if (session) {
+        login(session);
+      } else {
+        logout();
+      }
     });
 
     prepare();

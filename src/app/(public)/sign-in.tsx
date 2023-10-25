@@ -1,4 +1,4 @@
-import { signInWithEmail } from '@/services/auth';
+import { useEmailSignIn } from '@/services/auth';
 import {
   Box,
   Button,
@@ -11,7 +11,6 @@ import {
   InputField,
   InputIcon,
   InputSlot,
-  Spinner,
   VStack,
 } from '@gluestack-ui/themed';
 import { router } from 'expo-router';
@@ -21,19 +20,18 @@ import React, { useState } from 'react';
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [invalidCredentials, setInvalidCredentials] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { mutateAsync: signIn } = useEmailSignIn();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
   async function handleSignIn() {
-    setLoading(true);
-    const error = await signInWithEmail(email, password);
-
-    if (error) {
-      setInvalidCredentials(true);
-      setLoading(false);
+    try {
+      await signIn({ email, password });
+      router.replace('/');
+    } catch (error) {
+      console.warn(error);
     }
   }
 

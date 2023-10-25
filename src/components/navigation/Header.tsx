@@ -39,9 +39,8 @@ const Header: React.FC<HeaderProps> = ({
       justifyContent='space-evenly'
       pt={paddingTop}
       pb='$2'
-      px='$4'
     >
-      <Pressable onPress={onLeftPressed}>
+      <Pressable onPress={onLeftPressed} px='$4'>
         <Icon as={leftIcon ?? MenuIcon} color='$primary50' />
       </Pressable>
 
@@ -56,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({
         </Text>
       </Box>
 
-      <Pressable onPress={onRightPressed}>
+      <Pressable onPress={onRightPressed} px='$4'>
         <Icon as={rightIcon ?? BellIcon} color='$primary50' />
       </Pressable>
     </Box>

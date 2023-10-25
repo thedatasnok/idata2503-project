@@ -1,18 +1,23 @@
+import { useMutation } from '@tanstack/react-query';
 import { supabase } from './supabase';
 
-/**
- * Sign in with email with Supabase Auth.
- * @returns Returns an error object if there's an error, otherwise undefined.
- */
-export async function signInWithEmail(email: string, password: string) {
-  const { error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  });
-
-  return error;
+export interface SignInForm {
+  email: string;
+  password: string;
 }
 
+export const useEmailSignIn = () => {
+  return useMutation({
+    mutationFn: async ({ email, password }: SignInForm) => {
+      const response = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      return response.data;
+    },
+  });
+};
 /**
  * Sign out the current user.
  * @returns Returns an error object if there's an error, otherwise undefined.

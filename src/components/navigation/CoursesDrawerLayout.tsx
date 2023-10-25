@@ -1,4 +1,5 @@
 import { useCourses } from '@/services/courses';
+import { useDrawer } from '@/store/global';
 import { getToken } from '@/theme';
 import {
   Box,
@@ -11,7 +12,6 @@ import {
 } from '@gluestack-ui/themed';
 import { useRouter } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
-import { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Drawer as NavigationDrawer } from 'react-native-drawer-layout';
 
@@ -26,16 +26,14 @@ export interface CoursesDrawerLayoutProps {
 const CoursesDrawerLayout: React.FC<CoursesDrawerLayoutProps> = ({
   children,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { show, open, close } = useDrawer();
 
   return (
     <NavigationDrawer
-      open={isOpen}
-      onOpen={() => setIsOpen(true)}
-      onClose={() => setIsOpen(false)}
-      renderDrawerContent={() => (
-        <DrawerContent onNavigate={() => setIsOpen(false)} />
-      )}
+      open={show}
+      onOpen={open}
+      onClose={close}
+      renderDrawerContent={() => <DrawerContent onNavigate={close} />}
     >
       {children}
     </NavigationDrawer>
