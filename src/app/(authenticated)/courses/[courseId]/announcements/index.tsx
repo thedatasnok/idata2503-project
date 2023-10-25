@@ -1,8 +1,9 @@
 import Header from '@/components/navigation/Header';
+import { useCourse } from '@/services/courses';
 import { Box, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
+import { useLocalSearchParams } from 'expo-router';
 import { FlatList } from 'react-native';
-import { useRouter } from 'expo-router';
 
 // TODO: Replace these with data loaded from backend (from course props?)
 const announcements = [
@@ -30,11 +31,12 @@ const announcements = [
 ] as const;
 
 const AnnouncementsScreen = () => {
-  const router = useRouter();
+  const { courseId } = useLocalSearchParams();
+  const { data: course } = useCourse(courseId as string);
 
   return (
     <>
-      <Header title='Announcements' />
+      <Header context={course?.course_code} title='Announcements' back />
       <Text>Announcements</Text>
 
       <FlatList

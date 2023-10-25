@@ -40,7 +40,37 @@ export const useCourses = (params: UseCoursesParams) => {
 
       if (limit !== undefined) query = query.limit(limit);
 
-      return query.throwOnError().then((res) => res.data as CourseListItem[]);
+      const result = await query.throwOnError();
+
+      return result.data as CourseListItem[];
+    },
+  });
+};
+
+export interface CourseDetails {
+  course_id: string;
+  course_code: string;
+}
+
+/**
+ * Hook to fetch a single course from Supabase.
+ *
+ * @param courseId the course id
+ *
+ * @returns a query object with the result of the query
+ */
+export const useCourse = (courseId: string) => {
+  return useQuery({
+    queryKey: ['whiteboardapp/course', courseId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('course')
+        .select('*')
+        .eq('course_id', courseId)
+        .single()
+        .throwOnError();
+
+      return result.data as CourseDetails;
     },
   });
 };

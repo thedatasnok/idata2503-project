@@ -21,7 +21,7 @@ const course = {
 const CourseDescriptionScreen = () => {
   return (
     <>
-      <Header title='COURSE_CODE' />
+      <Header title='COURSE_CODE' back />
       <Text>Courses</Text>
       <Box display='flex' flexDirection='row'>
         <Text>{course.courseCode}</Text>
