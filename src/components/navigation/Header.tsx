@@ -1,12 +1,15 @@
 import { IconType } from '@/icon';
+import { useDrawer } from '@/store/global';
 import { getToken } from '@/theme';
-import { Box, Icon, Text } from '@gluestack-ui/themed';
+import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import { BellIcon, MenuIcon } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export interface HeaderProps {
   leftIcon?: IconType;
   rightIcon?: IconType;
+  onLeftIconPress?: () => void;
+  onRightIconPress?: () => void;
   context?: string;
   title: string;
 }
@@ -14,11 +17,17 @@ export interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
   leftIcon,
   rightIcon,
+  onLeftIconPress,
+  onRightIconPress,
   context,
   title,
 }) => {
+  const { open: openDrawer } = useDrawer();
   const insets = useSafeAreaInsets();
   const height = (getToken('space', '12') as number) + insets.top;
+  const onLeftPressed = onLeftIconPress ?? openDrawer;
+  const paddingTop = insets.top || (getToken('space', '2') as number);
+  const onRightPressed = onRightIconPress;
 
   return (
     <Box
@@ -28,11 +37,13 @@ const Header: React.FC<HeaderProps> = ({
       h={height}
       alignItems='center'
       justifyContent='space-evenly'
-      pt={insets.top}
+      pt={paddingTop}
       pb='$2'
       px='$4'
     >
-      <Icon as={leftIcon ?? MenuIcon} color='$primary50' />
+      <Pressable onPress={onLeftPressed}>
+        <Icon as={leftIcon ?? MenuIcon} color='$primary50' />
+      </Pressable>
 
       <Box flex={1} display='flex' alignItems='center' gap={-6}>
         {context && (
@@ -45,7 +56,9 @@ const Header: React.FC<HeaderProps> = ({
         </Text>
       </Box>
 
-      <Icon as={rightIcon ?? BellIcon} color='$primary50' />
+      <Pressable onPress={onRightPressed}>
+        <Icon as={rightIcon ?? BellIcon} color='$primary50' />
+      </Pressable>
     </Box>
   );
 };
