@@ -38,7 +38,7 @@ const config: ExpoConfig = {
       url: process.env.SUPABASE_URL,
       anonKey: process.env.SUPABASE_ANON_KEY,
     },
-    eas: {
+    eas: process.env.EXPO_EAS_ENABLED && {
       projectId: 'dd4c825a-9a28-4659-aa35-2ff422814389',
     },
   },
