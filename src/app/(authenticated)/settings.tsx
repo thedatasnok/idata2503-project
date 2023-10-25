@@ -1,5 +1,6 @@
 import Header from '@/components/navigation/Header';
 import { supabase } from '@/services/supabase';
+import { useAuth } from '@/store/global';
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -12,6 +13,9 @@ import {
   ButtonText,
   Divider,
   FormControl,
+  FormControlError,
+  FormControlErrorText,
+  FormControlLabel,
   FormControlLabelText,
   Heading,
   Input,
@@ -27,41 +31,44 @@ import {
   SelectItem,
   SelectPortal,
   SelectTrigger,
-  Spinner,
   Switch,
   Text,
   VStack,
 } from '@gluestack-ui/themed';
-import { Session } from '@supabase/supabase-js';
-import { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 import i18next from '../../i18n/index';
 
+const UserSchema = z.object({
+  fullName: z.string().min(1, { message: 'Full name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }),
+});
+
+type UserSchemaType = z.infer<typeof UserSchema>;
+
 const SettingsScreen = () => {
-  const [loading, setLoading] = useState(true);
-  const [website, setWebsite] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
-  const [session, setSession] = useState<Session | null>(null);
-  const [email, setEmail] = useState('');
   const { t } = useTranslation();
+  const { logout, session } = useAuth();
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-      setEmail(session?.user?.email ?? '');
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setLoading(false);
-      setEmail(session?.user?.email ?? '');
-      supabase.auth.refreshSession();
-    });
-  }, []);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserSchemaType>({
+    resolver: zodResolver(UserSchema),
+    defaultValues: {
+      //TODO: replace with data from backend
+      fullName: 'Placeholder',
+      email: session?.user?.email,
+    },
+  });
 
   const handleEmailNotificationToggle = () => {
     setEmailNotifications(!emailNotifications);
@@ -75,48 +82,52 @@ const SettingsScreen = () => {
     i18next.changeLanguage(languageCode);
   };
 
-  const handleChangeEmail = async () => {
-    try {
-      const { data, error } = await supabase.auth.updateUser({ email: email });
-      if (error) {
-        console.error('Error updating email:', error.message);
-      } else {
-        console.log('Email updated successfully:', data);
+  const handleSignOut = () => {
+    logout();
+    router.push('/sign-in');
+  };
+
+  const onSubmit = async (data: UserSchemaType) => {
+    //TODO: update full name if changed
+
+    if (session?.user.email === data.email) {
+      return console.log('Email is the same');
+    } else {
+      try {
+        const { error } = await supabase.auth.updateUser({ email: data.email });
+        if (error) {
+          //TODO: toast message for error?
+          console.error('Error updating email:', error.message);
+        } else {
+          //TODO: toast message for success?
+          console.log('Email updated successfully:', data);
+        }
+      } catch (err) {
+        console.error('Unexpected error:', err);
       }
-    } catch (err) {
-      console.error('Unexpected error:', err);
     }
   };
 
   return (
     <>
       <Header title={t('settings')} />
-      {loading ? (
-        <Spinner pt='$12' size='large' />
-      ) : (
-        <ScrollView>
-          <Box display='flex' flexDirection='column' p='$4' flex={1}>
-            <Heading pb='$2'>{t('userprofile')}</Heading>
-            <Box p='$1'>
-              <FormControl>
-                <VStack>
-                  <FormControlLabelText color='$gray950'>
-                    Full name
-                  </FormControlLabelText>
-                  <Input
-                    isDisabled={true}
-                    borderColor='$gray400'
-                    borderWidth='$1'
-                    borderRadius='$sm'
-                    width='100%'
-                    p='$1.5'
-                  >
-                    <InputField type='text' value='Placeholder name' />
-                  </Input>
 
-                  <FormControlLabelText color='$gray950' pt='$2'>
-                    E-mail
-                  </FormControlLabelText>
+      <ScrollView>
+        <Box display='flex' flexDirection='column' p='$4' flex={1}>
+          <Heading pb='$2'>{t('userprofile')}</Heading>
+
+          <VStack>
+            <FormControl isInvalid={'fullName' in errors}>
+              <FormControlLabel>
+                <FormControlLabelText color='$gray950'>
+                  Full name
+                </FormControlLabelText>
+              </FormControlLabel>
+
+              <Controller
+                control={control}
+                name='fullName'
+                render={({ field: { onChange, value } }) => (
                   <Input
                     borderColor='$gray400'
                     borderWidth='$1'
@@ -125,83 +136,117 @@ const SettingsScreen = () => {
                     p='$1.5'
                   >
                     <InputField
-                      type='text'
-                      onChangeText={setEmail}
-                      value={email}
+                      onChangeText={(val) => onChange(val)}
+                      value={value}
                     />
                   </Input>
-                </VStack>
-              </FormControl>
+                )}
+              />
+
+              <FormControlError>
+                <FormControlErrorText>
+                  {errors.fullName?.message}
+                </FormControlErrorText>
+              </FormControlError>
+            </FormControl>
+
+            <FormControl isInvalid={'email' in errors}>
+              <FormControlLabelText color='$gray950' pt='$2'>
+                Email
+              </FormControlLabelText>
+
+              <Controller
+                control={control}
+                name='email'
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    borderColor='$gray400'
+                    borderWidth='$1'
+                    borderRadius='$sm'
+                    width='100%'
+                    p='$1.5'
+                  >
+                    <InputField
+                      onChangeText={(val) => onChange(val)}
+                      value={value}
+                    />
+                  </Input>
+                )}
+              />
+
+              <FormControlError>
+                <FormControlErrorText>
+                  {errors.email?.message}
+                </FormControlErrorText>
+              </FormControlError>
+            </FormControl>
+
+            <Box pt='$5'>
+              <Button onPress={handleSubmit(onSubmit)}>
+                <ButtonText>Update Profile</ButtonText>
+              </Button>
             </Box>
+          </VStack>
 
-            <VStack>
-              <Text pt='$8' fontSize='$xl' fontWeight='bold'>
-                System Settings
-              </Text>
-              <Box p='$1'>
-                <Text pt='$2' fontWeight='bold'>
-                  Notifications
-                </Text>
-
-                <Pressable
-                  flexDirection='row'
-                  justifyContent='space-between'
-                  alignItems='center'
-                  py='$2'
-                  onPress={handleEmailNotificationToggle}
-                >
-                  <Text>Email notifications</Text>
-                  <Switch
-                    value={emailNotifications}
-                    onValueChange={handleEmailNotificationToggle}
-                  />
-                </Pressable>
-                <Divider />
-
-                <Pressable
-                  flexDirection='row'
-                  justifyContent='space-between'
-                  alignItems='center'
-                  py='$2'
-                  onPress={handlePushNotificationToggle}
-                >
-                  <Text>Push notifications</Text>
-                  <Switch
-                    value={pushNotifications}
-                    onValueChange={handlePushNotificationToggle}
-                  />
-                </Pressable>
-                <Divider />
-              </Box>
-            </VStack>
-
+          <VStack>
             <Text pt='$8' fontSize='$xl' fontWeight='bold'>
-              Language
+              System Settings
             </Text>
-            <SelectLanguageView handleLanguageChange={handleLanguageChange} />
+            <Box p='$1'>
+              <Text pt='$2' fontWeight='bold'>
+                Notifications
+              </Text>
 
-            <Box pt='$4'>
-              <Button onPress={handleChangeEmail}>
-                <ButtonText>Save</ButtonText>
-              </Button>
-            </Box>
-
-            <Box pt='$4'>
-              <Button
-                bgColor='$gray400'
-                onPress={() => setShowAlertDialog(true)}
+              <Pressable
+                flexDirection='row'
+                justifyContent='space-between'
+                alignItems='center'
+                py='$2'
+                onPress={handleEmailNotificationToggle}
               >
-                <ButtonText>Sign Out</ButtonText>
-              </Button>
-            </Box>
-          </Box>
+                <Text>Email notifications</Text>
+                <Switch
+                  value={emailNotifications}
+                  onValueChange={handleEmailNotificationToggle}
+                />
+              </Pressable>
+              <Divider />
 
-          <SignOutDialog
-            showAlertDialog={showAlertDialog}
-            setShowAlertDialog={setShowAlertDialog}
-          />
-        </ScrollView>
-      )}
+              <Pressable
+                flexDirection='row'
+                justifyContent='space-between'
+                alignItems='center'
+                py='$2'
+                onPress={handlePushNotificationToggle}
+              >
+                <Text>Push notifications</Text>
+                <Switch
+                  value={pushNotifications}
+                  onValueChange={handlePushNotificationToggle}
+                />
+              </Pressable>
+              <Divider />
+            </Box>
+          </VStack>
+
+          <Text pt='$8' fontSize='$xl' fontWeight='bold'>
+            Language
+          </Text>
+          <SelectLanguageView handleLanguageChange={handleLanguageChange} />
+
+          <Box pt='$4'>
+            <Button bg='$error500' onPress={() => setShowAlertDialog(true)}>
+              <ButtonText>Sign Out</ButtonText>
+            </Button>
+          </Box>
+        </Box>
+
+        <SignOutDialog
+          showAlertDialog={showAlertDialog}
+          setShowAlertDialog={setShowAlertDialog}
+          signOut={handleSignOut}
+        />
+      </ScrollView>
     </>
   );
 };
@@ -240,11 +285,13 @@ const SelectLanguageView: React.FC<SelectLanguageViewProps> = ({
 interface SignOutDialogProps {
   showAlertDialog: boolean;
   setShowAlertDialog: (showAlertDialog: boolean) => void;
+  signOut: () => void;
 }
 
 const SignOutDialog: React.FC<SignOutDialogProps> = ({
   showAlertDialog,
   setShowAlertDialog,
+  signOut,
 }) => (
   <AlertDialog
     isOpen={showAlertDialog}
@@ -269,7 +316,7 @@ const SignOutDialog: React.FC<SignOutDialogProps> = ({
           <Button
             bgColor='$error500'
             onPress={() => {
-              supabase.auth.signOut();
+              signOut();
               setShowAlertDialog(false);
             }}
           >
