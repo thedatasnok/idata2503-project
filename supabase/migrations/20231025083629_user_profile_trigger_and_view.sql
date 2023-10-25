@@ -7,7 +7,8 @@ AS $$
 BEGIN
   INSERT INTO user_profile (fk_user_id, full_name, avatar_url)
   VALUES (NEW.id, '', '')
-  ON CONFLICT (fk_user_id) DO NOTHING
+  ON CONFLICT (fk_user_id) DO NOTHING;
+  RETURN NEW;
 END;
 $$;
 
