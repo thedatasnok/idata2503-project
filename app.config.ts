@@ -18,6 +18,7 @@ export default {
     assetBundlePatterns: ['**/*'],
     ios: {
       supportsTablet: true,
+      bundleIdentifier: 'no.overlien.whiteboardapp'
     },
     android: {
       adaptiveIcon: {
@@ -37,6 +38,9 @@ export default {
       supabase: {
         url: process.env.SUPABASE_URL,
         anonKey: process.env.SUPABASE_ANON_KEY,
+      },
+      eas: {
+        projectId: 'dd4c825a-9a28-4659-aa35-2ff422814389',
       },
     },
   } satisfies ExpoConfig,
