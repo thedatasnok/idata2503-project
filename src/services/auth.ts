@@ -14,6 +14,8 @@ export const useEmailSignIn = () => {
         password,
       });
 
+      if (response.error) throw response.error;
+
       return response.data;
     },
   });
@@ -61,8 +63,14 @@ export const useUpdateProfileMutation = () => {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
-      // TODO
+    mutationFn: async (updatedProfile: Partial<UserProfile>) => {
+      // Update full_name in user_profile table
+      const { error } = await supabase
+        .from('user_profile')
+        .update({ full_name: updatedProfile.full_name })
+        .eq('fk_user_id', (await getCurrentUser()).data.user?.id);
+
+      if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [PROFILE_KEY] });

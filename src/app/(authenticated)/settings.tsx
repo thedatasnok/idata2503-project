@@ -1,4 +1,5 @@
 import Header from '@/components/navigation/Header';
+import { useProfile, useUpdateProfileMutation } from '@/services/auth';
 import { supabase } from '@/services/supabase';
 import { useAuth } from '@/store/global';
 import {
@@ -37,38 +38,45 @@ import {
 } from '@gluestack-ui/themed';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import i18next from '../../i18n/index';
 
-const UserSchema = z.object({
+const profileValidationSchema = z.object({
   fullName: z.string().min(1, { message: 'Full name is required' }),
   email: z.string().email({ message: 'Invalid email address' }),
 });
 
-type UserSchemaType = z.infer<typeof UserSchema>;
+type UserProfileForm = z.infer<typeof profileValidationSchema>;
 
 const SettingsScreen = () => {
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { logout, session } = useAuth();
+  const { data: userProfile } = useProfile();
+  const updateProfileMutation = useUpdateProfileMutation();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserSchemaType>({
-    resolver: zodResolver(UserSchema),
+    setValue,
+  } = useForm<UserProfileForm>({
+    resolver: zodResolver(profileValidationSchema),
     defaultValues: {
-      //TODO: replace with data from backend
-      fullName: 'Placeholder',
+      fullName: userProfile?.full_name,
       email: session?.user?.email,
     },
   });
+
+  useEffect(() => {
+    if (userProfile) {
+      setValue('fullName', userProfile.full_name);
+    }
+  }, [userProfile]);
 
   const handleEmailNotificationToggle = () => {
     setEmailNotifications(!emailNotifications);
@@ -79,7 +87,7 @@ const SettingsScreen = () => {
   };
 
   const handleLanguageChange = (languageCode: string) => {
-    i18next.changeLanguage(languageCode);
+    i18n.changeLanguage(languageCode);
   };
 
   const handleSignOut = () => {
@@ -87,24 +95,31 @@ const SettingsScreen = () => {
     router.push('/sign-in');
   };
 
-  const onSubmit = async (data: UserSchemaType) => {
-    //TODO: update full name if changed
+  const onSubmit = async (data: UserProfileForm) => {
+    try {
+      if (userProfile?.full_name !== data.fullName) {
+        await updateProfileMutation.mutateAsync({ full_name: data.fullName });
+        console.log('Full name updated successfully:', data);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
 
-    if (session?.user.email === data.email) {
-      return console.log('Email is the same');
-    } else {
+    if (session?.user.email !== data.email) {
       try {
         const { error } = await supabase.auth.updateUser({ email: data.email });
         if (error) {
-          //TODO: toast message for error?
+          //TODO: show message for error
           console.error('Error updating email:', error.message);
         } else {
-          //TODO: toast message for success?
-          console.log('Email updated successfully:', data);
+          //TODO: show message for success
+          console.log('Email confirmation successfully sent:', data);
         }
       } catch (err) {
         console.error('Unexpected error:', err);
       }
+    } else {
+      console.log('Email is the same');
     }
   };
 
@@ -137,6 +152,7 @@ const SettingsScreen = () => {
                   >
                     <InputField
                       onChangeText={(val) => onChange(val)}
+                      defaultValue={userProfile?.full_name}
                       value={value}
                     />
                   </Input>
@@ -168,6 +184,7 @@ const SettingsScreen = () => {
                   >
                     <InputField
                       onChangeText={(val) => onChange(val)}
+                      defaultValue={session?.user.email}
                       value={value}
                     />
                   </Input>
@@ -258,13 +275,15 @@ interface SelectLanguageViewProps {
 const SelectLanguageView: React.FC<SelectLanguageViewProps> = ({
   handleLanguageChange,
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <Box py='$2'>
       <Select onValueChange={handleLanguageChange}>
         <SelectTrigger>
           <SelectInput
             placeholder='No language selected as default'
-            value={i18next.language}
+            value={i18n.language}
           />
           <SelectPortal>
             <SelectBackdrop />
