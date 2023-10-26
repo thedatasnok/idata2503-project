@@ -1,7 +1,6 @@
 import {
   TransitionPresets,
-  createStackNavigator,
-  StackNavigationOptions,
+  createStackNavigator
 } from '@react-navigation/stack';
 
 import { withLayoutContext } from 'expo-router';
@@ -11,7 +10,7 @@ const { Navigator } = createStackNavigator();
 // NOTE: We use a JS stack here because we want to use the modal presentation
 //       on both platforms. This is not possible with the native stack.
 //       This is a one-off case, the rest should be native stacks.
-const JsStack = withLayoutContext<StackNavigationOptions, typeof Navigator>(
+const JsStack = withLayoutContext(
   Navigator
 );
 
