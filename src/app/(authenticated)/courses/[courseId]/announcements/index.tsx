@@ -25,7 +25,7 @@ const announcements = [
     id: 'temp3',
     annoucedBy: 'Teacher3',
     header: 'Im not an NPC i swear',
-    body: 'I have personal experiences and emotions just like you do. Lets chat about something outside of class!',
+    body: 'I have personal experiences and emotions just like you do. Lets chat about something outside of class! dawjhidbahdbjawdjavjdva jdvjavdjv jasgvdj gvasjgdv jasgvd',
     createdAt: dayjs('2023-10-10 08:15').toDate(),
   },
 ] as const;
@@ -93,7 +93,9 @@ const Announcement: React.FC<AnnouncementProps> = ({
           <Text color='$primary600' fontWeight='$semibold' fontSize='$md'>
             {header}
           </Text>
-          <Text fontSize='$xs'>{body}</Text>
+          <Text fontSize='$xs' numberOfLines={2}>
+            {body}
+          </Text>
           <Box display='flex' flexDirection='row'>
             <Text fontSize='$xs'>{dayjs(createdAt).format('LT')}</Text>
             <Text fontSize='$xs'>{announcedBy}</Text>
