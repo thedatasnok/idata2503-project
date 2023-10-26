@@ -43,14 +43,18 @@ const MessagesScreen = () => {
           paddingHorizontal: 12,
         }}
         renderItem={({ item: message, index: i }) => (
-          <Message
-            key={message.id}
-            createdAt={message.createdAt}
-            nextCreatedAt={messages?.[i + 1]?.createdAt}
-            senderName={message.senderUserId}
-            content={message.content}
-            // onPress={() => router.push(`/announcements/${announcement.id}`)}
-          />
+          <>
+            <Message
+              key={message.id}
+              createdAt={message.createdAt}
+              senderName={message.senderUserId}
+              content={message.content}
+              // onPress={() => router.push(`/announcements/${announcement.id}`)}
+            />
+            {messages[i + 1] && (
+              <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
+            )}
+          </>
         )}
       />
     </>
@@ -59,7 +63,6 @@ const MessagesScreen = () => {
 
 interface MessageProps {
   senderName: string;
-  nextCreatedAt?: Date;
   content: string;
   createdAt: Date;
   onPress?: () => void;
@@ -67,7 +70,6 @@ interface MessageProps {
 
 const Message: React.FC<MessageProps> = ({
   senderName,
-  nextCreatedAt,
   content,
   createdAt,
   onPress,
@@ -105,8 +107,6 @@ const Message: React.FC<MessageProps> = ({
           {dayjs(createdAt).format('LT')}
         </Text>
       </Pressable>
-
-      {nextCreatedAt && <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />}
     </>
   );
 };

@@ -46,15 +46,19 @@ const AnnouncementsScreen = () => {
           paddingHorizontal: 12,
         }}
         renderItem={({ item: announcement, index: i }) => (
-          <Announcement
-            key={announcement.id}
-            nextCreatedAt={announcements?.[i + 1]?.createdAt}
-            announcedBy={announcement.annoucedBy}
-            body={announcement.body}
-            header={announcement.header}
-            createdAt={announcement.createdAt}
-            // onPress={() => router.push(`/announcements/${announcement.id}`)}
-          />
+          <>
+            <Announcement
+              key={announcement.id}
+              announcedBy={announcement.annoucedBy}
+              body={announcement.body}
+              header={announcement.header}
+              createdAt={announcement.createdAt}
+              // onPress={() => router.push(`/announcements/${announcement.id}`)}
+            />
+            {announcements[i + 1] && (
+              <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
+            )}
+          </>
         )}
       />
     </>
@@ -62,7 +66,6 @@ const AnnouncementsScreen = () => {
 };
 
 interface AnnouncementProps {
-  nextCreatedAt?: Date;
   createdAt: Date;
   announcedBy: string;
   header: string;
@@ -71,7 +74,6 @@ interface AnnouncementProps {
 }
 
 const Announcement: React.FC<AnnouncementProps> = ({
-  nextCreatedAt,
   createdAt,
   announcedBy,
   header,
@@ -102,8 +104,6 @@ const Announcement: React.FC<AnnouncementProps> = ({
           </Box>
         </Box>
       </Pressable>
-
-      {nextCreatedAt && <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />}
     </>
   );
 };
