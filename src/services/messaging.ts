@@ -182,8 +182,6 @@ export const useCourseBoardMessages = (boardId: string) => {
               .single()
               .throwOnError();
 
-            console.log('yo', newMessage);
-
             if (newMessage.data) postedMessage = newMessage.data;
           } catch (error) {
             console.warn(error);
