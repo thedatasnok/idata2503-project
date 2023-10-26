@@ -65,8 +65,6 @@ interface MessageProps {
   onPress?: () => void;
 }
 
-const MAX_TEXT_LENGTH = 45;
-
 const Message: React.FC<MessageProps> = ({
   senderName,
   nextCreatedAt,
@@ -74,11 +72,6 @@ const Message: React.FC<MessageProps> = ({
   createdAt,
   onPress,
 }) => {
-  const truncatedContent =
-    content.length > MAX_TEXT_LENGTH
-      ? content.slice(0, MAX_TEXT_LENGTH) + '...' // Truncate text and add ellipsis
-      : content;
-
   return (
     <>
       <Pressable
@@ -101,10 +94,16 @@ const Message: React.FC<MessageProps> = ({
             <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
               {senderName}
             </Text>
-            <Text fontSize='$xs'>{truncatedContent}</Text>
+            <Text fontSize='$xs' numberOfLines={2}>
+              {content}
+            </Text>
           </Box>
-          <Text fontSize='$sm'>Day{dayjs(createdAt).format('DD  LT')}</Text>
         </Box>
+        <Text fontSize='$sm'>
+          {dayjs(createdAt).format('L')}
+          {'\n'}
+          {dayjs(createdAt).format('LT')}
+        </Text>
       </Pressable>
 
       {nextCreatedAt && <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />}
