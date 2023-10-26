@@ -74,3 +74,51 @@ export const useCourse = (courseId: string) => {
     },
   });
 };
+
+export const enum CourseRole {
+  STUDENT = 'STUDENT',
+  ASSISTANT = 'ASSISTANT',
+  LECTURER = 'LECTURER',
+}
+
+export interface CourseMember {
+  user_id: string;
+  name: string;
+  email: string;
+  avatar_url: string;
+  role: CourseRole;
+}
+
+export interface CourseDescription {
+  course_id: string;
+  course_code: string;
+  name: string;
+  description: string;
+  enrolled: boolean;
+  starts_at: string;
+  ends_at: string;
+  staff: CourseMember[];
+}
+
+/**
+ * Hook to fetch a course's description from Supabase.
+ *
+ * @param courseId the course id
+ *
+ * @returns a query object with the result of the query
+ */
+export const useCourseDescription = (courseId: string) => {
+  return useQuery({
+    queryKey: ['whiteboardapp/course-description', courseId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('current_user_course_description')
+        .select('*')
+        .eq('course_id', courseId)
+        .single()
+        .throwOnError();
+
+      return result.data as CourseDescription;
+    },
+  });
+};
