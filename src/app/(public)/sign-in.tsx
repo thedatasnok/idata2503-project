@@ -20,9 +20,8 @@ import React, { useState } from 'react';
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [invalidCredentials, setInvalidCredentials] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { mutateAsync: signIn } = useEmailSignIn();
+  const { mutateAsync: signIn, error, isError } = useEmailSignIn();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -45,10 +44,9 @@ const SignInScreen = () => {
       mt='$2'
       flex={1}
     >
-      <FormControl isInvalid={invalidCredentials}>
+      <FormControl isInvalid={isError}>
         <VStack gap='$2'>
           <Input
-            borderColor={invalidCredentials ? '$error600' : '$gray400'}
             borderWidth='$1'
             borderRadius='$sm'
             width={250}
@@ -58,14 +56,12 @@ const SignInScreen = () => {
               type='text'
               placeholder='Email'
               onChangeText={setEmail}
-              onChange={() => setInvalidCredentials(false)}
             />
             <InputSlot>
               <InputIcon as={Mail} color='$gray400' mt={0} />
             </InputSlot>
           </Input>
           <Input
-            borderColor={invalidCredentials ? '$error600' : '$gray400'}
             borderWidth='$1'
             borderRadius='$sm'
             width={250}
@@ -75,7 +71,6 @@ const SignInScreen = () => {
               type={showPassword ? 'text' : 'password'}
               placeholder='Password'
               onChangeText={setPassword}
-              onChange={() => setInvalidCredentials(false)}
             />
             <InputSlot onPress={handleShowPassword}>
               <InputIcon
