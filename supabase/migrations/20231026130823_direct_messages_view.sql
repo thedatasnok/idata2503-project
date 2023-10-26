@@ -23,16 +23,16 @@ CREATE VIEW current_user_direct_messages_view AS (
       AND (auth.uid() IN (dm.fk_receiver_user_id, dm.fk_sender_user_id))
   )
   SELECT
-    cudm.*,
-    counterpart.fk_user_id AS counterpart_user_id,
-    counterpart.full_name AS counterpart_full_name,
-    counterpart.avatar_url AS counterpart_avatar_url,
-    current_user_profile.fk_user_id AS current_user_id,
-    current_user_profile.full_name AS current_user_full_name,
-    current_user_profile.avatar_url AS current_user_avatar_url
+    cudm.direct_message_id,
+    cudm.direction,
+    cudm.counterpart_user_id,
+    cudm.content,
+    cudm.created_at,
+    cudm.row_number,
+    sender_profile.fk_user_id AS sender_user_id,
+    sender_profile.full_name AS sender_full_name,
+    sender_profile.avatar_url AS sender_avatar_url
   FROM current_user_direct_messages cudm
-  INNER JOIN user_profile counterpart
-    ON cudm.counterpart_user_id = counterpart.fk_user_id
-  INNER JOIN user_profile current_user_profile
-    ON auth.uid() = current_user_profile.fk_user_id
+  INNER JOIN user_profile sender_profile
+    ON cudm.fk_sender_user_id = sender_profile.fk_user_id
 );
