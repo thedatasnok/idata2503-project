@@ -26,7 +26,7 @@ const messages = [
     receiverUserId: 'MyId',
     senderUserId: 'SenderId2',
     content:
-      'Third message that is a very long message because i need to check the styling is correct',
+      'Third message that is a very long message because i need to check the styling is correct bla bla bladiak qwwiojdaluwbdiaubufadjv ay gdjafy fd',
     attachments: 'This is several cat a pictures, trust',
     createdAt: dayjs('2023-10-16 07:15').toDate(),
   },
@@ -99,7 +99,7 @@ const Message: React.FC<MessageProps> = ({
             </Text>
           </Box>
         </Box>
-        <Text fontSize='$sm'>
+        <Text fontSize='$sm' textAlign='center'>
           {dayjs(createdAt).format('L')}
           {'\n'}
           {dayjs(createdAt).format('LT')}
