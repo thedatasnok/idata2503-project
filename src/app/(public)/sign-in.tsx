@@ -7,10 +7,13 @@ import {
   FormControl,
   FormControlError,
   FormControlErrorText,
+  Heading,
+  Image,
   Input,
   InputField,
   InputIcon,
   InputSlot,
+  Text,
   VStack,
 } from '@gluestack-ui/themed';
 import { router } from 'expo-router';
@@ -35,23 +38,20 @@ const SignInScreen = () => {
   }
 
   return (
-    <Box
-      display='flex'
-      flexDirection='row'
-      alignItems='center'
-      justifyContent='center'
-      gap='$4'
-      mt='$2'
-      flex={1}
-    >
+    <Box display='flex' alignItems='center' justifyContent='center' flex={1}>
+      <Image
+        source={require('../../../assets/icon.png')}
+        alt='Logo'
+        width={200}
+        height={200}
+      />
+
+      <Heading color='$gray950'>Welcome!</Heading>
+      <Text pb='$4'>Sign in to your account</Text>
+
       <FormControl isInvalid={isError}>
         <VStack gap='$2'>
-          <Input
-            borderWidth='$1'
-            borderRadius='$sm'
-            width={250}
-            p='$1.5'
-          >
+          <Input borderWidth='$1' borderRadius='$sm' width={250} p='$1.5'>
             <InputField
               type='text'
               placeholder='Email'
@@ -61,12 +61,7 @@ const SignInScreen = () => {
               <InputIcon as={Mail} color='$gray400' mt={0} />
             </InputSlot>
           </Input>
-          <Input
-            borderWidth='$1'
-            borderRadius='$sm'
-            width={250}
-            p='$1.5'
-          >
+          <Input borderWidth='$1' borderRadius='$sm' width={250} p='$1.5'>
             <InputField
               type={showPassword ? 'text' : 'password'}
               placeholder='Password'
