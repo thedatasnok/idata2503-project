@@ -71,6 +71,9 @@ dependencies:
   lucide-react-native:
     specifier: ^0.284.0
     version: 0.284.0(prop-types@15.8.1)(react-native-svg@13.9.0)(react-native@0.72.5)(react@18.2.0)
+  onesignal-expo-plugin:
+    specifier: ^2.0.2
+    version: 2.0.2
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -92,6 +95,9 @@ dependencies:
   react-native-gesture-handler:
     specifier: ~2.12.0
     version: 2.12.0(react-native@0.72.5)(react@18.2.0)
+  react-native-onesignal:
+    specifier: ^5.0.2
+    version: 5.0.2
   react-native-reanimated:
     specifier: ~3.3.0
     version: 3.3.0(@babel/core@7.20.2)(@babel/plugin-proposal-nullish-coalescing-operator@7.18.6)(@babel/plugin-proposal-optional-chaining@7.21.0)(@babel/plugin-transform-arrow-functions@7.22.5)(@babel/plugin-transform-shorthand-properties@7.22.5)(@babel/plugin-transform-template-literals@7.22.5)(react-native@0.72.5)(react@18.2.0)
@@ -8669,6 +8675,14 @@ packages:
     dependencies:
       wrappy: 1.0.2
 
+  /onesignal-expo-plugin@2.0.2:
+    resolution: {integrity: sha512-KVzoNCYkZYjRJOpn2k1CcY1PRVuMMnW/XV5zwEGh7MVnXyLIBHD9I2Yf6dlRa6iPE10qBeWmDD3jZuMB1993hg==}
+    dependencies:
+      '@expo/image-utils': 0.3.22
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /onetime@2.0.1:
     resolution: {integrity: sha512-oyyPpiMaKARvvcgip+JV+7zci5L8D1W9RZIz2l1o08AM3pfspitVWnPt3mzHcBPp12oYMTy0pqrFs/C+m3EwsQ==}
     engines: {node: '>=4'}
@@ -9287,6 +9301,12 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-native: 0.72.5(@babel/core@7.20.2)(@babel/preset-env@7.22.20)(react@18.2.0)
+    dev: false
+
+  /react-native-onesignal@5.0.2:
+    resolution: {integrity: sha512-8CsEQRRwoiNX6JhW0FWbCgkKz5OrsgtmW2BLmOkg7TwNA9Fge2obMda3DSeZniZVDFs6viz6DXkgtZnJjdgNvg==}
+    dependencies:
+      invariant: 2.2.4
     dev: false
 
   /react-native-reanimated@3.3.0(@babel/core@7.20.2)(@babel/plugin-proposal-nullish-coalescing-operator@7.18.6)(@babel/plugin-proposal-optional-chaining@7.21.0)(@babel/plugin-transform-arrow-functions@7.22.5)(@babel/plugin-transform-shorthand-properties@7.22.5)(@babel/plugin-transform-template-literals@7.22.5)(react-native@0.72.5)(react@18.2.0):
