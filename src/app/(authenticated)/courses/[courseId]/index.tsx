@@ -4,19 +4,19 @@ import { formatDate, getTimeLeft } from '@/util/date';
 import {
   Box,
   Divider,
+  FlatList,
   Heading,
   Icon,
   Pressable,
   ScrollView,
   Text,
 } from '@gluestack-ui/themed';
-import dayjs from 'dayjs';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   ArrowRight,
   ChevronRight,
   Clock,
-  Dot,
+  Hash,
   InfoIcon,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
@@ -99,6 +99,33 @@ const CourseScreen = () => {
     },
   ];
 
+  const boards = [
+    {
+      title: 'general',
+    },
+    {
+      title: 'resources',
+    },
+    {
+      title: 'assignment-help',
+    },
+    {
+      title: 'group-1-chat',
+    },
+    {
+      title: 'general',
+    },
+    {
+      title: 'resources',
+    },
+    {
+      title: 'assignment-help',
+    },
+    {
+      title: 'group-1-chat',
+    },
+  ];
+
   return (
     <>
       <Header
@@ -141,6 +168,31 @@ const CourseScreen = () => {
             }
           />
         ))}
+
+        <ComponentHeader title='Boards' />
+
+        <Box
+          backgroundColor='$gray50'
+          rounded='$md'
+          p='$2'
+          maxHeight='$32'
+          borderWidth='$1'
+          borderColor='$gray200'
+        >
+          <FlatList
+            data={boards}
+            ItemSeparatorComponent={() => <Divider />}
+            renderItem={({ item: board }) => (
+              <BoardCard
+                title={(board as { title: string }).title}
+                onPress={() =>
+                  //TODO: Replace this with navigation to specific board
+                  router.push(`/courses/${courseId}/announcements` as any)
+                }
+              />
+            )}
+          />
+        </Box>
       </Box>
     </>
   );
@@ -159,7 +211,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
 }) => {
   return (
     <Box flexDirection='row' justifyContent='space-between' pt='$2'>
-      <Heading>{title}</Heading>
+      <Heading fontSize='$md'>{title}</Heading>
       {showAll && (
         <Pressable
           flexDirection='row'
@@ -169,7 +221,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
             router.push(`/courses/${courseId}/announcements` as any)
           }
         >
-          <Heading> Show All</Heading>
+          <Heading fontSize='$md'> Show all</Heading>
           <Icon as={ArrowRight} />
         </Pressable>
       )}
@@ -247,10 +299,14 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
 
   return (
     <>
-      <Pressable mr='$2' rounded='$md' onPress={onPress} pt='$2'>
+      <Pressable mr='$2' rounded='$md' onPress={onPress}>
         <Box
-          p='$1'
+          p='$2'
           flexDirection='row'
+          backgroundColor='$gray50'
+          borderColor='$gray200'
+          borderWidth='$1'
+          rounded='$md'
           alignItems='center'
           justifyContent='space-between'
         >
@@ -273,7 +329,30 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
           <Icon as={ChevronRight} color={color} />
         </Box>
       </Pressable>
-      <Divider mt='$2' />
+    </>
+  );
+};
+
+interface BoardProps {
+  title: string;
+  onPress?: () => void;
+}
+
+const BoardCard: React.FC<BoardProps> = ({ title, onPress }) => {
+  return (
+    <>
+      <Pressable
+        flexDirection='row'
+        alignItems='flex-end'
+        gap='$2'
+        py='$2'
+        onPress={onPress}
+      >
+        <Icon as={Hash} />
+        <Text color='$gray950' numberOfLines={1}>
+          {title}
+        </Text>
+      </Pressable>
     </>
   );
 };
