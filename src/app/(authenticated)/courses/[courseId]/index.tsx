@@ -8,7 +8,7 @@ import {
   ScrollView,
   Text,
 } from '@gluestack-ui/themed';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { ArrowRight, Dot, InfoIcon } from 'lucide-react-native';
 
 const CourseScreen = () => {
@@ -70,21 +70,12 @@ const CourseScreen = () => {
         onRightIconPress={() => router.push(`/courses/${courseId}/description`)}
       />
 
-      <Box px='$4' py='$2'>
-        <Box flexDirection='row' justifyContent='space-between' mb='$1'>
-          <Heading>Announcements</Heading>
-          <Pressable
-            flexDirection='row'
-            alignItems='center'
-            gap='$1'
-            onPress={() =>
-              router.push(`/courses/${courseId}/announcements` as any)
-            }
-          >
-            <Heading> Show All</Heading>
-            <Icon as={ArrowRight} />
-          </Pressable>
-        </Box>
+      <Box px='$4'>
+        <ComponentHeader
+          title='Announcements'
+          courseId={courseId as string}
+          showAll={true}
+        />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -106,6 +97,37 @@ const CourseScreen = () => {
         </ScrollView>
       </Box>
     </>
+  );
+};
+
+interface ComponentHeaderProps {
+  title: string;
+  courseId?: string;
+  showAll?: boolean;
+}
+
+const ComponentHeader: React.FC<ComponentHeaderProps> = ({
+  title,
+  courseId,
+  showAll,
+}) => {
+  return (
+    <Box flexDirection='row' justifyContent='space-between' my='$2'>
+      <Heading>{title}</Heading>
+      {showAll && (
+        <Pressable
+          flexDirection='row'
+          alignItems='center'
+          gap='$1'
+          onPress={() =>
+            router.push(`/courses/${courseId}/announcements` as any)
+          }
+        >
+          <Heading> Show All</Heading>
+          <Icon as={ArrowRight} w={32} />
+        </Pressable>
+      )}
+    </Box>
   );
 };
 
