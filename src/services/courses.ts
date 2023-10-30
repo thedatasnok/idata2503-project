@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from './supabase';
+import { getCurrentUser } from './auth';
 
 export interface UseCoursesParams {
   active?: boolean;
@@ -100,6 +101,8 @@ export interface CourseDescription {
   staff: CourseMember[];
 }
 
+const DESCRIPTION_KEY = 'whiteboardapp/course-description';
+
 /**
  * Hook to fetch a course's description from Supabase.
  *
@@ -109,7 +112,7 @@ export interface CourseDescription {
  */
 export const useCourseDescription = (courseId: string) => {
   return useQuery({
-    queryKey: ['whiteboardapp/course-description', courseId],
+    queryKey: [DESCRIPTION_KEY, courseId],
     queryFn: async () => {
       const result = await supabase
         .from('current_user_course_description')
@@ -119,6 +122,107 @@ export const useCourseDescription = (courseId: string) => {
         .throwOnError();
 
       return result.data as CourseDescription;
+    },
+  });
+};
+
+// TODO: idk if implemented in a good way or not
+/**
+ * Hook for signing up a user for a course and updating the course member list.
+ *
+ * @returns {UseMutation} A mutation object with methods for signing up for a course.
+ */
+export const useCourseSignUp = () => {
+  const qc = useQueryClient();
+
+  /**
+   * Mutation function to sign up a user for a course.
+   *
+   * @param {string} courseId - The ID of the course the user wants to sign up for.
+   * @returns {Promise<void>} A promise that resolves when the user is signed up successfully.
+   * @throws {Error} Throws an error if there's a problem during the sign-up process.
+   */
+  return useMutation({
+    mutationFn: async (courseId: string) => {
+      const currentUserId = (await getCurrentUser()).data.user?.id;
+
+      // TODO: check if already enrolled?
+
+      const newCourseMember = {
+        fk_course_id: courseId,
+        fk_user_id: currentUserId,
+        role: 'STUDENT',
+        registered_at: new Date(),
+      };
+
+      const { error } = await supabase
+        .from('course_member')
+        .upsert([newCourseMember]);
+
+      if (error) throw error;
+    },
+    // TODO: something more that needs to be invalidated?
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [DESCRIPTION_KEY] });
+    },
+  });
+};
+
+// TODO: idk if implemented in a good way or not
+/**
+ * Hook to fetch a course's announcements from Supabase.
+ *
+ * @param courseId the course id
+ * @returns a query object with the result of the query
+ */
+export const useAnnouncements = (courseId: string) => {
+  return useQuery({
+    queryKey: ['whiteboardapp/announcements', courseId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('course_announcement')
+        .select(
+          'announcement_id, title, content, created_at, fk_created_by_member_id'
+        )
+        .eq('fk_course_id', courseId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Fetch the 'created_by' information by joining with 'course_member' and 'user_profile' tables
+      const announcementsWithCreatedBy = await Promise.all(
+        data.map(async (announcement) => {
+          const memberData = await supabase
+            .from('course_member')
+            .select('fk_user_id, role')
+            .eq('course_member_id', announcement.fk_created_by_member_id)
+            .single();
+
+          if (!memberData) {
+            return {
+              ...announcement,
+              created_by: 'Unknown User',
+              avatar: 'default_avatar_url',
+              role: 'Unknown Role',
+            };
+          }
+
+          const userData = await supabase
+            .from('user_profile')
+            .select('full_name, avatar_url')
+            .eq('fk_user_id', memberData.data?.fk_user_id)
+            .single();
+
+          return {
+            ...announcement,
+            created_by: userData.data?.full_name || 'Unknown User',
+            avatar: userData.data?.avatar_url || 'default_avatar_url',
+            role: memberData.data?.role || 'Unknown Role',
+          };
+        })
+      );
+
+      return announcementsWithCreatedBy;
     },
   });
 };
