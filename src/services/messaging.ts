@@ -237,3 +237,45 @@ export const useCourseBoardMessages = (boardId: string) => {
     messagesBeingSent: [],
   };
 };
+
+// TODO: idk if implemented in a good way or not
+
+/**
+ * Hook for fetching the most recent direct message for each counterpart user.
+ *
+ * @returns an object containing the most recent message for each counterpart.
+ */
+export const useRecentDirectMessages = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['whiteboardapp/recent-direct-messages'],
+    queryFn: async () => {
+      const recentMessages = await supabase
+        .from('current_user_direct_messages_view')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      const mostRecentMessagesMap = new Map();
+
+      for (const message of recentMessages.data!) {
+        const counterpartUserId = message.counterpart_user_id;
+
+        if (
+          !mostRecentMessagesMap.has(counterpartUserId) ||
+          message.created_at >
+            mostRecentMessagesMap.get(counterpartUserId).created_at
+        ) {
+          mostRecentMessagesMap.set(counterpartUserId, message);
+        }
+      }
+
+      const mostRecentMessages = Array.from(mostRecentMessagesMap.values());
+
+      return mostRecentMessages as DirectMessage[];
+    },
+  });
+
+  return {
+    recentMessages: data,
+    isLoading,
+  };
+};
