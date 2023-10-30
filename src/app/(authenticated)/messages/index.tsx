@@ -1,4 +1,5 @@
 import Header from '@/components/navigation/Header';
+import { useRecentDirectMessages } from '@/services/messaging';
 import { Box, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { FlatList } from 'react-native';
@@ -33,25 +34,28 @@ const messages = [
 ] as const;
 
 const MessagesScreen = () => {
+  const { recentMessages, isLoading } = useRecentDirectMessages();
+
   return (
     <>
       <Header title='Messages' />
       <FlatList
-        data={messages}
-        keyExtractor={(i) => i.id}
+        data={recentMessages}
+        keyExtractor={(i) => i.direct_message_id}
         style={{
           paddingHorizontal: 12,
         }}
         renderItem={({ item: message, index: i }) => (
           <>
             <Message
-              key={message.id}
-              createdAt={message.createdAt}
-              senderName={message.senderUserId}
+              key={message.direct_message_id}
+              direction={message.direction}
+              createdAt={message.created_at}
+              senderName={message.sender_full_name}
               content={message.content}
               // onPress={() => router.push(`/announcements/${announcement.id}`)}
             />
-            {messages[i + 1] && (
+            {recentMessages?.[i + 1] && (
               <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
             )}
           </>
@@ -62,13 +66,15 @@ const MessagesScreen = () => {
 };
 
 interface MessageProps {
+  direction: string;
   senderName: string;
   content: string;
-  createdAt: Date;
+  createdAt: string;
   onPress?: () => void;
 }
 
 const Message: React.FC<MessageProps> = ({
+  direction,
   senderName,
   content,
   createdAt,
@@ -94,7 +100,7 @@ const Message: React.FC<MessageProps> = ({
         >
           <Box display='flex' flexDirection='column' flexGrow={1}>
             <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
-              {senderName}
+              {direction === 'INGOING' ? senderName : 'You'}
             </Text>
             <Text fontSize='$xs' numberOfLines={2}>
               {content}
@@ -102,7 +108,11 @@ const Message: React.FC<MessageProps> = ({
           </Box>
         </Box>
         <Text fontSize='$sm' textAlign='center'>
-          {dayjs(createdAt).format('L')}
+          {dayjs(createdAt).isSame(dayjs())
+            ? 'Today'
+            : dayjs(createdAt).isSame(dayjs().subtract(1, 'day'))
+            ? 'Yesterday'
+            : dayjs(createdAt).format('L')}
           {'\n'}
           {dayjs(createdAt).format('LT')}
         </Text>
