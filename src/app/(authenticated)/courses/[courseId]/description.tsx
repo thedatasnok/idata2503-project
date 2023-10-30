@@ -4,9 +4,16 @@ import {
   CourseMember,
   useCourseDescription,
 } from '@/services/courses';
-import { Box, Text, Icon } from '@gluestack-ui/themed';
+import {
+  Box,
+  Text,
+  Icon,
+  Button,
+  ButtonText,
+  ScrollView,
+} from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native';
 import { Mail } from 'lucide-react-native';
 
 /**
@@ -15,6 +22,12 @@ import { Mail } from 'lucide-react-native';
 const CourseDescriptionScreen = () => {
   const { courseId } = useLocalSearchParams();
   const { data: courseDescription } = useCourseDescription(courseId as string);
+
+  const signUp = () => {
+    // TODO: add user as course_member in supabase
+    return;
+  };
+
   return (
     <>
       <Header
@@ -22,10 +35,9 @@ const CourseDescriptionScreen = () => {
         title='Course Description'
         back
       />
-      {/* TODO: Inline styles no good? */}
-      <ScrollView style={styles.screenContainer}>
+      <ScrollView px={12}>
         <Box display='flex' flexDirection='row'>
-          <Text fontSize={20} fontWeight='bold' paddingTop={10}>
+          <Text fontSize={20} fontWeight='bold' pt={'$3'}>
             {courseDescription?.course_code} {courseDescription?.name}
           </Text>
         </Box>
@@ -50,6 +62,14 @@ const CourseDescriptionScreen = () => {
             </>
           )}
         />
+
+        {courseDescription?.enrolled && (
+          <Box py='$5' px={'$20'}>
+            <Button bg='$primary400' onPress={() => signUp()}>
+              <ButtonText>Sign Up</ButtonText>
+            </Button>
+          </Box>
+        )}
       </ScrollView>
     </>
   );
@@ -92,9 +112,3 @@ const Lecturer: React.FC<LecturerProps> = ({ name, email }) => {
 };
 
 export default CourseDescriptionScreen;
-
-const styles = StyleSheet.create({
-  screenContainer: {
-    paddingHorizontal: 12,
-  },
-});
