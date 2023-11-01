@@ -34,13 +34,13 @@ const messages = [
 ] as const;
 
 const MessagesScreen = () => {
-  const { recentMessages, isLoading } = useRecentDirectMessages();
+  const { data, isLoading } = useRecentDirectMessages();
 
   return (
     <>
       <Header title='Messages' />
       <FlatList
-        data={recentMessages}
+        data={data}
         keyExtractor={(i) => i.direct_message_id}
         style={{
           paddingHorizontal: 12,
@@ -55,7 +55,7 @@ const MessagesScreen = () => {
               content={message.content}
               // onPress={() => router.push(`/announcements/${announcement.id}`)}
             />
-            {recentMessages?.[i + 1] && (
+            {data?.[i + 1] && (
               <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
             )}
           </>
@@ -81,43 +81,41 @@ const Message: React.FC<MessageProps> = ({
   onPress,
 }) => {
   return (
-    <>
-      <Pressable
+    <Pressable
+      display='flex'
+      flexDirection='row'
+      alignItems='center'
+      px='$1'
+      gap='$1'
+      my='$1'
+      onPress={onPress}
+    >
+      <Box
+        flex={1}
+        gap={-4}
         display='flex'
         flexDirection='row'
         alignItems='center'
-        px='$1'
-        gap='$1'
-        my='$1'
-        onPress={onPress}
       >
-        <Box
-          flex={1}
-          gap={-4}
-          display='flex'
-          flexDirection='row'
-          alignItems='center'
-        >
-          <Box display='flex' flexDirection='column' flexGrow={1}>
-            <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
-              {direction === 'INGOING' ? senderName : 'You'}
-            </Text>
-            <Text fontSize='$xs' numberOfLines={2}>
-              {content}
-            </Text>
-          </Box>
+        <Box display='flex' flexDirection='column' flexGrow={1}>
+          <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
+            {direction === 'INGOING' ? senderName : 'You'}
+          </Text>
+          <Text fontSize='$xs' numberOfLines={2}>
+            {content}
+          </Text>
         </Box>
-        <Text fontSize='$sm' textAlign='center'>
-          {dayjs(createdAt).isSame(dayjs())
-            ? 'Today'
-            : dayjs(createdAt).isSame(dayjs().subtract(1, 'day'))
-            ? 'Yesterday'
-            : dayjs(createdAt).format('L')}
-          {'\n'}
-          {dayjs(createdAt).format('LT')}
-        </Text>
-      </Pressable>
-    </>
+      </Box>
+      <Text fontSize='$sm' textAlign='center'>
+        {dayjs(createdAt).isSame(dayjs())
+          ? 'Today'
+          : dayjs(createdAt).isSame(dayjs().subtract(1, 'day'))
+          ? 'Yesterday'
+          : dayjs(createdAt).format('L')}
+        {'\n'}
+        {dayjs(createdAt).format('LT')}
+      </Text>
+    </Pressable>
   );
 };
 
