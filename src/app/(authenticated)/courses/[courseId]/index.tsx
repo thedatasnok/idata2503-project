@@ -1,5 +1,6 @@
 import Header from '@/components/navigation/Header';
 import { useCourse } from '@/services/courses';
+import { getToken } from '@/theme';
 import { formatDate, getTimeLeft } from '@/util/date';
 import {
   Box,
@@ -284,8 +285,8 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
   const [timeLeft, setTimeLeft] = useState(getTimeLeft(dueDate));
   const color =
     formattedDate.startsWith('Today') || formattedDate.startsWith('Tomorrow')
-      ? 'red'
-      : '$gray950';
+      ? getToken('colors', 'error500')
+      : getToken('colors', 'gray950');
 
   //Create an interval to update the time left every second
   useEffect(() => {
