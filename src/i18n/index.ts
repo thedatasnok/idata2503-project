@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import no from './locales/no.json';
+import dayjs from 'dayjs';
 
 /**
  * Utility type for the schema of json translation files.
@@ -33,6 +34,16 @@ i18next.use(initReactI18next).init({
   resources,
   lng: 'no',
   fallbackLng: 'en',
+});
+
+i18next.on('languageChanged', (lang) => {
+  if (lang === 'no') {
+    // alternative is to rename the language
+    dayjs.locale('nb');
+    return;
+  }
+
+  dayjs.locale(lang);
 });
 
 export default i18next;
