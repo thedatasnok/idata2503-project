@@ -213,3 +213,123 @@ export const useAnnouncements = (courseId: string) => {
     },
   });
 };
+
+// // TODO: Uses announcement_view
+// export interface AnnouncementItem {
+//   announcement_id: string;
+//   created_by_full_name: string;
+//   created_by_role: string;
+//   created_by_avatar_url: string;
+//   content: string;
+//   title: string;
+//   created_at: string;
+// }
+
+// // TODO: Uses announcement_view
+// export const useAnnouncements = (courseId: string) => {
+//   return useQuery({
+//     queryKey: ['whiteboardapp/announcements', courseId],
+//     queryFn: async () => {
+//       const result = await supabase
+//         .from('announcement_view')
+//         .select(
+//           'announcement_id, created_by_full_name, created_by_role, created_by_avatar_url, content, title, created_at, fk_course_id'
+//         )
+//         .eq('fk_course_id', courseId)
+//         .order('created_at', { ascending: false })
+//         .throwOnError();
+
+//       return result.data as AnnouncementItem[];
+//     },
+//   });
+// };
+
+// // TODO: Uses announcement_view
+// export const useAnnouncement = (announcementId: string) => {
+//   return useQuery({
+//     queryKey: ['whiteboardapp/announcement', announcementId],
+//     queryFn: async () => {
+//       const result = await supabase
+//         .from('announcement_view')
+//         .select(
+//           'announcement_id, created_by_full_name, created_by_role, created_by_avatar_url, content, title, created_at, fk_course_id'
+//         )
+//         .eq('announcement_id', announcementId)
+//         .single()
+//         .throwOnError();
+
+//       return result.data as AnnouncementItem;
+//     },
+//   });
+// };
+
+// TODO: idk if implemented in a good way or not
+/**
+ * Hook to fetch a specific announcement from Supabase.
+ *
+ * @param announcementId the announcement id
+ * @returns a query object with the result of the query
+ */
+export const useAnnouncement = (announcementId: string) => {
+  return useQuery({
+    queryKey: ['whiteboardapp/announcement', announcementId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('course_announcement')
+        .select('title, content, created_at, fk_created_by_member_id')
+        .eq('announcement_id', announcementId)
+        .single();
+
+      if (error) throw error;
+
+      // Fetch the 'created_by' information by joining with 'course_member' and 'user_profile' tables
+      const memberData = await supabase
+        .from('course_member')
+        .select('fk_user_id, role')
+        .eq('course_member_id', data.fk_created_by_member_id)
+        .single();
+
+      if (!memberData) {
+        return {
+          ...data,
+          created_by: 'Unknown User',
+          avatar: 'default_avatar_url',
+          role: 'Unknown Role',
+        };
+      }
+
+      const userData = await supabase
+        .from('user_profile')
+        .select('full_name, avatar_url')
+        .eq('fk_user_id', memberData.data?.fk_user_id)
+        .single();
+
+      return {
+        ...data,
+        created_by: userData.data?.full_name || 'Unknown User',
+        avatar: userData.data?.avatar_url || 'default_avatar_url',
+        role: memberData.data?.role || 'Unknown Role',
+      };
+    },
+  });
+};
+
+// TODO: do i need to make sure the current user is a member?
+export const useMembershipRole = (courseId: string) => {
+  const { session } = useAuth();
+
+  return useQuery({
+    queryKey: ['whiteboardapp/course-member', courseId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('course_member')
+        .select('role')
+        .eq('fk_course_id', courseId)
+        .eq('fk_user_id', session?.user.id)
+        .single()
+        .throwOnError();
+
+      return result.data;
+    },
+  });
+};
