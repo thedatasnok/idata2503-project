@@ -4,13 +4,11 @@ import { getToken } from '@/theme';
 import { formatDate, getTimeLeft } from '@/util/date';
 import {
   Box,
-  Divider,
-  FlatList,
   Heading,
   Icon,
   Pressable,
   ScrollView,
-  Text,
+  Text
 } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import {
@@ -19,6 +17,7 @@ import {
   Clock,
   Hash,
   InfoIcon,
+  Mail
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 
@@ -127,6 +126,17 @@ const CourseScreen = () => {
     },
   ];
 
+  const lecturer = [
+    {
+      name: 'Albert Einstein',
+      email: 'albert.stein@yahoo.com',
+    },
+    {
+      name: 'Issac Newton',
+      email: 'issac.newton@live.no',
+    },
+  ];
+
   return (
     <>
       <Header
@@ -135,13 +145,17 @@ const CourseScreen = () => {
         onRightIconPress={() => router.push(`/courses/${courseId}/description`)}
       />
 
-      <Box px='$4'>
+      <ScrollView nestedScrollEnabled px='$4'>
         <ComponentHeader
           title='Announcements'
           courseId={courseId as string}
           showAll={true}
         />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView
+          nestedScrollEnabled={true}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        >
           {announcements.slice(0, 3).map((announcement, index) => (
             <AnnouncementCard
               key={index}
@@ -175,26 +189,27 @@ const CourseScreen = () => {
         <Box
           backgroundColor='$gray50'
           rounded='$md'
-          p='$2'
-          maxHeight='$32'
+          px='$2'
           borderWidth='$1'
           borderColor='$gray200'
         >
-          <FlatList
-            data={boards}
-            ItemSeparatorComponent={() => <Divider />}
-            renderItem={({ item: board }) => (
-              <BoardCard
-                title={(board as { title: string }).title}
-                onPress={() =>
-                  //TODO: Replace this with navigation to specific board
-                  router.push(`/courses/${courseId}/announcements` as any)
-                }
-              />
-            )}
-          />
+          {boards.map((boards, index) => (
+            <BoardCard
+              key={index}
+              title={boards.title}
+              onPress={() =>
+                //TODO: Replace this with navigation to specific board
+                router.push(`/courses/${courseId}/announcements` as any)
+              }
+            />
+          ))}
         </Box>
-      </Box>
+
+        <ComponentHeader title='Lecturers' />
+        {lecturer.map((lecturer, index) => (
+          <Lecturer key={index} name={lecturer.name} email={lecturer.email} />
+        ))}
+      </ScrollView>
     </>
   );
 };
@@ -299,38 +314,31 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
   }, [dueDate]);
 
   return (
-    <>
-      <Pressable mr='$2' rounded='$md' onPress={onPress}>
-        <Box
-          p='$2'
-          flexDirection='row'
-          backgroundColor='$gray50'
-          borderColor='$gray200'
-          borderWidth='$1'
-          rounded='$md'
-          alignItems='center'
-          justifyContent='space-between'
-        >
-          <Icon as={Clock} color={color} mr='$4' />
-          <Box flex={1}>
-            <Text
-              fontSize='$lg'
-              fontWeight='$bold'
-              numberOfLines={1}
-              color={color}
-            >
-              {title}
-            </Text>
-            <Box flexDirection='row'>
-              <Text fontSize='$sm' color={color} numberOfLines={1}>
-                {formattedDate} - {timeLeft}
-              </Text>
-            </Box>
-          </Box>
-          <Icon as={ChevronRight} color={color} />
+    <Pressable
+      rounded='$md'
+      onPress={onPress}
+      p='$2'
+      mb='$1'
+      flexDirection='row'
+      backgroundColor='$gray50'
+      borderColor='$gray200'
+      borderWidth='$1'
+      alignItems='center'
+      justifyContent='space-between'
+    >
+      <Icon as={Clock} color={color} mr='$4' />
+      <Box flex={1}>
+        <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1} color={color}>
+          {title}
+        </Text>
+        <Box flexDirection='row'>
+          <Text fontSize='$sm' color={color} numberOfLines={1}>
+            {formattedDate} - {timeLeft}
+          </Text>
         </Box>
-      </Pressable>
-    </>
+      </Box>
+      <Icon as={ChevronRight} color={color} />
+    </Pressable>
   );
 };
 
@@ -341,20 +349,53 @@ interface BoardProps {
 
 const BoardCard: React.FC<BoardProps> = ({ title, onPress }) => {
   return (
-    <>
-      <Pressable
+    <Pressable
+      flexDirection='row'
+      alignItems='flex-end'
+      gap='$2'
+      py='$2'
+      onPress={onPress}
+    >
+      <Icon as={Hash} />
+      <Text color='$gray950' numberOfLines={1}>
+        {title}
+      </Text>
+    </Pressable>
+  );
+};
+
+interface LecturerProps {
+  name: string;
+  email: string;
+  onPress?: () => void;
+}
+
+const Lecturer: React.FC<LecturerProps> = ({ name, email, onPress }) => {
+  return (
+    <Pressable rounded='$md' onPress={onPress} pb='$1'>
+      <Box
+        p='$2'
         flexDirection='row'
-        alignItems='flex-end'
-        gap='$2'
-        py='$2'
-        onPress={onPress}
+        backgroundColor='$gray50'
+        borderColor='$gray200'
+        borderWidth='$1'
+        rounded='$md'
+        alignItems='center'
+        justifyContent='space-between'
       >
-        <Icon as={Hash} />
-        <Text color='$gray950' numberOfLines={1}>
-          {title}
-        </Text>
-      </Pressable>
-    </>
+        <Box flex={1}>
+          <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1}>
+            {name}
+          </Text>
+          <Box flexDirection='row'>
+            <Text fontSize='$sm' numberOfLines={1}>
+              {email}
+            </Text>
+          </Box>
+        </Box>
+        <Icon as={Mail} />
+      </Box>
+    </Pressable>
   );
 };
 
