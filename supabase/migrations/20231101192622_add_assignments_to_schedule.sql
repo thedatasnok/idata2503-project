@@ -1,4 +1,6 @@
-CREATE OR REPLACE VIEW user_schedule_view AS (
+DROP VIEW user_schedule_view;
+
+CREATE VIEW user_schedule_view AS (
   WITH current_user_membership AS (
     SELECT 
       cm.fk_course_id,
