@@ -1,9 +1,10 @@
 import Header from '@/components/navigation/Header';
 import { useAnnouncements, useCourse } from '@/services/courses';
-import { Box, Pressable, Text } from '@gluestack-ui/themed';
+import { Box, Pressable, Text, Icon } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams } from 'expo-router';
 import { FlatList } from 'react-native';
+import { Dot } from 'lucide-react-native';
 
 // TODO: Replace these with data loaded from backend (from course props?)
 // const announcements = [
@@ -38,13 +39,13 @@ const AnnouncementsScreen = () => {
   return (
     <>
       <Header context={course?.course_code} title='Announcements' back />
-      <Text>Announcements</Text>
 
       <FlatList
         data={announcements}
         keyExtractor={(i) => i.announcement_id}
         style={{
           paddingHorizontal: 12,
+          paddingTop: 12,
         }}
         renderItem={({ item: announcement, index: i }) => (
           <>
@@ -82,30 +83,33 @@ const Announcement: React.FC<AnnouncementProps> = ({
   onPress,
 }) => {
   return (
-    <>
-      <Pressable
-        display='flex'
-        flexDirection='column'
-        alignItems='center'
-        px='$1'
-        gap='$1'
-        my='$1'
-        onPress={onPress}
-      >
-        <Box flex={1} gap={-4}>
-          <Text color='$primary600' fontWeight='$semibold' fontSize='$md'>
-            {title}
+    <Pressable
+      display='flex'
+      flexDirection='column'
+      alignItems='center'
+      px='$1'
+      gap='$1'
+      my='$1'
+      onPress={onPress}
+    >
+      <Box flex={1} gap={-4}>
+        <Text color='$gray900' fontWeight='$semibold' fontSize='$md'>
+          {title}
+        </Text>
+        <Text fontSize='$xs' numberOfLines={2} color='$gray800'>
+          {content}
+        </Text>
+        <Box display='flex' flexDirection='row' alignItems='center' pt='$1'>
+          <Text fontSize='$xs' color='$gray600'>
+            {dayjs(createdAt).fromNow()}
           </Text>
-          <Text fontSize='$xs' numberOfLines={2}>
-            {content}
+          <Icon as={Dot} />
+          <Text fontSize='$xs' color='$gray600'>
+            {announcedBy}
           </Text>
-          <Box display='flex' flexDirection='row'>
-            <Text fontSize='$xs'>{dayjs(createdAt).format('LT')}</Text>
-            <Text fontSize='$xs'>{announcedBy}</Text>
-          </Box>
         </Box>
-      </Pressable>
-    </>
+      </Box>
+    </Pressable>
   );
 };
 

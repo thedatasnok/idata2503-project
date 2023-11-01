@@ -44,6 +44,7 @@ const MessagesScreen = () => {
         keyExtractor={(i) => i.direct_message_id}
         style={{
           paddingHorizontal: 12,
+          paddingTop: 6,
         }}
         renderItem={({ item: message, index: i }) => (
           <>
@@ -99,7 +100,7 @@ const Message: React.FC<MessageProps> = ({
       >
         <Box display='flex' flexDirection='column' flexGrow={1}>
           <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
-            {direction === 'INGOING' ? senderName : 'You'}
+            {direction === 'INGOING' ? senderName : 'You | ' + senderName}
           </Text>
           <Text fontSize='$xs' numberOfLines={2}>
             {content}
