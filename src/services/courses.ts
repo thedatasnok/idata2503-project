@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/store/global';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from './supabase';
-import { getCurrentUser } from './auth';
 
 export interface UseCoursesParams {
   active?: boolean;
@@ -134,34 +134,21 @@ export const useCourseDescription = (courseId: string) => {
  */
 export const useCourseSignUp = () => {
   const qc = useQueryClient();
+  const { session } = useAuth();
 
-  /**
-   * Mutation function to sign up a user for a course.
-   *
-   * @param {string} courseId - The ID of the course the user wants to sign up for.
-   * @returns {Promise<void>} A promise that resolves when the user is signed up successfully.
-   * @throws {Error} Throws an error if there's a problem during the sign-up process.
-   */
   return useMutation({
     mutationFn: async (courseId: string) => {
-      const currentUserId = (await getCurrentUser()).data.user?.id;
-
-      // TODO: check if already enrolled?
-
       const newCourseMember = {
         fk_course_id: courseId,
-        fk_user_id: currentUserId,
+        fk_user_id: session?.user.id,
         role: 'STUDENT',
-        registered_at: new Date(),
       };
 
-      const { error } = await supabase
+      await supabase
         .from('course_member')
-        .upsert([newCourseMember]);
-
-      if (error) throw error;
+        .insert([newCourseMember])
+        .throwOnError();
     },
-    // TODO: something more that needs to be invalidated?
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [DESCRIPTION_KEY] });
     },
