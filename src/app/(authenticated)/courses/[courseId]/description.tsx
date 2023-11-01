@@ -37,7 +37,7 @@ const CourseDescriptionScreen = () => {
       />
       <ScrollView px={12}>
         <Box display='flex' flexDirection='row'>
-          <Text fontSize={20} fontWeight='bold' pt={'$3'}>
+          <Text fontSize='$xl' fontWeight='bold' pt={'$3'}>
             {courseDescription?.course_code} {courseDescription?.name}
           </Text>
         </Box>

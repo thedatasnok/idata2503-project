@@ -1,10 +1,21 @@
 import Header from '@/components/navigation/Header';
-import { useAnnouncements, useCourse } from '@/services/courses';
-import { Box, Pressable, Text, Icon } from '@gluestack-ui/themed';
+import {
+  useAnnouncements,
+  useCourse,
+  useMembershipRole,
+} from '@/services/courses';
+import {
+  Box,
+  Pressable,
+  Text,
+  Icon,
+  Button,
+  styled,
+} from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
-import { Dot } from 'lucide-react-native';
+import { Dot, PlusCircle } from 'lucide-react-native';
 
 // TODO: Replace these with data loaded from backend (from course props?)
 // const announcements = [
@@ -35,6 +46,8 @@ const AnnouncementsScreen = () => {
   const { courseId } = useLocalSearchParams();
   const { data: course } = useCourse(courseId as string);
   const { data: announcements } = useAnnouncements(courseId as string);
+  const { data: memberShip } = useMembershipRole(courseId as string);
+  const router = useRouter();
 
   return (
     <>
@@ -55,7 +68,11 @@ const AnnouncementsScreen = () => {
               content={announcement.content}
               title={announcement.title}
               createdAt={announcement.created_at}
-              // onPress={() => router.push(`/announcements/${announcement.id}`)}
+              onPress={() =>
+                router.push(
+                  `courses/${courseId}/announcements/${announcement.announcement_id}` as any
+                )
+              }
             />
             {announcements?.[i + 1] && (
               <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
@@ -63,12 +80,29 @@ const AnnouncementsScreen = () => {
           </>
         )}
       />
+      {/* TODO: CHECK ROLES LECTURER AND ASSISTANT, IT IS CHANGED FOR TESTING PURPOSES */}
+      {(memberShip?.role === 'LECTURER' || memberShip?.role === 'STUDENT') && (
+        <Pressable
+          display='flex'
+          flexDirection='row-reverse'
+          p='$4'
+          onPress={() =>
+            router.push(
+              `/courses/${courseId}/announcements/create-announcement` as any
+            )
+          }
+        >
+          {/* TODO: maybe style own svg, if we want it to be like figma */}
+          {/* @ts-ignore */}
+          <Icon size={40} color='$primary600' as={PlusCircle} />
+        </Pressable>
+      )}
     </>
   );
 };
 
 interface AnnouncementProps {
-  createdAt: Date;
+  createdAt: string;
   announcedBy: string;
   title: string;
   content: string;
