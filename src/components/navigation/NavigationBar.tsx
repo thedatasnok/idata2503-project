@@ -8,12 +8,14 @@ import {
   MessageSquareIcon,
   SettingsIcon,
 } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const NavigationBar = () => {
   const path = usePathname();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -23,6 +25,7 @@ const NavigationBar = () => {
       alignItems='center'
       justifyContent='space-between'
       px='$3'
+      gap='$2'
       pb={insets.bottom}
       borderTopWidth={1}
       borderTopColor='$gray300'
@@ -30,35 +33,35 @@ const NavigationBar = () => {
       <Tab
         active={path === '/'}
         icon={HomeIcon}
-        label='Home'
+        label={t('NAVIGATION.HOME')}
         onPress={() => router.push('/')}
       />
 
       <Tab
         active={path.startsWith('/courses')}
         icon={BookMarkedIcon}
-        label='Courses'
+        label={t('NAVIGATION.COURSES')}
         onPress={() => router.push('/courses/')}
       />
 
       <Tab
         active={path.startsWith('/schedule')}
         icon={CalendarDaysIcon}
-        label='Schedule'
+        label={t('NAVIGATION.SCHEDULE')}
         onPress={() => router.push('/schedule/')}
       />
 
       <Tab
         active={path.startsWith('/messages')}
         icon={MessageSquareIcon}
-        label='Messages'
+        label={t('NAVIGATION.MESSAGES')}
         onPress={() => router.push('/messages/')}
       />
 
       <Tab
         active={path.startsWith('/settings')}
         icon={SettingsIcon}
-        label='Settings'
+        label={t('NAVIGATION.SETTINGS')}
         onPress={() => router.push('/settings')}
       />
     </Box>
@@ -80,6 +83,8 @@ const TabContainer = styled(Pressable, {
   paddingTop: '$2',
   paddingBottom: '$1.5',
   marginTop: -1,
+  flexGrow: 1,
+  flexBasis: '$0',
   gap: '$2',
   ':active': {
     borderTopWidth: 1,

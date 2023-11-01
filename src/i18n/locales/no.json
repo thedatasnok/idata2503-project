@@ -1,5 +1,38 @@
 {
-  "welcome": "Velkommen til Whiteboard App {{name}}!",
-  "userprofile": "Brukerprofil",
-  "settings": "Innstillinger"
+  "NAVIGATION": {
+    "HOME": "Hjem",
+    "COURSES": "Emner",
+    "SCHEDULE": "Kalender",
+    "MESSAGES": "Meldinger",
+    "SETTINGS": "Innstillinger"
+  },
+  "GENERAL": {
+    "CANCEL": "Avbryt"
+  },
+  "TIME": {
+    "TODAY": "I dag",
+    "YESTERDAY": "I går",
+    "TOMORROW": "I morgen",
+    "LAST": "Forrige"
+  },
+  "FEATURES": {
+    "COURSES": {
+      "ACTIVE_COURSES": "Aktive emner",
+      "COMPLETED_COURSES": "Fullførte emner"
+    },
+    "SETTINGS": {
+      "FULL_NAME": "Fullt navn",
+      "FULL_NAME_REQUIRED": "Fullt navn er påkrevd",
+      "EMAIL": "E-postadresse",
+      "EMAIL_REQUIRED": "Ugyldig e-postadresse",
+      "EMAIL_NOTIFICATIONS": "Email notifikasjoner",
+      "PUSH_NOTIFICATIONS": "Push notifikasjoner",
+      "NOTIFICATIONS": "Notifikasjoner",
+      "LANGUAGE": "Språk",
+      "NO_LANGUAGE_SELECTED": "Velg språk",
+      "USER_PROFILE": "Brukerprofil",
+      "UPDATE_PROFILE": "Oppdater profil",
+      "SIGN_OUT": "Logg ut"
+    }
+  }
 }

@@ -125,17 +125,17 @@ const SettingsScreen = () => {
 
   return (
     <>
-      <Header title={t('settings')} />
+      <Header title={t('NAVIGATION.SETTINGS')} />
 
       <ScrollView>
         <Box display='flex' flexDirection='column' p='$4' flex={1}>
-          <Heading pb='$2'>{t('userprofile')}</Heading>
+          <Heading pb='$2'>{t('FEATURES.SETTINGS.USER_PROFILE')}</Heading>
 
           <VStack>
             <FormControl isInvalid={'fullName' in errors}>
               <FormControlLabel>
                 <FormControlLabelText color='$gray950'>
-                  Full name
+                  {t('FEATURES.SETTINGS.FULL_NAME')}
                 </FormControlLabelText>
               </FormControlLabel>
 
@@ -168,7 +168,7 @@ const SettingsScreen = () => {
 
             <FormControl isInvalid={'email' in errors}>
               <FormControlLabelText color='$gray950' pt='$2'>
-                Email
+                {t('FEATURES.SETTINGS.EMAIL')}
               </FormControlLabelText>
 
               <Controller
@@ -200,60 +200,50 @@ const SettingsScreen = () => {
 
             <Box pt='$5'>
               <Button onPress={handleSubmit(onSubmit)}>
-                <ButtonText>Update Profile</ButtonText>
+                <ButtonText>{t('FEATURES.SETTINGS.UPDATE_PROFILE')}</ButtonText>
               </Button>
             </Box>
           </VStack>
 
+          <Heading mt='$2'>{t('FEATURES.SETTINGS.NOTIFICATIONS')}</Heading>
+
           <VStack>
-            <Text pt='$8' fontSize='$xl' fontWeight='bold'>
-              System Settings
-            </Text>
-            <Box p='$1'>
-              <Text pt='$2' fontWeight='bold'>
-                Notifications
-              </Text>
+            <Pressable
+              flexDirection='row'
+              justifyContent='space-between'
+              alignItems='center'
+              py='$2'
+              onPress={handleEmailNotificationToggle}
+            >
+              <Text>{t('FEATURES.SETTINGS.EMAIL_NOTIFICATIONS')}</Text>
+              <Switch
+                value={emailNotifications}
+                onValueChange={handleEmailNotificationToggle}
+              />
+            </Pressable>
+            <Divider />
 
-              <Pressable
-                flexDirection='row'
-                justifyContent='space-between'
-                alignItems='center'
-                py='$2'
-                onPress={handleEmailNotificationToggle}
-              >
-                <Text>Email notifications</Text>
-                <Switch
-                  value={emailNotifications}
-                  onValueChange={handleEmailNotificationToggle}
-                />
-              </Pressable>
-              <Divider />
-
-              <Pressable
-                flexDirection='row'
-                justifyContent='space-between'
-                alignItems='center'
-                py='$2'
-                onPress={handlePushNotificationToggle}
-              >
-                <Text>Push notifications</Text>
-                <Switch
-                  value={pushNotifications}
-                  onValueChange={handlePushNotificationToggle}
-                />
-              </Pressable>
-              <Divider />
-            </Box>
+            <Pressable
+              flexDirection='row'
+              justifyContent='space-between'
+              alignItems='center'
+              py='$2'
+              onPress={handlePushNotificationToggle}
+            >
+              <Text>{t('FEATURES.SETTINGS.PUSH_NOTIFICATIONS')}</Text>
+              <Switch
+                value={pushNotifications}
+                onValueChange={handlePushNotificationToggle}
+              />
+            </Pressable>
           </VStack>
 
-          <Text pt='$8' fontSize='$xl' fontWeight='bold'>
-            Language
-          </Text>
+          <Heading mt='$2'>{t('FEATURES.SETTINGS.LANGUAGE')}</Heading>
           <SelectLanguageView handleLanguageChange={handleLanguageChange} />
 
           <Box pt='$4'>
             <Button bg='$error500' onPress={() => setShowAlertDialog(true)}>
-              <ButtonText>Sign Out</ButtonText>
+              <ButtonText>{t('FEATURES.SETTINGS.SIGN_OUT')}</ButtonText>
             </Button>
           </Box>
         </Box>
@@ -272,18 +262,26 @@ interface SelectLanguageViewProps {
   handleLanguageChange: (languageCode: string) => void;
 }
 
+const LANGUAGE_OPTIONS = [
+  { label: 'English', value: 'en' },
+  { label: 'Norsk', value: 'no' },
+];
+
 const SelectLanguageView: React.FC<SelectLanguageViewProps> = ({
   handleLanguageChange,
 }) => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+
+  const defaultLabel = LANGUAGE_OPTIONS.find(
+    ({ value }) => value === i18n.language
+  )?.label;
 
   return (
     <Box py='$2'>
-      <Select onValueChange={handleLanguageChange}>
+      <Select onValueChange={handleLanguageChange} selectedLabel={defaultLabel}>
         <SelectTrigger>
           <SelectInput
-            placeholder='No language selected as default'
-            value={i18n.language}
+            placeholder={t('FEATURES.SETTINGS.NO_LANGUAGE_SELECTED')}
           />
           <SelectPortal>
             <SelectBackdrop />
@@ -291,8 +289,9 @@ const SelectLanguageView: React.FC<SelectLanguageViewProps> = ({
               <SelectDragIndicatorWrapper>
                 <SelectDragIndicator />
               </SelectDragIndicatorWrapper>
-              <SelectItem label='English' value='en' />
-              <SelectItem label='Norwegian' value='no' />
+              {LANGUAGE_OPTIONS.map(({ label, value }) => (
+                <SelectItem key={value} label={label} value={value} />
+              ))}
             </SelectContent>
           </SelectPortal>
         </SelectTrigger>
@@ -311,40 +310,44 @@ const SignOutDialog: React.FC<SignOutDialogProps> = ({
   showAlertDialog,
   setShowAlertDialog,
   signOut,
-}) => (
-  <AlertDialog
-    isOpen={showAlertDialog}
-    onClose={() => {
-      setShowAlertDialog(false);
-    }}
-  >
-    <AlertDialogBackdrop />
-    <AlertDialogContent width={250} alignItems='center'>
-      <AlertDialogHeader>
-        <Heading>Sign out?</Heading>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <ButtonGroup>
-          <Button
-            onPress={() => {
-              setShowAlertDialog(false);
-            }}
-          >
-            <ButtonText>Cancel</ButtonText>
-          </Button>
-          <Button
-            bgColor='$error500'
-            onPress={() => {
-              signOut();
-              setShowAlertDialog(false);
-            }}
-          >
-            <ButtonText>Sign Out</ButtonText>
-          </Button>
-        </ButtonGroup>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
-);
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <AlertDialog
+      isOpen={showAlertDialog}
+      onClose={() => {
+        setShowAlertDialog(false);
+      }}
+    >
+      <AlertDialogBackdrop />
+      <AlertDialogContent width={250} alignItems='center'>
+        <AlertDialogHeader>
+          <Heading>{t('FEATURES.SETTINGS.SIGN_OUT')}?</Heading>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <ButtonGroup>
+            <Button
+              onPress={() => {
+                setShowAlertDialog(false);
+              }}
+            >
+              <ButtonText>{t('GENERAL.CANCEL')}</ButtonText>
+            </Button>
+            <Button
+              bgColor='$error500'
+              onPress={() => {
+                signOut();
+                setShowAlertDialog(false);
+              }}
+            >
+              <ButtonText>{t('FEATURES.SETTINGS.SIGN_OUT')}</ButtonText>
+            </Button>
+          </ButtonGroup>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
 
 export default SettingsScreen;

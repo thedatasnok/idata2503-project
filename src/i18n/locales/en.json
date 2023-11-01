@@ -1,5 +1,38 @@
 {
-  "welcome": "Welcome to Whiteboard App {{name}}!",
-  "userprofile": "User Profile",
-  "settings": "Settings"
+  "NAVIGATION": {
+    "HOME": "Home",
+    "COURSES": "Courses",
+    "SCHEDULE": "Schedule",
+    "MESSAGES": "Messages",
+    "SETTINGS": "Settings"
+  },
+  "GENERAL": {
+    "CANCEL": "Cancel"
+  },
+  "TIME": {
+    "TODAY": "Today",
+    "YESTERDAY": "Yesterday",
+    "TOMORROW": "Tomorrow",
+    "LAST": "Last"
+  },
+  "FEATURES": {
+    "COURSES": {
+      "ACTIVE_COURSES": "Active courses",
+      "COMPLETED_COURSES": "Completed courses"
+    },
+    "SETTINGS": {
+      "FULL_NAME": "Full name",
+      "FULL_NAME_REQUIRED": "Full name is required",
+      "EMAIL": "Email",
+      "EMAIL_REQUIRED": "Invalid email address",
+      "EMAIL_NOTIFICATIONS": "Email notifications",
+      "PUSH_NOTIFICATIONS": "Push notifications",
+      "NOTIFICATIONS": "Notifications",
+      "LANGUAGE": "Language",
+      "NO_LANGUAGE_SELECTED": "Choose language",
+      "USER_PROFILE": "User profile",
+      "UPDATE_PROFILE": "Update profile",
+      "SIGN_OUT": "Sign out"
+    }
+  }
 }
