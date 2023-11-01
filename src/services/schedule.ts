@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from './supabase';
-import dayjs from 'dayjs';
 import { DateFormats } from '@/util/date';
+import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import { supabase } from './supabase';
 
 export interface UseEventsParams {
   /**
@@ -14,20 +14,21 @@ export const enum EventType {
   EXAM = 'EXAM',
   LAB = 'LAB',
   LECTURE = 'LECTURE',
+  ASSIGNMENT = 'ASSIGNMENT',
 }
 
 export interface ScheduleEvent {
+  event_id: string;
   course_id: string;
   course_code: string;
   course_name: string;
-  course_event_id: string;
   event_name: string;
   mandatory: boolean;
   event_type: EventType;
   starts_at: string;
   ends_at: string;
-  room_number: string;
-  map_url: string;
+  room_number?: string;
+  map_url?: string;
   month: string;
 }
 
@@ -44,12 +45,13 @@ export const useEvents = (params: UseEventsParams) => {
   return useQuery({
     queryKey: ['whiteboardapp/events', month],
     queryFn: async () => {
-      let query = supabase
+      const result = await supabase
         .from('user_schedule_view')
         .select('*')
-        .eq('month', dayjs(month).startOf('month').format(DateFormats.DATE));
+        .eq('month', dayjs(month).startOf('month').format(DateFormats.DATE))
+        .throwOnError();
 
-      return query.throwOnError().then((res) => res.data as ScheduleEvent[]);
+      return result.data as ScheduleEvent[];
     },
   });
 };
@@ -65,15 +67,14 @@ export const useEvent = (eventId: string) => {
   return useQuery({
     queryKey: ['whiteboardapp/event', eventId],
     queryFn: async () => {
-      let query = supabase
+      const result = await supabase
         .from('user_schedule_view')
         .select('*')
-        .eq('course_event_id', eventId);
-
-      return query
+        .eq('course_event_id', eventId)
         .throwOnError()
-        .single()
-        .then((res) => res.data as ScheduleEvent);
+        .single();
+
+      return result.data as ScheduleEvent;
     },
   });
 };

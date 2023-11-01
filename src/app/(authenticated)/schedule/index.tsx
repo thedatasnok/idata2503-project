@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  ClipboardListIcon,
   FlaskConicalIcon,
   PenSquareIcon,
   PresentationIcon,
@@ -33,6 +34,14 @@ const ScheduleScreen = () => {
     }
   }, [events]);
 
+  const gotoEvent = (event: ScheduleEvent) => {
+    if (event.event_type === EventType.ASSIGNMENT) {
+      router.push(`/courses/${event.course_id}/assignments/${event.event_id}`);
+    } else {
+      router.push(`/schedule/${event.event_id}`);
+    }
+  };
+
   return (
     <>
       <Header title='Schedule' />
@@ -48,7 +57,7 @@ const ScheduleScreen = () => {
       <FlatList<ScheduleEvent>
         ref={listRef}
         data={events}
-        keyExtractor={(i) => i.course_event_id}
+        keyExtractor={(i) => i.event_id}
         style={{
           paddingHorizontal: 12,
         }}
@@ -61,7 +70,7 @@ const ScheduleScreen = () => {
             endsAt={event.ends_at}
             eventType={event.event_type}
             locationCode={event.room_number}
-            onPress={() => router.push(`/schedule/${event.course_event_id}`)}
+            onPress={() => gotoEvent(event)}
           />
         )}
       />
@@ -111,9 +120,17 @@ interface ScheduleEventEntryProps {
   startsAt: string;
   endsAt: string;
   eventType: EventType;
-  locationCode: string;
+  locationCode?: string;
   onPress?: () => void;
 }
+
+const formatDuration = (startsAt: string, endsAt: string) => {
+  if (dayjs(startsAt).isSame(endsAt)) {
+    return dayjs(startsAt).format('L LT');
+  }
+
+  return `${dayjs(startsAt).format('L LT')} - ${dayjs(endsAt).format('LT')}`;
+};
 
 const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
   previousEventDate,
@@ -143,15 +160,15 @@ const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
         my='$1'
         onPress={onPress}
       >
-        <Icon as={getEventTypeIcon(eventType)} color='$gray800' />
+        {/* @ts-ignore */}
+        <Icon as={getEventTypeIcon(eventType)} color='$gray800' size='xl' />
 
         <Box flex={1} gap={-4}>
           <Text color='$primary600' fontWeight='$semibold' fontSize='$md'>
             {courseCode}
           </Text>
           <Text fontSize='$xs'>
-            {eventType} | {dayjs(startsAt).format('L LT')} -{' '}
-            {dayjs(endsAt).format('LT')}
+            {eventType} | {formatDuration(startsAt, endsAt)}
           </Text>
         </Box>
 
@@ -173,6 +190,8 @@ const getEventTypeIcon = (type: EventType): IconType => {
       return PresentationIcon;
     case EventType.EXAM:
       return PenSquareIcon;
+    case EventType.ASSIGNMENT:
+      return ClipboardListIcon;
   }
 };
 

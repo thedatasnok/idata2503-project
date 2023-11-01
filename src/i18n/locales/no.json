@@ -7,6 +7,8 @@
     "SETTINGS": "Innstillinger"
   },
   "GENERAL": {
+    "ASSIGNMENT": "Innlevering",
+    "ASSIGNMENTS": "Innleveringer",
     "CANCEL": "Avbryt"
   },
   "TIME": {
