@@ -228,17 +228,23 @@ export const useCourseBoardMessages = (boardId: string) => {
     },
   });
 
+  // @ts-ignore
+  const variables: string[] = useMutationState({
+    filters: {
+      mutationKey: ['whiteboardapp/course-board-messages'],
+      status: 'pending',
+    },
+    select: (mut) => mut.state.variables,
+  });
+
   return {
     messages: data,
     isLoading,
     sendMessage,
     isSending: isPending,
-    // TODO: Allow for optimistic renders of messages sent in course boards as well
-    messagesBeingSent: [],
+    messagesBeingSent: variables,
   };
 };
-
-// TODO: idk if implemented in a good way or not
 
 /**
  * Hook for fetching the most recent direct message for each counterpart user.
@@ -246,36 +252,17 @@ export const useCourseBoardMessages = (boardId: string) => {
  * @returns an object containing the most recent message for each counterpart.
  */
 export const useRecentDirectMessages = () => {
-  const { data, isLoading } = useQuery({
+  return useQuery({
     queryKey: ['whiteboardapp/recent-direct-messages'],
     queryFn: async () => {
-      const recentMessages = await supabase
+      const threads = await supabase
         .from('current_user_direct_messages_view')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .eq('row_number', 1)
+        .throwOnError();
 
-      const mostRecentMessagesMap = new Map();
-
-      for (const message of recentMessages.data!) {
-        const counterpartUserId = message.counterpart_user_id;
-
-        if (
-          !mostRecentMessagesMap.has(counterpartUserId) ||
-          message.created_at >
-            mostRecentMessagesMap.get(counterpartUserId).created_at
-        ) {
-          mostRecentMessagesMap.set(counterpartUserId, message);
-        }
-      }
-
-      const mostRecentMessages = Array.from(mostRecentMessagesMap.values());
-
-      return mostRecentMessages as DirectMessage[];
+      return threads.data as DirectMessage[];
     },
   });
-
-  return {
-    recentMessages: data,
-    isLoading,
-  };
 };
