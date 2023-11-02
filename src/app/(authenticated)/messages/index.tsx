@@ -4,35 +4,6 @@ import { Box, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { FlatList } from 'react-native';
 
-// TODO: Replace these with data loaded from backend
-const messages = [
-  {
-    id: 'temp',
-    receiverUserId: 'MyId',
-    senderUserId: 'SenderId1',
-    content: 'Hello man',
-    attachments: 'This is a picture, trust',
-    createdAt: dayjs('2023-10-15 08:15').toDate(),
-  },
-  {
-    id: 'temp2',
-    receiverUserId: 'MyId',
-    senderUserId: 'SenderId1',
-    content: 'Hello man from the other side',
-    attachments: 'This is several dog a pictures, trust',
-    createdAt: dayjs('2023-10-16 08:15').toDate(),
-  },
-  {
-    id: 'temp3',
-    receiverUserId: 'MyId',
-    senderUserId: 'SenderId2',
-    content:
-      'Third message that is a very long message because i need to check the styling is correct bla bla bladiak qwwiojdaluwbdiaubufadjv ay gdjafy fd',
-    attachments: 'This is several cat a pictures, trust',
-    createdAt: dayjs('2023-10-16 07:15').toDate(),
-  },
-] as const;
-
 const MessagesScreen = () => {
   const { data, isLoading } = useRecentDirectMessages();
 
@@ -52,10 +23,11 @@ const MessagesScreen = () => {
               key={message.direct_message_id}
               direction={message.direction}
               createdAt={message.created_at}
-              senderName={message.sender_full_name}
+              counterPartName={message.counterpart_full_name}
               content={message.content}
               // onPress={() => router.push(`/announcements/${announcement.id}`)}
             />
+            {/* TODO: do the same way as announcements */}
             {data?.[i + 1] && (
               <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
             )}
@@ -68,7 +40,7 @@ const MessagesScreen = () => {
 
 interface MessageProps {
   direction: string;
-  senderName: string;
+  counterPartName: string;
   content: string;
   createdAt: string;
   onPress?: () => void;
@@ -76,7 +48,7 @@ interface MessageProps {
 
 const Message: React.FC<MessageProps> = ({
   direction,
-  senderName,
+  counterPartName,
   content,
   createdAt,
   onPress,
@@ -100,9 +72,10 @@ const Message: React.FC<MessageProps> = ({
       >
         <Box display='flex' flexDirection='column' flexGrow={1}>
           <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
-            {direction === 'INGOING' ? senderName : 'You | ' + senderName}
+            {counterPartName}
           </Text>
           <Text fontSize='$xs' numberOfLines={2}>
+            {direction === 'OUTGOING' && 'You: '}
             {content}
           </Text>
         </Box>
