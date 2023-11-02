@@ -1,15 +1,15 @@
 import Header from '@/components/navigation/Header';
 import { useCourse } from '@/services/courses';
 import { getToken } from '@/theme';
-import { formatDate, getTimeLeft } from '@/util/date';
 import {
   Box,
   Heading,
   Icon,
   Pressable,
   ScrollView,
-  Text
+  Text,
 } from '@gluestack-ui/themed';
+import dayjs from 'dayjs';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   ArrowRight,
@@ -17,7 +17,7 @@ import {
   Clock,
   Hash,
   InfoIcon,
-  Mail
+  Mail,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 
@@ -75,11 +75,11 @@ const CourseScreen = () => {
   const assignments = [
     {
       title: 'Assignment 1',
-      dueDate: '2023-10-30 14:18:50',
+      dueDate: '2023-11-02 23:18:50',
     },
     {
       title: 'Assignment 2',
-      dueDate: '2023-11-24 14:20:50',
+      dueDate: '2023-11-13 14:20:50',
     },
     {
       title: 'Assignment 3',
@@ -260,7 +260,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
   author,
   onPress,
 }) => {
-  const formattedDate = formatDate(created_at);
+  const formattedDate = dayjs(created_at).calendar();
 
   return (
     <Pressable
@@ -296,18 +296,15 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
   dueDate,
   onPress,
 }) => {
-  const formattedDate = formatDate(dueDate);
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft(dueDate));
-  const color =
-    formattedDate.startsWith('Today') || formattedDate.startsWith('Tomorrow')
-      ? getToken('colors', 'error500')
-      : getToken('colors', 'gray950');
+  const formattedDate = dayjs(dueDate).calendar();
+  const [timeLeft, setTimeLeft] = useState(dayjs(dueDate).fromNow());
+  const color = getToken('colors', 'gray950');
 
   //Create an interval to update the time left every second
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeLeft(getTimeLeft(dueDate));
-    }, 1000);
+      setTimeLeft(dayjs(dueDate).fromNow());
+    }, 10000);
 
     //Clear the interval when the component unmounts
     return () => clearInterval(interval);
