@@ -125,7 +125,7 @@ const SettingsScreen = () => {
 
   return (
     <>
-      <Header title={t('NAVIGATION.SETTINGS')} />
+      <Header title={t('NAVIGATION.MORE')} />
 
       <ScrollView>
         <Box display='flex' flexDirection='column' p='$4' flex={1}>
