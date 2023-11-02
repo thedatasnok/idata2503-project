@@ -33,7 +33,7 @@ const AnnouncementScreen = () => {
             {announcement?.title}
           </Text>
           <Text fontSize='$xs'>
-            {announcement?.created_by} |{' '}
+            {announcement?.created_by_full_name} |{' '}
             {dayjs(announcement?.created_at).format('L LT')}
           </Text>
         </Box>
