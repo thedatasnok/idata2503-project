@@ -9,7 +9,7 @@ import { FlatList } from 'react-native';
 
 const DirectMessageScreen = () => {
   const { id } = useLocalSearchParams();
-  const { messages, isSending, sendMessage } = useDirectMessages(id as string);
+  const { messages, isSending, sendMessage } = useDirectMessages(id as string, true);
 
   const flatListRef = useRef<FlatList<DirectMessage>>(null);
 
@@ -23,17 +23,17 @@ const DirectMessageScreen = () => {
 
       <FlatList
         ref={flatListRef}
-        onContentSizeChange={() => flatListRef.current?.scrollToEnd()}
         data={messages}
+        inverted
         keyExtractor={(i) => i.direct_message_id}
         renderItem={({ item: message, index: i }) => (
           <Message
             content={message.content}
             createdAt={message.created_at}
-            previousCreatedAt={messages?.[i - 1]?.created_at}
+            previousCreatedAt={messages?.[i + 1]?.created_at}
             senderFullName={message.sender_full_name}
             senderAvatarUrl={message.sender_avatar_url}
-            sameSender={messages?.[i - 1]?.sender_user_id === message.sender_user_id}
+            sameSender={messages?.[i + 1]?.sender_user_id === message.sender_user_id}
           />
         )}
       />

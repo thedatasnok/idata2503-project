@@ -38,11 +38,15 @@ export interface DirectMessage extends BaseMessage {
  * The counterpart is another user in the system.
  *
  * @param counterpartId the id of the counterpart user
+ * @param inverted whether or not the messages should be inverted
  *
  * @returns an object containing the messages, a function for sending a new message
  *          and loading indicators
  */
-export const useDirectMessages = (counterpartId: string) => {
+export const useDirectMessages = (
+  counterpartId: string,
+  inverted?: boolean
+) => {
   const { session } = useAuth();
   const qc = useQueryClient();
 
@@ -79,7 +83,10 @@ export const useDirectMessages = (counterpartId: string) => {
           if (postedMessage !== null) {
             qc.setQueryData(
               directMessageKey(counterpartId),
-              (oldData: DirectMessage[]) => [...oldData, postedMessage]
+              (oldData: DirectMessage[]) => {
+                if (inverted) return [postedMessage, ...oldData];
+                return [...oldData, postedMessage];
+              }
             );
           }
         }
@@ -98,7 +105,7 @@ export const useDirectMessages = (counterpartId: string) => {
         .from('current_user_direct_messages_view')
         .select('*')
         .eq('counterpart_user_id', counterpartId)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: !inverted });
 
       return initialMessages.data as DirectMessage[];
     },
@@ -144,11 +151,12 @@ export interface CourseBoardMessage extends BaseMessage {
  * Hook for fetching messages from a course board.
  *
  * @param boardId the id of the course board
+ * @param inverted whether or not the messages should be inverted
  *
  * @returns an object containing the messages, a function for sending a new message
  *          and loading indicators
  */
-export const useCourseBoardMessages = (boardId: string) => {
+export const useCourseBoardMessages = (boardId: string, inverted?: boolean) => {
   const qc = useQueryClient();
 
   /**
@@ -167,8 +175,6 @@ export const useCourseBoardMessages = (boardId: string) => {
           filter: `fk_course_board_id=eq.${boardId}`,
         },
         async (insertedMessage) => {
-          console.log(insertedMessage);
-
           let postedMessage: CourseBoardMessage | null = null;
 
           try {
@@ -190,7 +196,10 @@ export const useCourseBoardMessages = (boardId: string) => {
           if (postedMessage !== null) {
             qc.setQueryData(
               ['whiteboardapp/course-board-messages', boardId],
-              (oldData: CourseBoardMessage[]) => [...oldData, postedMessage]
+              (oldData: CourseBoardMessage[]) => {
+                if (inverted) return [postedMessage, ...oldData];
+                return [...oldData, postedMessage];
+              }
             );
           }
         }
@@ -209,7 +218,7 @@ export const useCourseBoardMessages = (boardId: string) => {
         .from('course_board_message_view')
         .select('*')
         .eq('fk_course_board_id', boardId)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: !inverted });
 
       return initialMessages.data as CourseBoardMessage[];
     },
