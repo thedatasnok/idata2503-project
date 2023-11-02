@@ -7,18 +7,17 @@ import {
   Text,
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-import React from 'react';
-
-dayjs.extend(duration);
 
 interface MessageProps {
   content: string;
-  created_at: string;
-  sender_full_name: string;
-  sender_avatar_url?: string;
+  createdAt: string;
+  senderFullName: string;
+  senderAvatarUrl?: string;
   previousCreatedAt?: string;
-  previousSender?: string;
+  /**
+   * Whether or not the sender of the message is the same as the previous one.
+   */
+  sameSender?: boolean;
 }
 
 /**
@@ -26,44 +25,43 @@ interface MessageProps {
  */
 const Message: React.FC<MessageProps> = ({
   content,
-  created_at,
-  sender_full_name,
-  sender_avatar_url,
+  createdAt,
+  senderFullName,
+  senderAvatarUrl,
   previousCreatedAt,
-  previousSender,
+  sameSender,
 }) => {
-  const formattedDate = dayjs(created_at).calendar();
-  const isSameSender = sender_full_name === previousSender;
+  const formattedDate = dayjs(createdAt).calendar();
   const isLastMessage = !previousCreatedAt;
 
-  const dateDiff = dayjs(created_at).diff(
-    dayjs(previousCreatedAt ?? created_at)
-  );
+  const dateDiff = dayjs(createdAt).diff(dayjs(previousCreatedAt ?? createdAt));
 
-  const moreThanFiveMinutes =
-    dayjs.duration(dateDiff).asMinutes() > 5 || isLastMessage || !isSameSender;
+  const displayAuthor =
+    dayjs.duration(dateDiff).asMinutes() > 5 || isLastMessage || !sameSender;
 
-  const moreThanOneDay = dayjs.duration(dateDiff).asDays() > 1 || isLastMessage;
+  const displayDateHeader =
+    dayjs.duration(dateDiff).asDays() > 1 || isLastMessage;
 
   return (
-    <Box px='$2' flexDirection='column'>
-      {moreThanOneDay && <DividerWithDate date={formattedDate} />}
-      <Box flexDirection='row' alignItems='center'>
+    <>
+      {displayDateHeader && <DividerWithDate date={formattedDate} />}
+
+      <Box flexDirection='row' alignItems='center' px='$2'>
         <Box width={40} mr='$4' pt='$4'>
-          {moreThanFiveMinutes && (
+          {displayAuthor && (
             <Avatar>
-              <AvatarFallbackText>{sender_full_name}</AvatarFallbackText>
-              {sender_avatar_url && (
-                <AvatarImage source={{ uri: sender_avatar_url }} />
+              <AvatarFallbackText>{senderFullName}</AvatarFallbackText>
+              {senderAvatarUrl && (
+                <AvatarImage source={{ uri: senderAvatarUrl }} />
               )}
             </Avatar>
           )}
         </Box>
         <Box maxWidth='$5/6'>
-          {moreThanFiveMinutes && (
+          {displayAuthor && (
             <Box gap='$1' flexDirection='row' pt='$4'>
               <Text fontWeight='bold' color='$gray950'>
-                {sender_full_name}
+                {senderFullName}
               </Text>
               <Text color='$gray500' fontSize='$xs'>
                 {formattedDate}
@@ -73,7 +71,7 @@ const Message: React.FC<MessageProps> = ({
           <Text>{content}</Text>
         </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
@@ -86,7 +84,7 @@ interface DividerWithDateProps {
  */
 const DividerWithDate: React.FC<DividerWithDateProps> = ({ date }) => {
   return (
-    <Box flexDirection='row' alignItems='center'>
+    <Box flexDirection='row' alignItems='center' mx='$2'>
       <Divider flex={1} marginRight='$1' />
       <Text fontSize='$sm'>{date}</Text>
       <Divider flex={1} marginLeft='$1' />

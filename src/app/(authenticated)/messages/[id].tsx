@@ -29,11 +29,11 @@ const DirectMessageScreen = () => {
         renderItem={({ item: message, index: i }) => (
           <Message
             content={message.content}
-            created_at={message.created_at}
+            createdAt={message.created_at}
             previousCreatedAt={messages?.[i - 1]?.created_at}
-            sender_full_name={message.sender_full_name}
-            sender_avatar_url={message.sender_avatar_url}
-            previousSender={messages?.[i - 1]?.sender_full_name}
+            senderFullName={message.sender_full_name}
+            senderAvatarUrl={message.sender_avatar_url}
+            sameSender={messages?.[i - 1]?.sender_user_id === message.sender_user_id}
           />
         )}
       />
