@@ -1,13 +1,12 @@
 import { IconType } from '@/icon';
 import { Box, Icon, Pressable, Text, styled } from '@gluestack-ui/themed';
 import { usePathname, useRouter } from 'expo-router';
-import { MoreHorizontalIcon } from 'lucide-react-native';
 import {
   BookMarkedIcon,
   CalendarDaysIcon,
   HomeIcon,
   MessageSquareIcon,
-  SettingsIcon,
+  MoreHorizontalIcon,
 } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -115,7 +114,7 @@ const Tab: React.FC<TabProps> = ({ active, icon, onPress, label }) => {
     <TabContainer states={{ active }} onPress={onPress}>
       {/* @ts-ignore */}
       <TabIcon as={icon} size={24} states={{ active }} />
-      <TabText states={{ active }}>{label}</TabText>
+      <TabText numberOfLines={1} states={{ active }}>{label}</TabText>
     </TabContainer>
   );
 };
