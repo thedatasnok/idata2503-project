@@ -17,20 +17,16 @@ const MessagesScreen = () => {
           paddingHorizontal: 12,
           paddingTop: 6,
         }}
-        renderItem={({ item: message, index: i }) => (
+        ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
+        renderItem={({ item: message }) => (
           <>
             <Message
-              key={message.direct_message_id}
               direction={message.direction}
               createdAt={message.created_at}
               counterPartName={message.counterpart_full_name}
               content={message.content}
               // onPress={() => router.push(`/announcements/${announcement.id}`)}
             />
-            {/* TODO: do the same way as announcements */}
-            {data?.[i + 1] && (
-              <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
-            )}
           </>
         )}
       />

@@ -35,13 +35,10 @@ const AnnouncementsScreen = () => {
           paddingHorizontal: 12,
           paddingTop: 12,
         }}
-        contentContainerStyle={{}}
         ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
-        // TODO: get rid of index
-        renderItem={({ item: announcement, index: i }) => (
+        renderItem={({ item: announcement }) => (
           <>
             <Announcement
-              key={announcement.announcement_id}
               announcedBy={announcement.created_by_full_name}
               content={announcement.content}
               title={announcement.title}

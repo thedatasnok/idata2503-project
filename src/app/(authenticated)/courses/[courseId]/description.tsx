@@ -49,16 +49,10 @@ const CourseDescriptionScreen = () => {
           data={courseDescription?.staff}
           scrollEnabled={false}
           keyExtractor={(i) => i.user_id}
-          renderItem={({ item: lecturer, index: i }) => (
+          ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
+          renderItem={({ item: lecturer }) => (
             <>
-              <Lecturer
-                key={lecturer.user_id}
-                name={lecturer.name}
-                email={lecturer.email}
-              />
-              {courseDescription?.staff[i + 1] && (
-                <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
-              )}
+              <Lecturer name={lecturer.name} email={lecturer.email} />
             </>
           )}
         />
