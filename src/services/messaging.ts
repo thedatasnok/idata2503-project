@@ -246,6 +246,11 @@ export const useCourseBoardMessages = (boardId: string) => {
   };
 };
 
+export interface DirectMessageThread extends DirectMessage {
+  counterpart_full_name: string;
+  counterpart_avatar_url: string;
+}
+
 /**
  * Hook for fetching the most recent direct message for each counterpart user.
  *
@@ -256,13 +261,13 @@ export const useRecentDirectMessages = () => {
     queryKey: ['whiteboardapp/recent-direct-messages'],
     queryFn: async () => {
       const threads = await supabase
-        .from('current_user_direct_messages_view')
+        .from('current_user_direct_messages_threads_view')
         .select('*')
         .order('created_at', { ascending: false })
         .eq('row_number', 1)
         .throwOnError();
 
-      return threads.data as DirectMessage[];
+      return threads.data as DirectMessageThread[];
     },
   });
 };
