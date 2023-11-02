@@ -32,7 +32,7 @@ const ScheduleEventScreen = () => {
         </Pressable>
       </Box>
 
-      {data && <WebView source={{ uri: data.map_url }} />}
+      {data?.map_url && <WebView source={{ uri: data.map_url }} />}
     </>
   );
 };
