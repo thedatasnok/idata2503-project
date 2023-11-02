@@ -1,6 +1,7 @@
 import { IconType } from '@/icon';
 import { Box, Icon, Pressable, Text, styled } from '@gluestack-ui/themed';
 import { usePathname, useRouter } from 'expo-router';
+import { MoreHorizontalIcon } from 'lucide-react-native';
 import {
   BookMarkedIcon,
   CalendarDaysIcon,
@@ -60,8 +61,8 @@ const NavigationBar = () => {
 
       <Tab
         active={path.startsWith('/settings')}
-        icon={SettingsIcon}
-        label={t('NAVIGATION.SETTINGS')}
+        icon={MoreHorizontalIcon}
+        label={t('NAVIGATION.MORE')}
         onPress={() => router.push('/settings')}
       />
     </Box>
