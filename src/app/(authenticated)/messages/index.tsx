@@ -2,10 +2,12 @@ import Header from '@/components/navigation/Header';
 import { useRecentDirectMessages } from '@/services/messaging';
 import { Box, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
+import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
 
 const MessagesScreen = () => {
   const { data, isLoading } = useRecentDirectMessages();
+  const router = useRouter();
 
   return (
     <>
@@ -25,7 +27,7 @@ const MessagesScreen = () => {
               createdAt={message.created_at}
               counterPartName={message.counterpart_full_name}
               content={message.content}
-              // onPress={() => router.push(`/announcements/${announcement.id}`)}
+              onPress={() => router.push(`/messages/${message.counterpart_user_id}`)}
             />
           </>
         )}
