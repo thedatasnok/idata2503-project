@@ -13,11 +13,15 @@ import { useAuth } from '@/store/global';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nb';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
+import calendar from 'dayjs/plugin/calendar';
+import duration from 'dayjs/plugin/duration';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useCallback, useEffect, useState } from 'react';
 
 dayjs.extend(advancedFormat);
+dayjs.extend(calendar);
+dayjs.extend(duration);
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 

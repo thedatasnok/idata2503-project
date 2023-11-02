@@ -264,7 +264,7 @@ interface SelectLanguageViewProps {
 
 const LANGUAGE_OPTIONS = [
   { label: 'English', value: 'en' },
-  { label: 'Norsk', value: 'no' },
+  { label: 'Norsk', value: 'nb' },
 ];
 
 const SelectLanguageView: React.FC<SelectLanguageViewProps> = ({

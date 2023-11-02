@@ -1,8 +1,11 @@
+import dayjs from 'dayjs';
+import updateLocale from 'dayjs/plugin/updateLocale';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
-import no from './locales/no.json';
-import dayjs from 'dayjs';
+import nb from './locales/nb.json';
+
+dayjs.extend(updateLocale);
 
 /**
  * Utility type for the schema of json translation files.
@@ -14,8 +17,8 @@ const resources = {
   en: {
     translation: en,
   },
-  no: {
-    translation: no satisfies Translation,
+  nb: {
+    translation: nb satisfies Translation,
   },
 };
 
@@ -32,18 +35,37 @@ declare module 'i18next' {
 i18next.use(initReactI18next).init({
   compatibilityJSON: 'v3',
   resources,
-  lng: 'no',
+  lng: 'nb',
   fallbackLng: 'en',
 });
 
-i18next.on('languageChanged', (lang) => {
-  if (lang === 'no') {
-    // alternative is to rename the language
-    dayjs.locale('nb');
-    return;
-  }
+/**
+ * Enriches the dayjs locale with customized calendar strings.
+ *
+ * @param lng the language to configure the locale for
+ */
+const configureDayjsLocale = (lng: keyof typeof resources) => {
+  const today = i18next.t('TIME.TODAY', { lng });
+  const tomorrow = i18next.t('TIME.TOMORROW', { lng });
+  const yesterday = i18next.t('TIME.YESTERDAY', { lng });
+  const last = i18next.t('TIME.LAST', { lng });
 
-  dayjs.locale(lang);
-});
+  dayjs.updateLocale(lng, {
+    calendar: {
+      sameDay: `[${today}] LT`,
+      nextDay: `[${tomorrow}] LT`,
+      nextWeek: 'dddd LT',
+      lastDay: `[${yesterday}] LT`,
+      lastWeek: `[${last}] dddd LT`,
+      sameElse: 'L LT',
+    },
+  });
+};
+
+configureDayjsLocale('en');
+configureDayjsLocale('nb');
+
+i18next.on('loaded', () => dayjs.locale(i18next.language));
+i18next.on('languageChanged', (lang) => dayjs.locale(lang));
 
 export default i18next;
