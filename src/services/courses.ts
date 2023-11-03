@@ -155,8 +155,44 @@ export const useCourseSignUp = () => {
   });
 };
 
-// TODO: Uses announcement_view
 export interface Announcement {
+  course_id: string;
+  created_by_member_id: string;
+  title: string;
+  content: string;
+}
+
+/**
+ * Hook for creating a new announcement and updating the announcements list.
+ *
+ * @returns {UseMutation} A mutation object with methods for creating an announcement.
+ */
+export const useCreateAnnouncement = () => {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (announcement: Announcement) => {
+      const newAnnouncement = {
+        fk_course_id: announcement.course_id,
+        fk_created_by_member_id: announcement.created_by_member_id,
+        title: announcement.title,
+        content: announcement.content,
+      };
+
+      await supabase
+        .from('course_announcement')
+        .insert([newAnnouncement])
+        .throwOnError();
+    },
+    onSuccess: () => {
+      // TODO: idk if this needs to be invalidated, if so should create a const for the shared query key
+      qc.invalidateQueries({ queryKey: ['whiteboardapp/announcements'] });
+    },
+  });
+};
+
+// TODO: Uses announcement_view
+export interface AnnouncementWithCreatedBy {
   announcement_id: string;
   created_by_full_name: string;
   created_by_role: string;
@@ -180,7 +216,7 @@ export const useAnnouncements = (courseId: string) => {
         .order('created_at', { ascending: false })
         .throwOnError();
 
-      return result.data as Announcement[];
+      return result.data as AnnouncementWithCreatedBy[];
     },
   });
 };
@@ -199,13 +235,13 @@ export const useAnnouncement = (announcementId: string) => {
         .single()
         .throwOnError();
 
-      return result.data as Announcement;
+      return result.data as AnnouncementWithCreatedBy;
     },
   });
 };
 
 // TODO: do i need to make sure the current user is a member?
-export const useMembershipRole = (courseId: string) => {
+export const useCourseMembership = (courseId: string) => {
   const { session } = useAuth();
 
   return useQuery({
@@ -213,7 +249,7 @@ export const useMembershipRole = (courseId: string) => {
     queryFn: async () => {
       const result = await supabase
         .from('course_member')
-        .select('role')
+        .select('role, course_member_id')
         .eq('fk_course_id', courseId)
         .eq('fk_user_id', session?.user.id)
         .single()
