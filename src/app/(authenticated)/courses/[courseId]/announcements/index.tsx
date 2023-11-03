@@ -2,7 +2,7 @@ import Header from '@/components/navigation/Header';
 import {
   useAnnouncements,
   useCourse,
-  useMembershipRole,
+  useCourseMembership,
 } from '@/services/courses';
 import {
   Box,
@@ -21,7 +21,7 @@ const AnnouncementsScreen = () => {
   const { courseId } = useLocalSearchParams();
   const { data: course } = useCourse(courseId as string);
   const { data: announcements } = useAnnouncements(courseId as string);
-  const { data: memberShip } = useMembershipRole(courseId as string);
+  const { data: memberShip } = useCourseMembership(courseId as string);
   const router = useRouter();
 
   return (
