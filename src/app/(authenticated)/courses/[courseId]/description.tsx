@@ -1,20 +1,16 @@
 import Header from '@/components/navigation/Header';
-import {
-  CourseDescription,
-  CourseMember,
-  useCourseDescription,
-} from '@/services/courses';
+import { useCourseDescription, useCourseSignUp } from '@/services/courses';
 import {
   Box,
-  Text,
-  Icon,
   Button,
   ButtonText,
+  Icon,
   ScrollView,
+  Text,
 } from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
-import { FlatList } from 'react-native';
 import { Mail } from 'lucide-react-native';
+import { FlatList } from 'react-native';
 
 /**
  * Description of the course, here you can signup if you are not signed up for the course yet
@@ -22,10 +18,15 @@ import { Mail } from 'lucide-react-native';
 const CourseDescriptionScreen = () => {
   const { courseId } = useLocalSearchParams();
   const { data: courseDescription } = useCourseDescription(courseId as string);
+  const courseSignUp = useCourseSignUp();
 
-  const signUp = () => {
-    // TODO: add user as course_member in supabase
-    return;
+  // TODO: Havent tested this function yet
+  const signUp = async () => {
+    try {
+      await courseSignUp.mutateAsync(courseId as string);
+    } catch (error) {
+      console.error('SignUp error: ', error);
+    }
   };
 
   return (
@@ -51,13 +52,11 @@ const CourseDescriptionScreen = () => {
           keyExtractor={(i) => i.user_id}
           ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
           renderItem={({ item: lecturer }) => (
-            <>
-              <Lecturer name={lecturer.name} email={lecturer.email} />
-            </>
+            <Lecturer name={lecturer.name} email={lecturer.email} />
           )}
         />
-
-        {courseDescription?.enrolled && (
+        {/* TODO: remember to set to !courseDescription?.enrolled */}
+        {!courseDescription?.enrolled && (
           <Box py='$5' px={'$20'}>
             <Button bg='$primary400' onPress={() => signUp()}>
               <ButtonText>Sign Up</ButtonText>
