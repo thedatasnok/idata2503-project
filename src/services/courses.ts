@@ -203,6 +203,12 @@ export interface AnnouncementWithCreatedBy {
 }
 
 // TODO: Uses announcement_view
+/**
+ * Hook to fetch announcements for a course
+ *
+ * @param courseId the course id
+ * @returns a query object with the result of the query
+ */
 export const useAnnouncements = (courseId: string) => {
   return useQuery({
     queryKey: ['whiteboardapp/announcements', courseId],
@@ -222,6 +228,12 @@ export const useAnnouncements = (courseId: string) => {
 };
 
 // TODO: Uses announcement_view
+/**
+ * Hook to fetch a single announcement
+ *
+ * @param announcementId the announcement id
+ * @returns a query object with the result of the query
+ */
 export const useAnnouncement = (announcementId: string) => {
   return useQuery({
     queryKey: ['whiteboardapp/announcement', announcementId],
@@ -240,7 +252,18 @@ export const useAnnouncement = (announcementId: string) => {
   });
 };
 
+export interface CourseMembership {
+  role: string;
+  course_member_id: string;
+}
+
 // TODO: do i need to make sure the current user is a member?
+/**
+ * Hook to fetch the current users membership status for a specific course
+ *
+ * @param courseId the course id
+ * @returns a query object with the result of the query
+ */
 export const useCourseMembership = (courseId: string) => {
   const { session } = useAuth();
 
@@ -255,7 +278,7 @@ export const useCourseMembership = (courseId: string) => {
         .single()
         .throwOnError();
 
-      return result.data;
+      return result.data as CourseMembership;
     },
   });
 };
