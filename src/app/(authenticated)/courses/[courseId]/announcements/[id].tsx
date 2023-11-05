@@ -1,22 +1,8 @@
 import Header from '@/components/navigation/Header';
-import {
-  useAnnouncement,
-  useAnnouncements,
-  useCourse,
-} from '@/services/courses';
-import {
-  Box,
-  Pressable,
-  Text,
-  Icon,
-  Button,
-  styled,
-  ScrollView,
-} from '@gluestack-ui/themed';
+import { useAnnouncement, useCourse } from '@/services/courses';
+import { Box, ScrollView, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { FlatList } from 'react-native';
-import { Dot, PlusCircle } from 'lucide-react-native';
+import { useLocalSearchParams } from 'expo-router';
 
 const AnnouncementScreen = () => {
   const { courseId, id: announcementId } = useLocalSearchParams();

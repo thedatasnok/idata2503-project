@@ -4,18 +4,11 @@ import {
   useCourse,
   useCourseMembership,
 } from '@/services/courses';
-import {
-  Box,
-  Pressable,
-  Text,
-  Icon,
-  Button,
-  styled,
-} from '@gluestack-ui/themed';
+import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { FlatList } from 'react-native';
 import { Dot, PlusCircle } from 'lucide-react-native';
+import { FlatList } from 'react-native';
 
 const AnnouncementsScreen = () => {
   const { courseId } = useLocalSearchParams();
@@ -37,19 +30,17 @@ const AnnouncementsScreen = () => {
         }}
         ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
         renderItem={({ item: announcement }) => (
-          <>
-            <Announcement
-              announcedBy={announcement.created_by_full_name}
-              content={announcement.content}
-              title={announcement.title}
-              createdAt={announcement.created_at}
-              onPress={() =>
-                router.push(
-                  `courses/${courseId}/announcements/${announcement.announcement_id}` as any
-                )
-              }
-            />
-          </>
+          <Announcement
+            announcedBy={announcement.created_by_full_name}
+            content={announcement.content}
+            title={announcement.title}
+            createdAt={announcement.created_at}
+            onPress={() =>
+              router.push(
+                `courses/${courseId}/announcements/${announcement.announcement_id}` as any
+              )
+            }
+          />
         )}
       />
       {/* TODO: CHECK ROLES LECTURER AND ASSISTANT, IT IS CHANGED FOR TESTING PURPOSES */}

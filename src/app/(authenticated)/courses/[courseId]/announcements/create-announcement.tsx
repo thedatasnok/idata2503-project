@@ -1,10 +1,9 @@
 import Header from '@/components/navigation/Header';
 import {
-  useAnnouncements,
+  Announcement,
   useCourse,
   useCourseMembership,
   useCreateAnnouncement,
-  Announcement,
 } from '@/services/courses';
 import {
   Box,
@@ -21,12 +20,11 @@ import {
   ScrollView,
   VStack,
 } from '@gluestack-ui/themed';
-import dayjs from 'dayjs';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 const announcementValidationSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
@@ -55,7 +53,7 @@ const CreateAnnouncementScreen = () => {
   const onSubmit = async (data: CreateAnnouncementForm) => {
     const announcement: Announcement = {
       course_id: courseId as string,
-      created_by_member_id: memberShip?.course_member_id,
+      created_by_member_id: memberShip?.course_member_id as string,
       title: data.title,
       content: data.content,
     };
@@ -153,8 +151,8 @@ const CreateAnnouncementScreen = () => {
               </FormControlError>
             </FormControl>
 
-            <Box pt='$5' flex={1}>
-              <Button onPress={handleSubmit(onSubmit)}>
+            <Box pt='$5' alignItems='center'>
+              <Button w='80%' onPress={handleSubmit(onSubmit)}>
                 <ButtonText>
                   {/* {t('FEATURES.SETTINGS.UPDATE_PROFILE')} */}
                   Create announcement

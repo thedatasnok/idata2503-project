@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
 
 const MessagesScreen = () => {
-  const { data, isLoading } = useRecentDirectMessages();
+  const { data } = useRecentDirectMessages();
   const router = useRouter();
 
   return (
@@ -21,15 +21,15 @@ const MessagesScreen = () => {
         }}
         ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
         renderItem={({ item: message }) => (
-          <>
-            <Message
-              direction={message.direction}
-              createdAt={message.created_at}
-              counterPartName={message.counterpart_full_name}
-              content={message.content}
-              onPress={() => router.push(`/messages/${message.counterpart_user_id}`)}
-            />
-          </>
+          <Message
+            direction={message.direction}
+            createdAt={message.created_at}
+            counterPartName={message.counterpart_full_name}
+            content={message.content}
+            onPress={() =>
+              router.push(`/messages/${message.counterpart_user_id}`)
+            }
+          />
         )}
       />
     </>
