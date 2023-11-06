@@ -1,5 +1,5 @@
 import Header from '@/components/navigation/Header';
-import { useCourse } from '@/services/courses';
+import { useAnnouncements, useCourse } from '@/services/courses';
 import { getToken } from '@/theme';
 import {
   Box,
@@ -7,6 +7,7 @@ import {
   Icon,
   Pressable,
   ScrollView,
+  Spinner,
   Text,
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
@@ -18,59 +19,18 @@ import {
   Hash,
   InfoIcon,
   Mail,
+  Megaphone,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
+import { FlatList } from 'react-native-gesture-handler';
 
 const CourseScreen = () => {
   const router = useRouter();
   const { courseId } = useLocalSearchParams();
   const { data: course } = useCourse(courseId as string);
-
-  //TODO: Replace this with data loaded from backend
-  const announcements = [
-    {
-      title: 'No lecture tomorrow 05.10.2023',
-      content:
-        'Unfortunately, due to unforeseen circumstances there will be no lecture tomorrow.',
-      created_at: '2023-10-28 13:21:50',
-      author: 'Albert Einstein',
-    },
-    {
-      title: 'I tried something new today',
-      content:
-        'No one has ever done that in the history of Dota! 4Head (copilot hello?)',
-      created_at: '2023-10-26 09:24:50',
-      author: 'Albert Einstein',
-    },
-    {
-      title: 'No lecture tomorrow 05.10.2023',
-      content:
-        'Unfortunately, due to unforeseen circumstances there will be no lecture tomorrow.',
-      created_at: '2023-10-26 09:24:50',
-      author: 'Albert Einstein',
-    },
-    {
-      title: 'I tried something new today',
-      content:
-        'No one has ever done that in the history of Dota! 4Head (copilot hello?)',
-      created_at: '2023-10-26 09:24:50',
-      author: 'Albert Einstein',
-    },
-    {
-      title: 'No lecture tomorrow 05.10.2023',
-      content:
-        'Unfortunately, due to unforeseen circumstances there will be no lecture tomorrow.',
-      created_at: '2023-10-26 09:24:50',
-      author: 'Albert Einstein',
-    },
-    {
-      title: 'I tried something new today',
-      content:
-        'No one has ever done that in the history of Dota! 4Head (copilot hello?)',
-      created_at: '2023-10-26 09:24:50',
-      author: 'Albert Einstein',
-    },
-  ];
+  const { data: announcements, isLoading } = useAnnouncements(
+    courseId as string
+  );
 
   const assignments = [
     {
@@ -137,6 +97,14 @@ const CourseScreen = () => {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <Box flex={1} alignItems='center' justifyContent='center'>
+        <Spinner size={48} />
+      </Box>
+    );
+  }
+
   return (
     <>
       <Header
@@ -149,27 +117,41 @@ const CourseScreen = () => {
         <ComponentHeader
           title='Announcements'
           courseId={courseId as string}
-          showAll={true}
+          showAll={announcements && announcements.length > 0}
         />
-        <ScrollView
-          nestedScrollEnabled={true}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {announcements.slice(0, 3).map((announcement, index) => (
-            <AnnouncementCard
-              key={index}
-              title={announcement.title}
-              content={announcement.content}
-              created_at={announcement.created_at}
-              author={announcement.author}
-              onPress={() =>
-                //TODO: Replace this with navigation to specific announcement
-                router.push(`/courses/${courseId}/announcements` as any)
-              }
-            />
-          ))}
-        </ScrollView>
+
+        {announcements && announcements.length > 0 ? (
+          <FlatList
+            horizontal={true}
+            data={announcements.slice(0, 3)}
+            keyExtractor={(item) => item.announcement_id}
+            renderItem={({ item, index }) => (
+              <AnnouncementCard
+                key={index}
+                title={item.title}
+                content={item.content}
+                createdAt={item.created_at}
+                author={item.created_by_full_name}
+                onPress={() => {
+                  router.push(
+                    `/courses/${courseId}/announcements/${item.announcement_id}`
+                  );
+                }}
+              />
+            )}
+          />
+        ) : (
+          <Box
+            alignItems='center'
+            justifyContent='center'
+            height={60}
+            width='100%'
+          >
+            {/*@ts-ignore*/}
+            <Icon as={Megaphone} size={48} />
+            <Text color='$gray950'>No Announcements yet</Text>
+          </Box>
+        )}
 
         <ComponentHeader title='Assignments' showAll={true} />
         {assignments.slice(0, 2).map((assignment, index) => (
@@ -248,7 +230,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
 interface AnnouncementCardProps {
   title: string;
   content: string;
-  created_at: string;
+  createdAt: string;
   author: string;
   onPress: () => void;
 }
@@ -256,11 +238,11 @@ interface AnnouncementCardProps {
 const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
   title,
   content,
-  created_at,
+  createdAt,
   author,
   onPress,
 }) => {
-  const formattedDate = dayjs(created_at).calendar();
+  const formattedDate = dayjs(createdAt).calendar();
 
   return (
     <Pressable
@@ -269,15 +251,17 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
       borderColor='$gray200'
       mr='$2'
       p='$2'
-      width='$72'
+      width='$80'
       height='$32'
       rounded='$md'
       onPress={onPress}
     >
       <Heading numberOfLines={1}>{title}</Heading>
       <Box flex={1} justifyContent='space-between'>
-        <Text numberOfLines={2}>{content}</Text>
-        <Text color='$gray500' numberOfLines={1}>
+        <Text numberOfLines={2} color='$gray950'>
+          {content}
+        </Text>
+        <Text color='$gray950' numberOfLines={1}>
           {formattedDate} | {author}
         </Text>
       </Box>
