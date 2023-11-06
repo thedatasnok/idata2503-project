@@ -1,5 +1,9 @@
 import Header from '@/components/navigation/Header';
-import { useAnnouncements, useCourse } from '@/services/courses';
+import {
+  useAnnouncements,
+  useCourse,
+  useCourseDescription,
+} from '@/services/courses';
 import { getToken } from '@/theme';
 import {
   Box,
@@ -16,6 +20,7 @@ import {
   ArrowRight,
   ChevronRight,
   Clock,
+  GraduationCap,
   Hash,
   InfoIcon,
   Mail,
@@ -31,6 +36,7 @@ const CourseScreen = () => {
   const { data: announcements, isLoading } = useAnnouncements(
     courseId as string
   );
+  const { data: courseDescription } = useCourseDescription(courseId as string);
 
   const assignments = [
     {
@@ -86,17 +92,6 @@ const CourseScreen = () => {
     },
   ];
 
-  const lecturer = [
-    {
-      name: 'Albert Einstein',
-      email: 'albert.stein@yahoo.com',
-    },
-    {
-      name: 'Issac Newton',
-      email: 'issac.newton@live.no',
-    },
-  ];
-
   if (isLoading) {
     return (
       <Box flex={1} alignItems='center' justifyContent='center'>
@@ -141,12 +136,7 @@ const CourseScreen = () => {
             )}
           />
         ) : (
-          <Box
-            alignItems='center'
-            justifyContent='center'
-            height={60}
-            width='100%'
-          >
+          <Box alignItems='center' justifyContent='center'>
             {/*@ts-ignore*/}
             <Icon as={Megaphone} size={48} />
             <Text color='$gray950'>No Announcements yet</Text>
@@ -188,9 +178,18 @@ const CourseScreen = () => {
         </Box>
 
         <ComponentHeader title='Lecturers' />
-        {lecturer.map((lecturer, index) => (
-          <Lecturer key={index} name={lecturer.name} email={lecturer.email} />
-        ))}
+
+        {courseDescription?.staff && courseDescription?.staff.length > 0 ? (
+          courseDescription?.staff.map((lecturer, index) => (
+            <Lecturer key={index} name={lecturer.name} email={lecturer.email} />
+          ))
+        ) : (
+          <Box alignItems='center' justifyContent='center' pb='$2'>
+            {/*@ts-ignore*/}
+            <Icon as={GraduationCap} size={48} />
+            <Text>No lecturers assigned</Text>
+          </Box>
+        )}
       </ScrollView>
     </>
   );
@@ -284,7 +283,7 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
   const [timeLeft, setTimeLeft] = useState(dayjs(dueDate).fromNow());
   const color = getToken('colors', 'gray950');
 
-  //Create an interval to update the time left every second
+  //Create an interval to update the time left every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeLeft(dayjs(dueDate).fromNow());
@@ -307,7 +306,8 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
       alignItems='center'
       justifyContent='space-between'
     >
-      <Icon as={Clock} color={color} mr='$4' />
+      {/*@ts-ignore*/}
+      <Icon as={Clock} color={color} mr='$3' size={24} />
       <Box flex={1}>
         <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1} color={color}>
           {title}
@@ -374,7 +374,8 @@ const Lecturer: React.FC<LecturerProps> = ({ name, email, onPress }) => {
             </Text>
           </Box>
         </Box>
-        <Icon as={Mail} />
+        {/*@ts-ignore*/}
+        <Icon as={Mail} size={24} />
       </Box>
     </Pressable>
   );
