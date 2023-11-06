@@ -44,8 +44,6 @@ const Message: React.FC<MessageProps> = ({
 
   return (
     <>
-      {displayDateHeader && <DividerWithDate date={formattedDate} />}
-
       <Box flexDirection='row' alignItems='center' px='$2'>
         <Box width={40} mr='$4' pt='$4'>
           {displayAuthor && (
@@ -71,6 +69,7 @@ const Message: React.FC<MessageProps> = ({
           <Text>{content}</Text>
         </Box>
       </Box>
+      {displayDateHeader && <DividerWithDate date={formattedDate} />}
     </>
   );
 };
