@@ -282,3 +282,55 @@ export const useCourseMembership = (courseId: string) => {
     },
   });
 };
+
+export interface CourseBoard {
+  course_board_id: string;
+  name: string;
+  description: string;
+  created_at: string;
+  created_by_member_id: string;
+  course_id: string;
+}
+
+/**
+ * Hook to fetch the course boards for a course
+ *
+ * @param courseId the course id
+ * @returns a query object with the result of the query
+ */
+export const useCourseBoards = (courseId: string) => {
+  return useQuery({
+    queryKey: ['whiteboardapp/course-boards', courseId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('course_board')
+        .select('*')
+        .eq('fk_course_id', courseId)
+        .throwOnError();
+
+      return result.data as CourseBoard[];
+    },
+  });
+};
+
+/**
+ * Hook to fetch a single course board
+ *
+ * @param boardId the course board id
+ * @returns a single course board object
+ */
+export const useCourseBoard = (boardId: string) => {
+  return useQuery({
+    queryKey: ['whiteboardapp/course-board', boardId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('course_board')
+        .select('*')
+        .eq('course_board_id', boardId)
+        .single()
+        .throwOnError();
+
+      return result.data as CourseBoard;
+    },
+  });
+};

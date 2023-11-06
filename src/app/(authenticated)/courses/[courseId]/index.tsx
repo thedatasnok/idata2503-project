@@ -2,6 +2,7 @@ import Header from '@/components/navigation/Header';
 import {
   useAnnouncements,
   useCourse,
+  useCourseBoards,
   useCourseDescription,
 } from '@/services/courses';
 import { getToken } from '@/theme';
@@ -32,11 +33,15 @@ import { FlatList } from 'react-native-gesture-handler';
 const CourseScreen = () => {
   const router = useRouter();
   const { courseId } = useLocalSearchParams();
-  const { data: course } = useCourse(courseId as string);
-  const { data: announcements, isLoading } = useAnnouncements(
+  const { data: course, isLoading: isCourseLoading } = useCourse(
     courseId as string
   );
-  const { data: courseDescription } = useCourseDescription(courseId as string);
+  const { data: announcements, isLoading: isAnnouncementLoading } =
+    useAnnouncements(courseId as string);
+  const { data: courseDescription, isLoading: isCourseDescriptionLoading } =
+    useCourseDescription(courseId as string);
+  const { data: courseBoards, isLoading: isCourseBoardLoading } =
+    useCourseBoards(courseId as string);
 
   const assignments = [
     {
@@ -65,32 +70,11 @@ const CourseScreen = () => {
     },
   ];
 
-  const boards = [
-    {
-      title: 'general',
-    },
-    {
-      title: 'resources',
-    },
-    {
-      title: 'assignment-help',
-    },
-    {
-      title: 'group-1-chat',
-    },
-    {
-      title: 'general',
-    },
-    {
-      title: 'resources',
-    },
-    {
-      title: 'assignment-help',
-    },
-    {
-      title: 'group-1-chat',
-    },
-  ];
+  const isLoading =
+    isCourseLoading ||
+    isAnnouncementLoading ||
+    isCourseDescriptionLoading ||
+    isCourseBoardLoading;
 
   if (isLoading) {
     return (
@@ -103,7 +87,8 @@ const CourseScreen = () => {
   return (
     <>
       <Header
-        title={course?.course_code ?? 'Loading...'}
+        back
+        title={course?.course_code ?? 'Course'}
         rightIcon={InfoIcon}
         onRightIconPress={() => router.push(`/courses/${courseId}/description`)}
       />
@@ -120,9 +105,8 @@ const CourseScreen = () => {
             horizontal={true}
             data={announcements.slice(0, 3)}
             keyExtractor={(item) => item.announcement_id}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <AnnouncementCard
-                key={index}
                 title={item.title}
                 content={item.content}
                 createdAt={item.created_at}
@@ -150,7 +134,7 @@ const CourseScreen = () => {
             title={assignment.title}
             dueDate={assignment.dueDate}
             onPress={() =>
-              //TODO: Replace this with navigation to specific announcement
+              //TODO: Replace this with navigation to specific assignment
               router.push(`/courses/${courseId}/announcements` as any)
             }
           />
@@ -158,36 +142,52 @@ const CourseScreen = () => {
 
         <ComponentHeader title='Boards' />
 
-        <Box
-          backgroundColor='$gray50'
-          rounded='$md'
-          px='$2'
-          borderWidth='$1'
-          borderColor='$gray200'
-        >
-          {boards.map((boards, index) => (
-            <BoardCard
-              key={index}
-              title={boards.title}
-              onPress={() =>
-                //TODO: Replace this with navigation to specific board
-                router.push(`/courses/${courseId}/announcements` as any)
-              }
-            />
-          ))}
-        </Box>
+        {courseBoards && courseBoards.length > 0 ? (
+          <Box
+            backgroundColor='$gray50'
+            rounded='$md'
+            px='$2'
+            borderWidth='$1'
+            borderColor='$gray200'
+          >
+            {courseBoards.map((board) => (
+              <BoardCard
+                key={board.course_board_id}
+                title={board.name}
+                onPress={() => {
+                  router.push(
+                    `/courses/${courseId}/boards/${board.course_board_id}`
+                  );
+                }}
+              />
+            ))}
+          </Box>
+        ) : (
+          <Box alignItems='center' justifyContent='center'>
+            {/*@ts-ignore*/}
+            <Icon as={Hash} size={32} />
+            <Text color='$gray950'>No boards created</Text>
+          </Box>
+        )}
 
         <ComponentHeader title='Lecturers' />
 
         {courseDescription?.staff && courseDescription?.staff.length > 0 ? (
-          courseDescription?.staff.map((lecturer, index) => (
-            <Lecturer key={index} name={lecturer.name} email={lecturer.email} />
+          courseDescription?.staff.map((lecturer) => (
+            <Lecturer
+              key={lecturer.user_id}
+              name={lecturer.name}
+              email={lecturer.email}
+              onPress={() => {
+                router.push(`/messages/${lecturer.user_id}`);
+              }}
+            />
           ))
         ) : (
           <Box alignItems='center' justifyContent='center' pb='$2'>
             {/*@ts-ignore*/}
             <Icon as={GraduationCap} size={48} />
-            <Text>No lecturers assigned</Text>
+            <Text color='$gray950'>No lecturers assigned</Text>
           </Box>
         )}
       </ScrollView>
