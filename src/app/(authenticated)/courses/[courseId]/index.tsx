@@ -24,8 +24,8 @@ import {
   GraduationCap,
   Hash,
   InfoIcon,
-  Mail,
   Megaphone,
+  MessageSquare,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
@@ -46,7 +46,7 @@ const CourseScreen = () => {
   const assignments = [
     {
       title: 'Assignment 1',
-      dueDate: '2023-11-02 23:18:50',
+      dueDate: '2023-11-07 23:18:50',
     },
     {
       title: 'Assignment 2',
@@ -281,7 +281,12 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
 }) => {
   const formattedDate = dayjs(dueDate).calendar();
   const [timeLeft, setTimeLeft] = useState(dayjs(dueDate).fromNow());
-  const color = getToken('colors', 'gray950');
+
+  const isUnderTwoDays = dayjs(dueDate).diff(dayjs(), 'day') < 2;
+
+  const color = isUnderTwoDays
+    ? getToken('colors', 'error500')
+    : getToken('colors', 'gray950');
 
   //Create an interval to update the time left every 10 seconds
   useEffect(() => {
@@ -375,7 +380,7 @@ const Lecturer: React.FC<LecturerProps> = ({ name, email, onPress }) => {
           </Box>
         </Box>
         {/*@ts-ignore*/}
-        <Icon as={Mail} size={24} />
+        <Icon as={MessageSquare} size={24} />
       </Box>
     </Pressable>
   );
