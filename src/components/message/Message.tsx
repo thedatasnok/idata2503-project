@@ -31,7 +31,11 @@ const Message: React.FC<MessageProps> = ({
   previousCreatedAt,
   sameSender,
 }) => {
-  const formattedDate = dayjs(createdAt).calendar();
+  const shouldAbbreviate = dayjs().diff(createdAt, 'day') <= 1;
+  const headerDate = dayjs(createdAt).format('LL');
+  const formattedDate = shouldAbbreviate
+    ? dayjs(createdAt).calendar()
+    : dayjs(createdAt).format('L LT');
   const isLastMessage = !previousCreatedAt;
 
   const dateDiff = dayjs(createdAt).diff(dayjs(previousCreatedAt ?? createdAt));
@@ -69,7 +73,7 @@ const Message: React.FC<MessageProps> = ({
           <Text>{content}</Text>
         </Box>
       </Box>
-      {displayDateHeader && <DividerWithDate date={formattedDate} />}
+      {displayDateHeader && <DividerWithDate date={headerDate} />}
     </>
   );
 };
