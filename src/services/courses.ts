@@ -157,7 +157,6 @@ export const useCourseSignUp = () => {
 
 export interface Announcement {
   course_id: string;
-  created_by_member_id: string;
   title: string;
   content: string;
 }
@@ -165,16 +164,19 @@ export interface Announcement {
 /**
  * Hook for creating a new announcement and updating the announcements list.
  *
- * @returns {UseMutation} A mutation object with methods for creating an announcement.
+ * @param courseId the id of the course to create an announcement for
+ * 
+ * @returns a mutation object with methods for creating an announcement.
  */
-export const useCreateAnnouncement = () => {
+export const useCreateCourseAnnouncement = (courseId: string) => {
   const qc = useQueryClient();
+  const { data: membership } = useCourseMembership(courseId);
 
   return useMutation({
     mutationFn: async (announcement: Announcement) => {
       const newAnnouncement = {
         fk_course_id: announcement.course_id,
-        fk_created_by_member_id: announcement.created_by_member_id,
+        fk_created_by_member_id: membership?.course_member_id,
         title: announcement.title,
         content: announcement.content,
       };
@@ -185,8 +187,9 @@ export const useCreateAnnouncement = () => {
         .throwOnError();
     },
     onSuccess: () => {
-      // TODO: idk if this needs to be invalidated, if so should create a const for the shared query key
-      qc.invalidateQueries({ queryKey: ['whiteboardapp/announcements'] });
+      qc.invalidateQueries({
+        queryKey: ['whiteboardapp/announcements', courseId],
+      });
     },
   });
 };
@@ -257,7 +260,6 @@ export interface CourseMembership {
   course_member_id: string;
 }
 
-// TODO: do i need to make sure the current user is a member?
 /**
  * Hook to fetch the current users membership status for a specific course
  *
