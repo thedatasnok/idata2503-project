@@ -1,6 +1,6 @@
 import Header from '@/components/navigation/Header';
 import { useRecentDirectMessages } from '@/services/messaging';
-import { Box, Pressable, Text } from '@gluestack-ui/themed';
+import { Box, Divider, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
@@ -19,7 +19,7 @@ const MessagesScreen = () => {
           paddingHorizontal: 12,
           paddingTop: 6,
         }}
-        ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
+        ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item: message }) => (
           <Message
             direction={message.direction}
@@ -59,6 +59,7 @@ const Message: React.FC<MessageProps> = ({
       px='$1'
       gap='$1'
       my='$1'
+      py='$1'
       onPress={onPress}
     >
       <Box

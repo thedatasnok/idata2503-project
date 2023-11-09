@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   ButtonText,
+  Divider,
   Icon,
   ScrollView,
   Text,
@@ -50,7 +51,7 @@ const CourseDescriptionScreen = () => {
           data={courseDescription?.staff}
           scrollEnabled={false}
           keyExtractor={(i) => i.user_id}
-          ItemSeparatorComponent={() => <Box h='$px' bg='$gray200' mt='$2' />}
+          ItemSeparatorComponent={() => <Divider />}
           renderItem={({ item: lecturer }) => (
             <Lecturer name={lecturer.name} email={lecturer.email} />
           )}
@@ -75,32 +76,31 @@ interface LecturerProps {
 
 const Lecturer: React.FC<LecturerProps> = ({ name, email }) => {
   return (
-    <>
+    <Box
+      display='flex'
+      flexDirection='row'
+      alignItems='center'
+      px='$1'
+      gap='$1'
+      my='$1'
+      py='$1'
+    >
       <Box
+        flex={1}
+        gap={-4}
         display='flex'
         flexDirection='row'
         alignItems='center'
-        px='$1'
-        gap='$1'
-        my='$1'
       >
-        <Box
-          flex={1}
-          gap={-4}
-          display='flex'
-          flexDirection='row'
-          alignItems='center'
-        >
-          <Box display='flex' flexDirection='column' flexGrow={1}>
-            <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
-              {name}
-            </Text>
-            <Text fontSize='$xs'>{email}</Text>
-          </Box>
+        <Box display='flex' flexDirection='column' flexGrow={1}>
+          <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
+            {name}
+          </Text>
+          <Text fontSize='$xs'>{email}</Text>
         </Box>
-        <Icon as={Mail} />
       </Box>
-    </>
+      <Icon as={Mail} />
+    </Box>
   );
 };
 
