@@ -13,7 +13,7 @@
     "SHOW_ALL": "Show all",
     "LECTURERS": "Lecturers",
     "ANNOUNCEMENTS": "Announcements",
-    "BOARDS": "Boards"
+    "TEXT_CHANNEL": "Text channels"
   },
   "TIME": {
     "TODAY": "Today",
@@ -29,7 +29,7 @@
       "YOUR_COURSES": "Your courses",
       "ALL_COURSES": "All courses",
       "NO_ANNOUNCEMENTS_YET": "No announcements yet",
-      "NO_BOARDS_CREATED": "No boards created",
+      "NO_TEXT_CHANNEL_CREATED": "No text channel created",
       "NO_LECTURERS_ASSIGNED": "No lecturers assigned"
     },
     "SETTINGS": {

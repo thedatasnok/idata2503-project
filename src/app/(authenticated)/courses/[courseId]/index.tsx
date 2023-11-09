@@ -141,7 +141,7 @@ const CourseScreen = () => {
           />
         ))}
 
-        <ComponentHeader title={t("GENERAL.BOARDS")} />
+        <ComponentHeader title={t("GENERAL.TEXT_CHANNEL")} />
 
         {courseBoards && courseBoards.length > 0 ? (
           <Box
@@ -167,7 +167,7 @@ const CourseScreen = () => {
           <Box alignItems='center' justifyContent='center'>
             {/*@ts-ignore*/}
             <Icon as={Hash} size={32} />
-            <Text color='$gray950'>{t("FEATURES.COURSES.NO_BOARDS_CREATED")}</Text>
+            <Text color='$gray950'>{t("FEATURES.COURSES.NO_TEXT_CHANNEL_CREATED")}</Text>
           </Box>
         )}
 

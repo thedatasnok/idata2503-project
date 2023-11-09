@@ -13,7 +13,7 @@
     "SHOW_ALL": "Vis alle",
     "LECTURERS": "Forelesere",
     "ANNOUNCEMENTS": "Kunngjøringer",
-    "BOARDS": "Diskusjonsforum"
+    "TEXT_CHANNEL": "Tekst kanaler"
   },
   "TIME": {
     "TODAY": "I dag",
@@ -29,7 +29,7 @@
       "YOUR_COURSES": "Dine emner",
       "ALL_COURSES": "Alle emner",
       "NO_ANNOUNCEMENTS_YET": "Ingen kunngjøringer enda",
-      "NO_BOARDS_CREATED": "Ingen diskusjonsforum opprettet",
+      "NO_TEXT_CHANNEL_CREATED": "Ingen tekst kanal opprettet",
       "NO_LECTURERS_ASSIGNED": "Ingen forelesere tildelt"
     },
     "SETTINGS": {
