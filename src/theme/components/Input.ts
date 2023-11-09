@@ -2,7 +2,7 @@ import { createStyle } from '@gluestack-style/react';
 
 export const Input = createStyle({
   borderWidth: 1,
-  borderColor: '$gray300',
+  borderColor: '$gray400',
   borderRadius: '$sm',
   flexDirection: 'row',
   overflow: 'hidden',
@@ -18,7 +18,7 @@ export const Input = createStyle({
   ':disabled': {
     opacity: 0.4,
     ':hover': {
-      borderColor: '$gray300',
+      borderColor: '$gray400',
     },
   },
 
@@ -28,7 +28,7 @@ export const Input = createStyle({
   },
 
   _icon: {
-    color: '$gray400',
+    color: '$gray500',
   },
 
   variants: {
