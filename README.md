@@ -31,3 +31,5 @@ Note: To use a real device you need to install [Expo Go](https://expo.dev/client
 2. Install dependencies with `pnpm install`
 3. Set environment variables in `.env` (see [`.env.example`](.env.example))
 4. Start the development server with `pnpm start`
+
+You can start using Expo Go or a development client by postfixing the start command using `-g` for Expo Go, and `-d` for a development client.
