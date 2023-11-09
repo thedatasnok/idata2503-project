@@ -143,13 +143,7 @@ const SettingsScreen = () => {
                 control={control}
                 name='fullName'
                 render={({ field: { onChange, value } }) => (
-                  <Input
-                    borderColor='$gray400'
-                    borderWidth='$1'
-                    borderRadius='$sm'
-                    width='100%'
-                    p='$1.5'
-                  >
+                  <Input>
                     <InputField
                       onChangeText={(val) => onChange(val)}
                       defaultValue={userProfile?.full_name}
@@ -167,7 +161,7 @@ const SettingsScreen = () => {
             </FormControl>
 
             <FormControl isInvalid={'email' in errors}>
-              <FormControlLabelText color='$gray950' pt='$2'>
+              <FormControlLabelText color='$gray400' pt='$2'>
                 {t('FEATURES.SETTINGS.EMAIL')}
               </FormControlLabelText>
 
@@ -175,14 +169,11 @@ const SettingsScreen = () => {
                 control={control}
                 name='email'
                 render={({ field: { onChange, value } }) => (
-                  <Input
-                    borderColor='$gray400'
-                    borderWidth='$1'
-                    borderRadius='$sm'
-                    width='100%'
-                    p='$1.5'
-                  >
+                  <Input>
                     <InputField
+                      color='$gray400'
+                      // @ts-ignore
+                      readOnly={true}
                       onChangeText={(val) => onChange(val)}
                       defaultValue={session?.user.email}
                       value={value}
