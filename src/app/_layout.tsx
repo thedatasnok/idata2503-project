@@ -8,6 +8,10 @@ import { StatusBar } from 'expo-status-bar';
 import { I18nextProvider } from 'react-i18next';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import {
+  associateUserId,
+  requestNotificationPermissions,
+} from '@/services/onesignal';
 import { supabase } from '@/services/supabase';
 import { useAuth } from '@/store/global';
 import dayjs from 'dayjs';
@@ -37,6 +41,7 @@ const RootLayout = () => {
     const prepare = async () => {
       try {
         const { data } = await supabase.auth.getSession();
+        requestNotificationPermissions();
         if (data.session) login(data.session);
       } catch (error) {
         console.warn(error);
@@ -48,6 +53,7 @@ const RootLayout = () => {
     supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
         login(session);
+        associateUserId(session.user.id);
       } else {
         logout();
       }
