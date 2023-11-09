@@ -256,7 +256,7 @@ export const useAnnouncement = (announcementId: string) => {
 };
 
 export interface CourseMembership {
-  role: string;
+  role: CourseRole;
   course_member_id: string;
 }
 
