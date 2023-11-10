@@ -47,14 +47,8 @@ const CreateAnnouncementScreen = () => {
   });
 
   const onSubmit = async (data: CreateAnnouncementForm) => {
-    const announcement: Announcement = {
-      course_id: courseId as string,
-      title: data.title,
-      content: data.content,
-    };
-
     try {
-      createAnnouncement.mutateAsync(announcement);
+      createAnnouncement.mutateAsync(data);
       console.log('announcement created successfully: ', data);
       // TODO: go back?
       router.back();

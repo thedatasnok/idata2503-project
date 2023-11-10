@@ -155,7 +155,6 @@ export const useCourseSignUp = () => {
 };
 
 export interface Announcement {
-  course_id: string;
   title: string;
   content: string;
 }
@@ -174,8 +173,7 @@ export const useCreateCourseAnnouncement = (courseId: string) => {
   return useMutation({
     mutationFn: async (announcement: Announcement) => {
       const newAnnouncement = {
-        // TODO: use courseId parameter instead?
-        fk_course_id: announcement.course_id,
+        fk_course_id: courseId,
         fk_created_by_member_id: membership?.course_member_id,
         title: announcement.title,
         content: announcement.content,
@@ -340,7 +338,7 @@ export interface CourseBoardFormData {
 }
 
 /**
- * Hook for creating a new courseBoard and updating the courseBoards list.
+ * Hook for creating a new course board and updating the course boards list.
  *
  * @param courseId the id of the course to create a board for
  *
@@ -367,6 +365,35 @@ export const useCreateCourseBoard = (courseId: string) => {
     onSuccess: () => {
       qc.invalidateQueries({
         queryKey: ['whiteboardapp/course-boards', courseId],
+      });
+    },
+  });
+};
+
+/**
+ * Hook for editing a course board and updating the course boards list.
+ *
+ * @param boardId the id of the board to edit
+ *
+ * @returns a mutation object with methods for editing a course board.
+ */
+export const useEditCourseBoard = (boardId: string) => {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (courseBoardFormData: Partial<CourseBoardFormData>) => {
+      await supabase
+        .from('course_board')
+        .update({
+          name: courseBoardFormData.name,
+          description: courseBoardFormData.description,
+        })
+        .eq('course_board_id', boardId)
+        .throwOnError();
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ['whiteboardapp/course-boards', boardId],
       });
     },
   });
