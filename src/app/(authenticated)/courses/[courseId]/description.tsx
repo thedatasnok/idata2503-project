@@ -21,7 +21,6 @@ const CourseDescriptionScreen = () => {
   const { data: courseDescription } = useCourseDescription(courseId as string);
   const courseSignUp = useCourseSignUp();
 
-  // TODO: Havent tested this function yet
   const signUp = async () => {
     try {
       await courseSignUp.mutateAsync(courseId as string);
