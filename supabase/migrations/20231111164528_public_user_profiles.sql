@@ -5,7 +5,7 @@ CREATE VIEW public_user_profile_view AS (
       cm.fk_user_id,
       cm.role
     FROM course_member cm
-    WHERE cm.fk_user_id = auth.uid() AND cm.deleted_at IS NULL
+    WHERE cm.fk_user_id = auth.uid() AND cm.removed_at IS NULL
   ),
   other_user_common_membership AS (
     SELECT 
