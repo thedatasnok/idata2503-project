@@ -12,6 +12,7 @@ import {
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
+import { t } from 'i18next';
 import { ChevronRightIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
@@ -30,17 +31,17 @@ const CoursesScreen = () => {
 
   return (
     <>
-      <Header title='Courses' />
+      <Header title={t('FEATURES.COURSES.COURSES_TITLE')} />
 
       <Box flex={1}>
         <Box flexDirection='row' p='$2'>
           <Tab
-            label='Your Courses'
-            active={personalTab}
+            label={t('FEATURES.COURSES.YOUR_COURSES')}
+            active={personalTab} 
             onPress={() => setPersonalTab(true)}
           />
           <Tab
-            label='All Courses'
+            label={t('FEATURES.COURSES.ALL_COURSES')}
             active={!personalTab}
             onPress={() => setPersonalTab(false)}
           />

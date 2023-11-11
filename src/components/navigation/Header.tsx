@@ -90,7 +90,12 @@ const Header: React.FC<HeaderProps> = ({
       </Box>
 
       <Pressable onPress={onRightPressed} px='$4'>
-        <Icon as={rightIcon ?? BellIcon} color='$primary50' />
+        {rightIcon ? (
+          <Icon as={rightIcon} color='$primary50' />
+        ) : (
+          // i am transparent. i am invisible. i am the bell icon.
+          <Icon as={BellIcon} color='$primary600' />
+        )}
       </Pressable>
     </Box>
   );

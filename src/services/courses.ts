@@ -126,11 +126,10 @@ export const useCourseDescription = (courseId: string) => {
   });
 };
 
-// TODO: idk if implemented in a good way or not
 /**
  * Hook for signing up a user for a course and updating the course member list.
  *
- * @returns {UseMutation} A mutation object with methods for signing up for a course.
+ * @returns A mutation object with methods for signing up for a course.
  */
 export const useCourseSignUp = () => {
   const qc = useQueryClient();
@@ -156,8 +155,6 @@ export const useCourseSignUp = () => {
 };
 
 export interface Announcement {
-  course_id: string;
-  created_by_member_id: string;
   title: string;
   content: string;
 }
@@ -165,16 +162,19 @@ export interface Announcement {
 /**
  * Hook for creating a new announcement and updating the announcements list.
  *
- * @returns {UseMutation} A mutation object with methods for creating an announcement.
+ * @param courseId the id of the course to create an announcement for
+ *
+ * @returns a mutation object with methods for creating an announcement.
  */
-export const useCreateAnnouncement = () => {
+export const useCreateCourseAnnouncement = (courseId: string) => {
   const qc = useQueryClient();
+  const { data: membership } = useCourseMembership(courseId);
 
   return useMutation({
     mutationFn: async (announcement: Announcement) => {
       const newAnnouncement = {
-        fk_course_id: announcement.course_id,
-        fk_created_by_member_id: announcement.created_by_member_id,
+        fk_course_id: courseId,
+        fk_created_by_member_id: membership?.course_member_id,
         title: announcement.title,
         content: announcement.content,
       };
@@ -185,13 +185,13 @@ export const useCreateAnnouncement = () => {
         .throwOnError();
     },
     onSuccess: () => {
-      // TODO: idk if this needs to be invalidated, if so should create a const for the shared query key
-      qc.invalidateQueries({ queryKey: ['whiteboardapp/announcements'] });
+      qc.invalidateQueries({
+        queryKey: ['whiteboardapp/announcements', courseId],
+      });
     },
   });
 };
 
-// TODO: Uses announcement_view
 export interface AnnouncementWithCreatedBy {
   announcement_id: string;
   created_by_full_name: string;
@@ -202,7 +202,6 @@ export interface AnnouncementWithCreatedBy {
   created_at: string;
 }
 
-// TODO: Uses announcement_view
 /**
  * Hook to fetch announcements for a course
  *
@@ -227,7 +226,6 @@ export const useAnnouncements = (courseId: string) => {
   });
 };
 
-// TODO: Uses announcement_view
 /**
  * Hook to fetch a single announcement
  *
@@ -253,11 +251,10 @@ export const useAnnouncement = (announcementId: string) => {
 };
 
 export interface CourseMembership {
-  role: string;
+  role: CourseRole;
   course_member_id: string;
 }
 
-// TODO: do i need to make sure the current user is a member?
 /**
  * Hook to fetch the current users membership status for a specific course
  *
@@ -331,6 +328,73 @@ export const useCourseBoard = (boardId: string) => {
         .throwOnError();
 
       return result.data as CourseBoard;
+    },
+  });
+};
+
+export interface CourseBoardFormData {
+  name: string;
+  description: string;
+}
+
+/**
+ * Hook for creating a new course board and updating the course boards list.
+ *
+ * @param courseId the id of the course to create a board for
+ *
+ * @returns a mutation object with methods for creating a course board.
+ */
+export const useCreateCourseBoard = (courseId: string) => {
+  const qc = useQueryClient();
+  const { session } = useAuth();
+
+  return useMutation({
+    mutationFn: async (courseBoardFormData: CourseBoardFormData) => {
+      const newCourseBoard = {
+        fk_course_id: courseId,
+        fk_created_by_user_id: session?.user.id,
+        name: courseBoardFormData.name,
+        description: courseBoardFormData.description,
+      };
+
+      await supabase
+        .from('course_board')
+        .insert([newCourseBoard])
+        .throwOnError();
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ['whiteboardapp/course-boards', courseId],
+      });
+    },
+  });
+};
+
+/**
+ * Hook for editing a course board and updating the course boards list.
+ *
+ * @param boardId the id of the board to edit
+ *
+ * @returns a mutation object with methods for editing a course board.
+ */
+export const useEditCourseBoard = (boardId: string) => {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (courseBoardFormData: Partial<CourseBoardFormData>) => {
+      await supabase
+        .from('course_board')
+        .update({
+          name: courseBoardFormData.name,
+          description: courseBoardFormData.description,
+        })
+        .eq('course_board_id', boardId)
+        .throwOnError();
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ['whiteboardapp/course-boards', boardId],
+      });
     },
   });
 };

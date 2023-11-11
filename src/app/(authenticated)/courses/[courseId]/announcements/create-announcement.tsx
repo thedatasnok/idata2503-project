@@ -2,8 +2,7 @@ import Header from '@/components/navigation/Header';
 import {
   Announcement,
   useCourse,
-  useCourseMembership,
-  useCreateAnnouncement,
+  useCreateCourseAnnouncement,
 } from '@/services/courses';
 import {
   Box,
@@ -14,7 +13,6 @@ import {
   FormControlErrorText,
   FormControlLabel,
   FormControlLabelText,
-  Heading,
   Input,
   InputField,
   ScrollView,
@@ -36,8 +34,7 @@ type CreateAnnouncementForm = z.infer<typeof announcementValidationSchema>;
 const CreateAnnouncementScreen = () => {
   const { courseId } = useLocalSearchParams();
   const { data: course } = useCourse(courseId as string);
-  const { data: memberShip } = useCourseMembership(courseId as string);
-  const createAnnouncement = useCreateAnnouncement();
+  const createAnnouncement = useCreateCourseAnnouncement(courseId as string);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -45,21 +42,13 @@ const CreateAnnouncementScreen = () => {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<CreateAnnouncementForm>({
     resolver: zodResolver(announcementValidationSchema),
   });
 
   const onSubmit = async (data: CreateAnnouncementForm) => {
-    const announcement: Announcement = {
-      course_id: courseId as string,
-      created_by_member_id: memberShip?.course_member_id as string,
-      title: data.title,
-      content: data.content,
-    };
-
     try {
-      createAnnouncement.mutateAsync(announcement);
+      createAnnouncement.mutateAsync(data);
       console.log('announcement created successfully: ', data);
       // TODO: go back?
       router.back();
@@ -70,13 +59,10 @@ const CreateAnnouncementScreen = () => {
 
   return (
     <>
-      <Header context={course?.course_code} title='Create Announcement' back />
+      <Header context={course?.course_code} title='New announcement' back />
 
       <ScrollView>
         <Box display='flex' flexDirection='column' p='$4' flex={1}>
-          {/* <Heading pb='$2'>{t('FEATURES.SETTINGS.USER_PROFILE')}</Heading> */}
-          <Heading pb='$2'>Create Announcement</Heading>
-
           <VStack>
             <FormControl isInvalid={'title' in errors}>
               <FormControlLabel>
@@ -90,19 +76,10 @@ const CreateAnnouncementScreen = () => {
                 control={control}
                 name='title'
                 render={({ field: { onChange, value } }) => (
-                  <Input
-                    borderColor='$gray400'
-                    borderWidth='$1'
-                    borderRadius='$sm'
-                    width='100%'
-                    p='$1.5'
-                    h='auto'
-                  >
+                  <Input>
                     <InputField
                       onChangeText={(val) => onChange(val)}
                       value={value}
-                      multiline
-                      textAlignVertical='top'
                     />
                   </Input>
                 )}
@@ -125,18 +102,12 @@ const CreateAnnouncementScreen = () => {
                 control={control}
                 name='content'
                 render={({ field: { onChange, value } }) => (
-                  <Input
-                    borderColor='$gray400'
-                    borderWidth='$1'
-                    borderRadius='$sm'
-                    width='100%'
-                    p='$1.5'
-                    h='auto'
-                  >
+                  <Input h='auto'>
                     <InputField
                       onChangeText={(val) => onChange(val)}
                       value={value}
                       multiline
+                      py='$1.5'
                       textAlignVertical='top'
                       numberOfLines={10}
                     />
@@ -152,7 +123,7 @@ const CreateAnnouncementScreen = () => {
             </FormControl>
 
             <Box pt='$5' alignItems='center'>
-              <Button w='80%' onPress={handleSubmit(onSubmit)}>
+              <Button w='100%' onPress={handleSubmit(onSubmit)}>
                 <ButtonText>
                   {/* {t('FEATURES.SETTINGS.UPDATE_PROFILE')} */}
                   Create announcement

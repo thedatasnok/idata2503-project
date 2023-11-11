@@ -9,7 +9,11 @@
   "GENERAL": {
     "ASSIGNMENT": "Assignment",
     "ASSIGNMENTS": "Assignments",
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "SHOW_ALL": "Show all",
+    "LECTURERS": "Lecturers",
+    "ANNOUNCEMENTS": "Announcements",
+    "TEXT_CHANNEL": "Text channels"
   },
   "TIME": {
     "TODAY": "Today",
@@ -20,7 +24,13 @@
   "FEATURES": {
     "COURSES": {
       "ACTIVE_COURSES": "Active courses",
-      "COMPLETED_COURSES": "Completed courses"
+      "COMPLETED_COURSES": "Completed courses",
+      "COURSES_TITLE": "Courses",
+      "YOUR_COURSES": "Your courses",
+      "ALL_COURSES": "All courses",
+      "NO_ANNOUNCEMENTS_YET": "No announcements yet",
+      "NO_TEXT_CHANNEL_CREATED": "No text channel created",
+      "NO_LECTURERS_ASSIGNED": "No lecturers assigned"
     },
     "SETTINGS": {
       "FULL_NAME": "Full name",

@@ -9,7 +9,11 @@
   "GENERAL": {
     "ASSIGNMENT": "Innlevering",
     "ASSIGNMENTS": "Innleveringer",
-    "CANCEL": "Avbryt"
+    "CANCEL": "Avbryt",
+    "SHOW_ALL": "Vis alle",
+    "LECTURERS": "Forelesere",
+    "ANNOUNCEMENTS": "Kunngjøringer",
+    "TEXT_CHANNEL": "Tekst kanaler"
   },
   "TIME": {
     "TODAY": "I dag",
@@ -20,7 +24,13 @@
   "FEATURES": {
     "COURSES": {
       "ACTIVE_COURSES": "Aktive emner",
-      "COMPLETED_COURSES": "Fullførte emner"
+      "COMPLETED_COURSES": "Fullførte emner",
+      "COURSES_TITLE": "Emner",
+      "YOUR_COURSES": "Dine emner",
+      "ALL_COURSES": "Alle emner",
+      "NO_ANNOUNCEMENTS_YET": "Ingen kunngjøringer enda",
+      "NO_TEXT_CHANNEL_CREATED": "Ingen tekst kanal opprettet",
+      "NO_LECTURERS_ASSIGNED": "Ingen forelesere tildelt"
     },
     "SETTINGS": {
       "FULL_NAME": "Fullt navn",

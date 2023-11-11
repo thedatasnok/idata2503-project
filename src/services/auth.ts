@@ -56,6 +56,24 @@ export const useProfile = () => {
 };
 
 /**
+ * Hook to fetch a user profile.
+ */
+export const useUserProfile = (userId: string) => {
+  return useQuery({
+    queryKey: [PROFILE_KEY, userId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('user_profile')
+        .select('*')
+        .eq('fk_user_id', userId)
+        .single();
+
+      return result.data as UserProfile;
+    },
+  });
+};
+
+/**
  * Hook to update the current user's profile.
  * Will invalidate the profile cache on success.
  */

@@ -11,6 +11,7 @@ import {
   styled,
 } from '@gluestack-ui/themed';
 import { useRouter } from 'expo-router';
+import { t } from 'i18next';
 import { ChevronRightIcon } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native';
 import { Drawer as NavigationDrawer } from 'react-native-drawer-layout';
@@ -64,7 +65,7 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
         {activeCourses && activeCourses?.length > 0 && (
           <>
             <Text fontWeight='$semibold' fontSize='$md' px='$2'>
-              Active courses
+            {t('FEATURES.COURSES.ACTIVE_COURSES')}
             </Text>
 
             <Divider px='$2' />
@@ -86,7 +87,7 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
         {otherCourses && otherCourses?.length > 0 && (
           <>
             <Text fontWeight='$semibold' fontSize='$md' mt='$2' px='$2'>
-              Previous courses
+              {t("FEATURES.COURSES.COMPLETED_COURSES")}
             </Text>
 
             <Divider px='$2' />

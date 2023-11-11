@@ -17,6 +17,7 @@ import {
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
+import { t } from 'i18next';
 import {
   ArrowRight,
   ChevronRight,
@@ -95,7 +96,7 @@ const CourseScreen = () => {
 
       <ScrollView nestedScrollEnabled px='$4'>
         <ComponentHeader
-          title='Announcements'
+          title={t('GENERAL.ANNOUNCEMENTS')}
           courseId={courseId as string}
           showAll={announcements && announcements.length > 0}
         />
@@ -123,11 +124,11 @@ const CourseScreen = () => {
           <Box alignItems='center' justifyContent='center'>
             {/*@ts-ignore*/}
             <Icon as={Megaphone} size={48} />
-            <Text color='$gray950'>No Announcements yet</Text>
+            <Text color='$gray950'>{t("FEATURES.COURSES.NO_ANNOUNCEMENTS_YET")}</Text>
           </Box>
         )}
 
-        <ComponentHeader title='Assignments' showAll={true} />
+        <ComponentHeader title={t("GENERAL.ASSIGNMENTS")} showAll={true} />
         {assignments.slice(0, 2).map((assignment, index) => (
           <AssignmentCard
             key={index}
@@ -140,7 +141,7 @@ const CourseScreen = () => {
           />
         ))}
 
-        <ComponentHeader title='Boards' />
+        <ComponentHeader title={t("GENERAL.TEXT_CHANNEL")} />
 
         {courseBoards && courseBoards.length > 0 ? (
           <Box
@@ -166,11 +167,11 @@ const CourseScreen = () => {
           <Box alignItems='center' justifyContent='center'>
             {/*@ts-ignore*/}
             <Icon as={Hash} size={32} />
-            <Text color='$gray950'>No boards created</Text>
+            <Text color='$gray950'>{t("FEATURES.COURSES.NO_TEXT_CHANNEL_CREATED")}</Text>
           </Box>
         )}
 
-        <ComponentHeader title='Lecturers' />
+        <ComponentHeader title={t("GENERAL.LECTURERS")} />
 
         {courseDescription?.staff && courseDescription?.staff.length > 0 ? (
           courseDescription?.staff.map((lecturer) => (
@@ -187,7 +188,7 @@ const CourseScreen = () => {
           <Box alignItems='center' justifyContent='center' pb='$2'>
             {/*@ts-ignore*/}
             <Icon as={GraduationCap} size={48} />
-            <Text color='$gray950'>No lecturers assigned</Text>
+            <Text color='$gray950'>{t("FEATURES.COURSES.NO_LECTURERS_ASSIGNED")}</Text>
           </Box>
         )}
       </ScrollView>
@@ -218,7 +219,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
             router.push(`/courses/${courseId}/announcements` as any)
           }
         >
-          <Heading fontSize='$md'> Show all</Heading>
+          <Heading fontSize='$md'> {t("GENERAL.SHOW_ALL")}</Heading>
           <Icon as={ArrowRight} />
         </Pressable>
       )}
