@@ -61,9 +61,11 @@ export const config = createConfig({
 });
 
 export type Config = typeof config;
+export type Components = typeof components;
 
 declare module '@gluestack-ui/themed' {
   interface UIConfig extends Config {}
+  interface UIComponents extends Components {}
 }
 
 export const getToken = <TokenType extends keyof Config['tokens']>(
