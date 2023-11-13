@@ -41,7 +41,11 @@ const RootLayout = () => {
     const prepare = async () => {
       try {
         const { data } = await supabase.auth.getSession();
-        requestNotificationPermissions();
+
+        requestNotificationPermissions().then((res) => {
+          if (res && data.session) associateUserId(data.session.user.id);
+        });
+
         if (data.session) login(data.session);
       } catch (error) {
         console.warn(error);

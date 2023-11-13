@@ -1,7 +1,26 @@
-import Constants from 'expo-constants';
-import { OneSignal } from 'react-native-onesignal';
+import Constants, { AppOwnership } from 'expo-constants';
+import type { OneSignal } from 'react-native-onesignal';
 
-OneSignal.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
+let os: typeof OneSignal | null;
+
+// ignores onesignal when running through Expo Go
+if (Constants.appOwnership !== AppOwnership.Expo) {
+  import('react-native-onesignal').then((mod) => {
+    os = mod.OneSignal;
+    os?.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
+  });
+} else {
+  os = null;
+}
+
+/**
+ * Helper function to wait for OneSignal state to be determined.
+ */
+const waitForOneSignal = async () => {
+  if (os !== undefined) return;
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  await waitForOneSignal();
+};
 
 /**
  * Requests the user for push notification permissions.
@@ -9,7 +28,9 @@ OneSignal.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
  * @returns a promise that resolves to a boolean indicating whether the user granted permissions or not.
  */
 export const requestNotificationPermissions = async () => {
-  return await OneSignal.Notifications.requestPermission(true);
+  await waitForOneSignal();
+  if (os === null) return false;
+  return await os.Notifications.requestPermission(true);
 };
 
 /**
@@ -17,6 +38,8 @@ export const requestNotificationPermissions = async () => {
  *
  * @param userId the users id
  */
-export const associateUserId = (userId: string) => {
-  OneSignal.login(userId);
+export const associateUserId = async (userId: string) => {
+  await waitForOneSignal();
+  if (os === null) return;
+  os.login(userId);
 };
