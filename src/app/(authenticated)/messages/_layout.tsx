@@ -1,12 +1,8 @@
+import { DEFAULT_STACK_SCREEN_OPTIONS } from '@/util/screen';
 import { Stack } from 'expo-router';
 
-const SCREEN_OPTIONS = {
-  header: () => <></>,
-  animation: 'slide_from_right',
-} as const;
-
 const MessagesLayout = () => {
-  return <Stack screenOptions={SCREEN_OPTIONS} />;
+  return <Stack screenOptions={DEFAULT_STACK_SCREEN_OPTIONS} />;
 };
 
 export default MessagesLayout;
