@@ -6,10 +6,12 @@ import { useDirectMessages } from '@/services/messaging';
 import { Box } from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
 const DirectMessageScreen = () => {
   const { id } = useLocalSearchParams();
+  const { t } = useTranslation();
   const { messages, isSending, sendMessage } = useDirectMessages(
     id as string,
     true
@@ -23,7 +25,11 @@ const DirectMessageScreen = () => {
 
   return (
     <Box flex={1}>
-      <Header title={userProfile?.full_name ?? 'Message'} />
+      <Header
+        back
+        context={t('NAVIGATION.MESSAGES')}
+        title={userProfile?.full_name ?? 'Message'}
+      />
 
       <FlatList
         data={messages}
