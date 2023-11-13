@@ -72,6 +72,7 @@ export const useDirectMessages = (
               .from('current_user_direct_messages_view')
               .select('*')
               .eq('direct_message_id', insertedMessage.new.direct_message_id)
+              .eq('counterpart_user_id', counterpartId)
               .single()
               .throwOnError();
 
