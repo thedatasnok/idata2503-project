@@ -126,34 +126,6 @@ export const useCourseDescription = (courseId: string) => {
   });
 };
 
-/**
- * Hook for signing up a user for a course and updating the course member list.
- *
- * @returns A mutation object with methods for signing up for a course.
- */
-export const useCourseSignUp = () => {
-  const qc = useQueryClient();
-  const { session } = useAuth();
-
-  return useMutation({
-    mutationFn: async (courseId: string) => {
-      const newCourseMember = {
-        fk_course_id: courseId,
-        fk_user_id: session?.user.id,
-        role: 'STUDENT',
-      };
-
-      await supabase
-        .from('course_member')
-        .insert([newCourseMember])
-        .throwOnError();
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: [DESCRIPTION_KEY] });
-    },
-  });
-};
-
 export interface Announcement {
   title: string;
   content: string;
@@ -256,28 +228,77 @@ export interface CourseMembership {
 }
 
 /**
- * Hook to fetch the current users membership status for a specific course
+ * Hook to fetch a users membership for a given course, with methods for signing up and leaving the course.
  *
  * @param courseId the course id
- * @returns a query object with the result of the query
+ *
+ * @returns a query object with the result of the query, and two helper functions for signing up and leaving the course
  */
 export const useCourseMembership = (courseId: string) => {
   const { session } = useAuth();
+  const queryKey = ['whiteboardapp/course-member', courseId];
+  const qc = useQueryClient();
 
-  return useQuery({
-    queryKey: ['whiteboardapp/course-member', courseId],
+  const query = useQuery({
+    queryKey,
     queryFn: async () => {
       const result = await supabase
         .from('course_member')
         .select('role, course_member_id')
         .eq('fk_course_id', courseId)
         .eq('fk_user_id', session?.user.id)
+        .not('removed_at', 'is', null)
         .single()
         .throwOnError();
 
       return result.data as CourseMembership;
     },
   });
+
+  const onMembershipMutated = () => {
+    qc.invalidateQueries({ queryKey: ['whiteboardapp/courses'] });
+    qc.invalidateQueries({ queryKey });
+    qc.invalidateQueries({ queryKey: [DESCRIPTION_KEY, courseId] });
+  };
+
+  const signUpMutation = useMutation({
+    mutationFn: async () => {
+      if (query.data?.course_member_id) throw new Error('Already signed up');
+
+      const newCourseMember = {
+        fk_course_id: courseId,
+        fk_user_id: session?.user.id,
+        role: 'STUDENT',
+      };
+
+      await supabase
+        .from('course_member')
+        .insert([newCourseMember])
+        .throwOnError();
+    },
+    onSuccess: onMembershipMutated,
+  });
+
+  const leaveMutation = useMutation({
+    mutationFn: async () => {
+      if (!query.data?.course_member_id) throw new Error('Not signed up');
+
+      await supabase
+        .from('course_member')
+        .update({ removed_at: new Date().toISOString() })
+        .eq('course_member_id', query.data.course_member_id)
+        .throwOnError();
+    },
+    onSuccess: onMembershipMutated,
+  });
+
+  return {
+    ...query,
+    signUp: signUpMutation.mutateAsync,
+    isSigningUp: signUpMutation.isPending,
+    leave: leaveMutation.mutateAsync,
+    isLeaving: leaveMutation.isPending,
+  };
 };
 
 export interface CourseBoard {

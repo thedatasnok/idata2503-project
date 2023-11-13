@@ -12,6 +12,7 @@
     "CANCEL": "Cancel",
     "SHOW_ALL": "Show all",
     "LECTURERS": "Lecturers",
+    "MEMBERS": "Members",
     "ANNOUNCEMENTS": "Announcements",
     "TEXT_CHANNEL": "Text channels"
   },
@@ -26,11 +27,18 @@
       "ACTIVE_COURSES": "Active courses",
       "COMPLETED_COURSES": "Completed courses",
       "COURSES_TITLE": "Courses",
+      "COURSE_DESCRIPTION": "Course description",
       "YOUR_COURSES": "Your courses",
       "ALL_COURSES": "All courses",
       "NO_ANNOUNCEMENTS_YET": "No announcements yet",
       "NO_TEXT_CHANNEL_CREATED": "No text channel created",
-      "NO_LECTURERS_ASSIGNED": "No lecturers assigned"
+      "NO_LECTURERS_ASSIGNED": "No lecturers assigned",
+      "NEW_ANNOUNCEMENT": "New announcement",
+      "NEW_TEXT_CHANNEL": "New text channel",
+      "VIEW_COURSE_DESCRIPTION": "View course description",
+      "VIEW_COURSE_MEMBERS": "View course members",
+      "LEAVE_COURSE": "Leave course",
+      "SIGN_UP": "Sign up"
     },
     "SETTINGS": {
       "FULL_NAME": "Full name",

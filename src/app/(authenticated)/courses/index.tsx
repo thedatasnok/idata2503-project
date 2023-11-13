@@ -1,6 +1,7 @@
 import Header from '@/components/navigation/Header';
 import { IconType } from '@/icon';
 import { useCourses } from '@/services/courses';
+import { formatDuration } from '@/util/date';
 import {
   Box,
   Divider,
@@ -10,7 +11,6 @@ import {
   Text,
   styled,
 } from '@gluestack-ui/themed';
-import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
 import { t } from 'i18next';
 import { ChevronRightIcon } from 'lucide-react-native';
@@ -22,13 +22,6 @@ const CoursesScreen = () => {
   const { data: courses, isLoading } = useCourses({ enrolled: personalTab });
   const router = useRouter();
 
-  const formatDuration = (start: string, end: string) => {
-    const startString = dayjs(start).format('MMM YYYY');
-    const endString = dayjs(end).format('MMM YYYY');
-
-    return `${startString} - ${endString}`;
-  };
-
   return (
     <>
       <Header title={t('FEATURES.COURSES.COURSES_TITLE')} />
@@ -37,7 +30,7 @@ const CoursesScreen = () => {
         <Box flexDirection='row' p='$2'>
           <Tab
             label={t('FEATURES.COURSES.YOUR_COURSES')}
-            active={personalTab} 
+            active={personalTab}
             onPress={() => setPersonalTab(true)}
           />
           <Tab
@@ -58,8 +51,7 @@ const CoursesScreen = () => {
                 name={course.name}
                 date={formatDuration(course.starts_at, course.ends_at)}
                 icon={ChevronRightIcon}
-                // @ts-ignore
-                onPress={() => router.push(`/courses/${course.course_id}`)}
+                onPress={() => router.push(`/courses/${course.course_id}/`)}
               />
             )}
           />
@@ -122,26 +114,24 @@ const CourseCard: React.FC<CourseCardProps> = ({
   onPress,
 }) => {
   return (
-    <>
-      <Pressable onPress={onPress}>
-        <Box
-          display='flex'
-          flexDirection='row'
-          alignItems='center'
-          justifyContent='space-between'
-          p='$2'
-        >
-          <Box display='flex' flexDirection='column'>
-            <Text fontSize='$lg' fontWeight='$semibold' color='$primary600'>
-              {courseCode}
-            </Text>
-            <Text color='$gray700'>{name}</Text>
-            <Text color='$gray700'>{date}</Text>
-          </Box>
-          <Icon as={icon} color='$gray950' />
+    <Pressable onPress={onPress}>
+      <Box
+        display='flex'
+        flexDirection='row'
+        alignItems='center'
+        justifyContent='space-between'
+        p='$2'
+      >
+        <Box display='flex' flexDirection='column'>
+          <Text fontSize='$lg' fontWeight='$semibold' color='$primary600'>
+            {courseCode}
+          </Text>
+          <Text color='$gray700'>{name}</Text>
+          <Text color='$gray700'>{date}</Text>
         </Box>
-      </Pressable>
-    </>
+        <Icon as={icon} color='$gray950' />
+      </Box>
+    </Pressable>
   );
 };
 

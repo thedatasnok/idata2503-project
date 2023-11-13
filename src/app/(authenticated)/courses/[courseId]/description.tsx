@@ -1,16 +1,20 @@
 import Header from '@/components/navigation/Header';
-import { useCourseDescription, useCourseSignUp } from '@/services/courses';
+import { useCourseDescription, useCourseMembership } from '@/services/courses';
 import {
   Box,
   Button,
+  ButtonSpinner,
   ButtonText,
   Divider,
+  Heading,
   Icon,
   ScrollView,
   Text,
 } from '@gluestack-ui/themed';
+import dayjs from 'dayjs';
 import { useLocalSearchParams } from 'expo-router';
 import { Mail } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
 /**
@@ -19,33 +23,41 @@ import { FlatList } from 'react-native';
 const CourseDescriptionScreen = () => {
   const { courseId } = useLocalSearchParams();
   const { data: courseDescription } = useCourseDescription(courseId as string);
-  const courseSignUp = useCourseSignUp();
+  const { signUp, isSigningUp } = useCourseMembership(courseId as string);
+  const { t } = useTranslation();
 
-  const signUp = async () => {
+  const handleSignUp = async () => {
     try {
-      await courseSignUp.mutateAsync(courseId as string);
+      await signUp();
     } catch (error) {
       console.error('SignUp error: ', error);
     }
   };
 
+  const canSignUp =
+    courseDescription &&
+    dayjs(courseDescription.starts_at).isBefore() &&
+    !courseDescription.enrolled;
+
   return (
     <>
       <Header
         context={courseDescription?.course_code}
-        title='Course Description'
+        title={t('FEATURES.COURSES.COURSE_DESCRIPTION')}
         back
       />
-      <ScrollView px={12}>
-        <Box display='flex' flexDirection='row'>
-          <Text fontSize='$xl' fontWeight='bold' pt={'$3'}>
-            {courseDescription?.course_code} {courseDescription?.name}
-          </Text>
-        </Box>
-        <Text fontWeight='$bold'>Course Description</Text>
+
+      <ScrollView px='$3' py='$1'>
+        <Heading>
+          {courseDescription?.course_code} {courseDescription?.name}
+        </Heading>
+
+        <Heading size='sm'>{t('FEATURES.COURSES.COURSE_DESCRIPTION')}</Heading>
+
         <Text>{courseDescription?.description}</Text>
 
-        <Text fontWeight='$bold'>Lecturers</Text>
+        <Heading size='sm'>{t('GENERAL.LECTURERS')}</Heading>
+
         <FlatList
           data={courseDescription?.staff}
           scrollEnabled={false}
@@ -55,11 +67,16 @@ const CourseDescriptionScreen = () => {
             <Lecturer name={lecturer.name} email={lecturer.email} />
           )}
         />
-        {/* TODO: remember to set to !courseDescription?.enrolled */}
-        {!courseDescription?.enrolled && (
-          <Box py='$5' px={'$20'}>
-            <Button bg='$primary400' onPress={() => signUp()}>
-              <ButtonText>Sign Up</ButtonText>
+
+        {canSignUp && (
+          <Box py='$5' px='$20'>
+            <Button
+              bg='$primary400'
+              disabled={isSigningUp}
+              onPress={handleSignUp}
+            >
+              {isSigningUp && <ButtonSpinner />}
+              <ButtonText>{t('FEATURES.COURSES.SIGN_UP')}</ButtonText>
             </Button>
           </Box>
         )}

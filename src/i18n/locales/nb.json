@@ -12,6 +12,7 @@
     "CANCEL": "Avbryt",
     "SHOW_ALL": "Vis alle",
     "LECTURERS": "Forelesere",
+    "MEMBERS": "Medlemmer",
     "ANNOUNCEMENTS": "Kunngjøringer",
     "TEXT_CHANNEL": "Tekst kanaler"
   },
@@ -26,11 +27,18 @@
       "ACTIVE_COURSES": "Aktive emner",
       "COMPLETED_COURSES": "Fullførte emner",
       "COURSES_TITLE": "Emner",
+      "COURSE_DESCRIPTION": "Emnebeskrivelse",
       "YOUR_COURSES": "Dine emner",
       "ALL_COURSES": "Alle emner",
       "NO_ANNOUNCEMENTS_YET": "Ingen kunngjøringer enda",
       "NO_TEXT_CHANNEL_CREATED": "Ingen tekst kanal opprettet",
-      "NO_LECTURERS_ASSIGNED": "Ingen forelesere tildelt"
+      "NO_LECTURERS_ASSIGNED": "Ingen forelesere tildelt",
+      "NEW_ANNOUNCEMENT": "Ny kunngjøring",
+      "NEW_TEXT_CHANNEL": "Ny tekstkanal",
+      "VIEW_COURSE_DESCRIPTION": "Vis emnebeskrivelse",
+      "VIEW_COURSE_MEMBERS": "Vis medlemmer",
+      "LEAVE_COURSE": "Forlat emnet",
+      "SIGN_UP": "Meld deg på"
     },
     "SETTINGS": {
       "FULL_NAME": "Fullt navn",

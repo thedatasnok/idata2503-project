@@ -1,3 +1,4 @@
+import CourseSheet from '@/components/course/CourseSheet';
 import Header from '@/components/navigation/Header';
 import {
   useAnnouncements,
@@ -7,6 +8,11 @@ import {
 } from '@/services/courses';
 import { getToken } from '@/theme';
 import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetDragIndicatorWrapper,
   Box,
   Heading,
   Icon,
@@ -24,9 +30,9 @@ import {
   Clock,
   GraduationCap,
   Hash,
-  InfoIcon,
   Megaphone,
   MessageSquare,
+  MoreVerticalIcon,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
@@ -34,6 +40,7 @@ import { FlatList } from 'react-native-gesture-handler';
 const CourseScreen = () => {
   const router = useRouter();
   const { courseId } = useLocalSearchParams();
+  const [showCourseSheet, setShowCourseSheet] = useState(false);
   const { data: course, isLoading: isCourseLoading } = useCourse(
     courseId as string
   );
@@ -90,8 +97,8 @@ const CourseScreen = () => {
       <Header
         back
         title={course?.course_code ?? 'Course'}
-        rightIcon={InfoIcon}
-        onRightIconPress={() => router.push(`/courses/${courseId}/description`)}
+        rightIcon={MoreVerticalIcon}
+        onRightIconPress={() => setShowCourseSheet(true)}
       />
 
       <ScrollView nestedScrollEnabled px='$4'>
@@ -122,13 +129,14 @@ const CourseScreen = () => {
           />
         ) : (
           <Box alignItems='center' justifyContent='center'>
-            {/*@ts-ignore*/}
-            <Icon as={Megaphone} size={48} />
-            <Text color='$gray950'>{t("FEATURES.COURSES.NO_ANNOUNCEMENTS_YET")}</Text>
+            <Icon as={Megaphone} size='3xl' />
+            <Text color='$gray950'>
+              {t('FEATURES.COURSES.NO_ANNOUNCEMENTS_YET')}
+            </Text>
           </Box>
         )}
 
-        <ComponentHeader title={t("GENERAL.ASSIGNMENTS")} showAll={true} />
+        <ComponentHeader title={t('GENERAL.ASSIGNMENTS')} showAll={true} />
         {assignments.slice(0, 2).map((assignment, index) => (
           <AssignmentCard
             key={index}
@@ -141,7 +149,7 @@ const CourseScreen = () => {
           />
         ))}
 
-        <ComponentHeader title={t("GENERAL.TEXT_CHANNEL")} />
+        <ComponentHeader title={t('GENERAL.TEXT_CHANNEL')} />
 
         {courseBoards && courseBoards.length > 0 ? (
           <Box
@@ -165,13 +173,14 @@ const CourseScreen = () => {
           </Box>
         ) : (
           <Box alignItems='center' justifyContent='center'>
-            {/*@ts-ignore*/}
-            <Icon as={Hash} size={32} />
-            <Text color='$gray950'>{t("FEATURES.COURSES.NO_TEXT_CHANNEL_CREATED")}</Text>
+            <Icon as={Hash} size='2xl' />
+            <Text color='$gray950'>
+              {t('FEATURES.COURSES.NO_TEXT_CHANNEL_CREATED')}
+            </Text>
           </Box>
         )}
 
-        <ComponentHeader title={t("GENERAL.LECTURERS")} />
+        <ComponentHeader title={t('GENERAL.LECTURERS')} />
 
         {courseDescription?.staff && courseDescription?.staff.length > 0 ? (
           courseDescription?.staff.map((lecturer) => (
@@ -186,12 +195,32 @@ const CourseScreen = () => {
           ))
         ) : (
           <Box alignItems='center' justifyContent='center' pb='$2'>
-            {/*@ts-ignore*/}
-            <Icon as={GraduationCap} size={48} />
-            <Text color='$gray950'>{t("FEATURES.COURSES.NO_LECTURERS_ASSIGNED")}</Text>
+            <Icon as={GraduationCap} size='3xl' />
+            <Text color='$gray950'>
+              {t('FEATURES.COURSES.NO_LECTURERS_ASSIGNED')}
+            </Text>
           </Box>
         )}
       </ScrollView>
+
+      <Actionsheet
+        isOpen={showCourseSheet}
+        onClose={() => setShowCourseSheet(false)}
+      >
+        <ActionsheetBackdrop />
+        <ActionsheetContent zIndex={999}>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <CourseSheet
+            courseId={courseId as string}
+            onClose={() => setShowCourseSheet(false)}
+            onLeavePressed={() => console.log('y')}
+            onNewAnnouncementPressed={() => console.log('y')}
+            onNewTextChannelPressed={() => console.log('y')}
+          />
+        </ActionsheetContent>
+      </Actionsheet>
     </>
   );
 };
@@ -219,7 +248,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
             router.push(`/courses/${courseId}/announcements` as any)
           }
         >
-          <Heading fontSize='$md'> {t("GENERAL.SHOW_ALL")}</Heading>
+          <Heading fontSize='$md'> {t('GENERAL.SHOW_ALL')}</Heading>
           <Icon as={ArrowRight} />
         </Pressable>
       )}
@@ -312,8 +341,7 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
       alignItems='center'
       justifyContent='space-between'
     >
-      {/*@ts-ignore*/}
-      <Icon as={Clock} color={color} mr='$3' size={24} />
+      <Icon as={Clock} color={color} mr='$3' size='xl' />
       <Box flex={1}>
         <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1} color={color}>
           {title}
@@ -380,8 +408,7 @@ const Lecturer: React.FC<LecturerProps> = ({ name, email, onPress }) => {
             </Text>
           </Box>
         </Box>
-        {/*@ts-ignore*/}
-        <Icon as={MessageSquare} size={24} />
+        <Icon as={MessageSquare} size='xl' />
       </Box>
     </Pressable>
   );

@@ -14,22 +14,26 @@ import {
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
+
+const FLATLIST_STYLE = {
+  paddingHorizontal: 12,
+  paddingTop: 6,
+};
 
 const MessagesScreen = () => {
   const { data } = useRecentDirectMessages();
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <>
-      <Header title='Messages' />
+      <Header title={t('NAVIGATION.MESSAGES')} />
       <FlatList
         data={data}
         keyExtractor={(i) => i.direct_message_id}
-        style={{
-          paddingHorizontal: 12,
-          paddingTop: 6,
-        }}
+        style={FLATLIST_STYLE}
         ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item: message }) => (
           <Message
