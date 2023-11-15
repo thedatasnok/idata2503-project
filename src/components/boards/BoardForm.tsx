@@ -1,5 +1,4 @@
 import {
-  useCourse,
   useCourseBoard,
   useCreateCourseBoard,
   useEditCourseBoard,
@@ -29,27 +28,17 @@ const boardValidationSchema = z.object({
 
 type BoardFormData = z.infer<typeof boardValidationSchema>;
 
-type BoardFormProps =
-  | {
-      type: 'edit';
-      /**
-       * Board id of the board to edit
-       */
-      boardId: string;
-    }
-  | {
-      type: 'create';
-      boardId?: never; // Ensure boardId is undefined when type is 'create'
-    };
+type BoardFormProps = {
+  boardId?: string;
+};
 
-const BoardForm: React.FC<BoardFormProps> = ({ type, boardId }) => {
+const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
   const { courseId } = useLocalSearchParams();
-  const { data: course } = useCourse(courseId as string);
-  const { data: board } = useCourseBoard(type === 'edit' ? boardId : '');
+  const { data: board } = useCourseBoard(boardId ?? '');
   const createBoard = useCreateCourseBoard(
-    type === 'create' ? (courseId as string) : ''
+    !boardId ? (courseId as string) : ''
   );
-  const editBoard = useEditCourseBoard(type === 'edit' ? boardId : '');
+  const editBoard = useEditCourseBoard(boardId ?? '');
   const router = useRouter();
 
   const {
@@ -59,13 +48,13 @@ const BoardForm: React.FC<BoardFormProps> = ({ type, boardId }) => {
   } = useForm<BoardFormData>({
     resolver: zodResolver(boardValidationSchema),
     defaultValues: {
-      name: type === 'edit' ? board?.name ?? '' : '', // Use fetched value or empty string
-      description: type === 'edit' ? board?.description ?? '' : '', // Use fetched value or empty string
+      name: board?.name ?? '',
+      description: board?.description ?? '',
     },
   });
 
   const onSubmit = async (data: BoardFormData) => {
-    if (type === 'edit') {
+    if (boardId) {
       if (
         data.name === board?.name &&
         data.description === board?.description
@@ -156,11 +145,9 @@ const BoardForm: React.FC<BoardFormProps> = ({ type, boardId }) => {
 
         <Box pt='$5' alignItems='center'>
           <Button w='100%' onPress={handleSubmit(onSubmit)}>
-            <ButtonText>
-              {type === 'edit' ? 'Save changes' : 'Create board'}
-            </ButtonText>
+            <ButtonText>{boardId ? 'Save changes' : 'Create board'}</ButtonText>
           </Button>
-          {type === 'edit' && (
+          {boardId && (
             <Button bgColor='$error400' w='100%' onPress={onDelete}>
               <ButtonText>Delete</ButtonText>
             </Button>
