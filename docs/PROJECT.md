@@ -7,19 +7,13 @@ It should contain course information and notifications about deadlines for assig
 One of the main goals is to create a simple and intuitive user interface, which is easy to navigate and understand.
 A feature we want to focus on is the ability to send messages to lecturers and fellow students both within courses and separately.
 
-## Terminology
-
-| Term  | Description                         |
-| ----- | ----------------------------------- |
-| Board | A chat between more than two people |
-
 ## Features
 
 - Courses
   - Get an overview of courses
   - Get information about courses
   - Find announcements related to a course
-  - Manage course membership
+  - Manage course membership (sign-up, leave)
 - Deadlines for assignments
   - Global overview
   - Per course
@@ -27,8 +21,8 @@ A feature we want to focus on is the ability to send messages to lecturers and f
   - Global overview
 - Messaging
   - Communicating with lecturers about courses
-  - Course boards
-  - Course group boards
+  - Communicating with fellow students
+  - Course text channels
 - Push notifications
 - Storing data
   - Remotely in backend
