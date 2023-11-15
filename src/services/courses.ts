@@ -414,6 +414,33 @@ export const useEditCourseBoard = (boardId: string) => {
     },
     onSuccess: () => {
       qc.invalidateQueries({
+        // TODO: update the queryKey with courseId?
+        queryKey: ['whiteboardapp/course-boards', boardId],
+      });
+    },
+  });
+};
+
+/**
+ * Hook for deleting a course board and updating the course boards list.
+ *
+ * @param boardId the id of the board to delete
+ *
+ * @returns a mutation object with methods for deleting a course board.
+ */
+export const useDeleteCourseBoard = (boardId: string) => {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      await supabase
+        .from('course_board')
+        .delete()
+        .eq('course_board_id', boardId)
+        .throwOnError();
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
         queryKey: ['whiteboardapp/course-boards', boardId],
       });
     },
