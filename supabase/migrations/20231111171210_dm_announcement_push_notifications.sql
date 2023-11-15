@@ -18,7 +18,7 @@ BEGIN
     AND (cm.course_member_id != NEW.fk_created_by_member_id)
     AND (cm.removed_at IS NULL)
     AND (cm.fk_course_id = NEW.fk_course_id)
-    AND (cm.role = 'STUDENT')
+    AND (cm.role = 'STUDENT');
 END;
 $$;
 
@@ -41,7 +41,7 @@ BEGIN
     ARRAY_AGG(dm.fk_receiver_user_id)
   )
   FROM user_profile up
-  WHERE NEW.fk_sender_user_id = up.fk_user_id
+  WHERE NEW.fk_sender_user_id = up.fk_user_id;
 END;
 $$;
 
