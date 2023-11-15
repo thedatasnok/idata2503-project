@@ -83,11 +83,6 @@ const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
     }
   };
 
-  const onDelete = async () => {
-    // TODO: delete
-    return;
-  };
-
   return (
     <Box display='flex' flexDirection='column' p='$4' flex={1}>
       <VStack>
@@ -147,11 +142,6 @@ const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
           <Button w='100%' onPress={handleSubmit(onSubmit)}>
             <ButtonText>{boardId ? 'Save changes' : 'Create board'}</ButtonText>
           </Button>
-          {boardId && (
-            <Button bgColor='$error400' w='100%' onPress={onDelete}>
-              <ButtonText>Delete</ButtonText>
-            </Button>
-          )}
         </Box>
       </VStack>
     </Box>
