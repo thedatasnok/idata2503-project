@@ -49,7 +49,7 @@ const CourseDescriptionScreen = () => {
         back
       />
 
-      <ScrollView px='$3' py='$1'>
+      <ScrollView p='$3' flex={1}>
         <Heading>
           {courseDescription?.course_code} {courseDescription?.name}
         </Heading>
@@ -58,31 +58,40 @@ const CourseDescriptionScreen = () => {
 
         <Text>{courseDescription?.description}</Text>
 
-        <Heading size='sm'>{t('GENERAL.LECTURERS')}</Heading>
+        <Heading size='sm' mt='$2'>
+          {t('GENERAL.LECTURERS')}
+        </Heading>
 
         <FlatList
           data={courseDescription?.staff}
           scrollEnabled={false}
           keyExtractor={(i) => i.user_id}
           ItemSeparatorComponent={() => <Divider />}
+          ListEmptyComponent={() => (
+            <Text color='$gray600'>
+              {t('FEATURES.COURSES.NO_LECTURERS_ASSIGNED')}
+            </Text>
+          )}
           renderItem={({ item: lecturer }) => (
             <Lecturer name={lecturer.name} email={lecturer.email} />
           )}
         />
 
-        {canSignUp && (
-          <Box py='$5' px='$20'>
-            <Button
-              bg='$primary400'
-              disabled={isSigningUp}
-              onPress={handleSignUp}
-            >
-              {isSigningUp && <ButtonSpinner />}
-              <ButtonText>{t('FEATURES.COURSES.SIGN_UP')}</ButtonText>
-            </Button>
-          </Box>
-        )}
+        <Box h='$4' />
       </ScrollView>
+
+      {canSignUp && (
+        <Button
+          mx='$3'
+          mb='$3'
+          bg='$primary400'
+          disabled={isSigningUp}
+          onPress={handleSignUp}
+        >
+          {isSigningUp && <ButtonSpinner />}
+          <ButtonText>{t('FEATURES.COURSES.SIGN_UP')}</ButtonText>
+        </Button>
+      )}
     </>
   );
 };
