@@ -12,7 +12,7 @@ import {
   Text,
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Mail } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
@@ -25,10 +25,12 @@ const CourseDescriptionScreen = () => {
   const { data: courseDescription } = useCourseDescription(courseId as string);
   const { signUp, isSigningUp } = useCourseMembership(courseId as string);
   const { t } = useTranslation();
+  const router = useRouter();
 
   const handleSignUp = async () => {
     try {
       await signUp();
+      router.replace(`/courses/${courseId}/`);
     } catch (error) {
       console.error('SignUp error: ', error);
     }

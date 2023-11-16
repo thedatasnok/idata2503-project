@@ -22,6 +22,14 @@ const CoursesScreen = () => {
   const { data: courses, isLoading } = useCourses({ enrolled: personalTab });
   const router = useRouter();
 
+  const handleCoursePressed = (courseId: string) => {
+    if (personalTab) {
+      router.push(`/courses/${courseId}/`);
+    } else {
+      router.push(`/courses/${courseId}/description`);
+    }
+  };
+
   return (
     <>
       <Header title={t('FEATURES.COURSES.COURSES_TITLE')} />
@@ -51,7 +59,7 @@ const CoursesScreen = () => {
                 name={course.name}
                 date={formatDuration(course.starts_at, course.ends_at)}
                 icon={ChevronRightIcon}
-                onPress={() => router.push(`/courses/${course.course_id}/`)}
+                onPress={() => handleCoursePressed(course.course_id)}
               />
             )}
           />

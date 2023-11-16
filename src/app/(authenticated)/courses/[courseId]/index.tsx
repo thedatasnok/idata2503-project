@@ -1,5 +1,6 @@
 import BoardForm from '@/components/boards/BoardForm';
 import CourseSheet from '@/components/course/CourseSheet';
+import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfirmationDialog';
 import Header from '@/components/navigation/Header';
 import {
   CourseBoard,
@@ -32,7 +33,6 @@ import {
 import dayjs from 'dayjs';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
-import { X } from 'lucide-react-native';
 import {
   ArrowRight,
   ChevronRight,
@@ -43,28 +43,29 @@ import {
   MessageSquare,
   MoreVerticalIcon,
   Trash,
+  X,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 
 const CourseScreen = () => {
   const router = useRouter();
-  const { courseId } = useLocalSearchParams();
+  const { courseId } = useLocalSearchParams<{ courseId: string }>();
   const [showCourseSheet, setShowCourseSheet] = useState(false);
+  const [showLeaveConfirmation, setShowLeaveConfirmation] = useState(false);
   const [showBoardSheet, setShowBoardSheet] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState<CourseBoard>();
-  const { data: course, isLoading: isCourseLoading } = useCourse(
-    courseId as string
-  );
+  const { leave } = useCourseMembership(courseId);
+  const { data: course, isLoading: isCourseLoading } = useCourse(courseId);
   const { data: announcements, isLoading: isAnnouncementLoading } =
-    useAnnouncements(courseId as string);
+    useAnnouncements(courseId);
   const { data: courseDescription, isLoading: isCourseDescriptionLoading } =
-    useCourseDescription(courseId as string);
+    useCourseDescription(courseId);
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
-    useCourseBoards(courseId as string);
+    useCourseBoards(courseId);
 
-  const { data: membership } = useCourseMembership(courseId as string);
-  const deleteBoard = useDeleteCourseBoard(courseId as string);
+  const { data: membership } = useCourseMembership(courseId);
+  const deleteBoard = useDeleteCourseBoard(courseId);
 
   const onDeleteBoard = async (boardId: string) => {
     try {
@@ -101,6 +102,16 @@ const CourseScreen = () => {
     },
   ];
 
+  const handleLeave = async () => {
+    try {
+      await leave();
+      setShowLeaveConfirmation(false);
+      router.push('/courses/');
+    } catch (error) {
+      console.error('Failed to leave course', error);
+    }
+  };
+
   const isLoading =
     isCourseLoading ||
     isAnnouncementLoading ||
@@ -127,7 +138,7 @@ const CourseScreen = () => {
       <ScrollView nestedScrollEnabled px='$4'>
         <ComponentHeader
           title={t('GENERAL.ANNOUNCEMENTS')}
-          courseId={courseId as string}
+          courseId={courseId}
           showAll={announcements && announcements.length > 0}
         />
 
@@ -165,10 +176,7 @@ const CourseScreen = () => {
             key={index}
             title={assignment.title}
             dueDate={assignment.dueDate}
-            onPress={() =>
-              //TODO: Replace this with navigation to specific assignment
-              router.push(`/courses/${courseId}/announcements` as any)
-            }
+            onPress={() => router.push(`/courses/${courseId}/announcements/`)}
           />
         ))}
 
@@ -241,10 +249,14 @@ const CourseScreen = () => {
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
           <CourseSheet
-            courseId={courseId as string}
+            courseId={courseId}
             onClose={() => setShowCourseSheet(false)}
-            onLeavePressed={() => console.log('y')}
-            onNewAnnouncementPressed={() => console.log('y')}
+            onLeavePressed={() => setShowLeaveConfirmation(true)}
+            onNewAnnouncementPressed={() =>
+              router.push(
+                `/courses/${courseId}/announcements/create-announcement`
+              )
+            }
             onNewTextChannelPressed={() => {
               setShowBoardSheet(true);
               setSelectedBoard(undefined);
@@ -265,7 +277,7 @@ const CourseScreen = () => {
           <ActionsheetItem>
             <BoardForm
               key={selectedBoard?.course_board_id}
-              courseId={courseId as string}
+              courseId={courseId}
               boardId={selectedBoard?.course_board_id}
               boardName={selectedBoard?.name}
               boardDescription={selectedBoard?.description}
@@ -274,7 +286,7 @@ const CourseScreen = () => {
           </ActionsheetItem>
           <ActionsheetItem
             onPress={() => {
-              onDeleteBoard(selectedBoard?.course_board_id as string);
+              onDeleteBoard(selectedBoard?.course_board_id!);
               setShowBoardSheet(false);
             }}
           >
@@ -287,6 +299,13 @@ const CourseScreen = () => {
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>
+
+      <LeaveCourseConfirmationDialog
+        courseCode={course?.course_code}
+        show={showLeaveConfirmation}
+        onClose={() => setShowLeaveConfirmation(false)}
+        onLeave={handleLeave}
+      />
     </>
   );
 };

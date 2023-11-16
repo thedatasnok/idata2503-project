@@ -38,6 +38,8 @@
       "VIEW_COURSE_DESCRIPTION": "View course description",
       "VIEW_COURSE_MEMBERS": "View course members",
       "LEAVE_COURSE": "Leave course",
+      "LEAVE_COURSE_CONFIRMATION_TITLE": "Are you sure you want to leave {{course}}?",
+      "LEAVE_COURSE_CONFIRMATION_BODY": "You will no longer have access to the course. You will not able to sign up again for the course until the next semester.",
       "SIGN_UP": "Sign up"
     },
     "SETTINGS": {

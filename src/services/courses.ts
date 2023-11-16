@@ -246,7 +246,7 @@ export const useCourseMembership = (courseId: string) => {
         .select('role, course_member_id')
         .eq('fk_course_id', courseId)
         .eq('fk_user_id', session?.user.id)
-        .not('removed_at', 'is', null)
+        .filter('removed_at', 'is', null)
         .single()
         .throwOnError();
 
@@ -269,11 +269,12 @@ export const useCourseMembership = (courseId: string) => {
         fk_course_id: courseId,
         fk_user_id: session?.user.id,
         role: 'STUDENT',
+        removed_at: null,
       };
 
       await supabase
         .from('course_member')
-        .insert([newCourseMember])
+        .upsert([newCourseMember])
         .throwOnError();
     },
     onSuccess: onMembershipMutated,
