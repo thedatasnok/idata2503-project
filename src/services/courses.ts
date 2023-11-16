@@ -354,68 +354,42 @@ export const useCourseBoard = (boardId: string) => {
 };
 
 export interface CourseBoardFormData {
+  id?: string;
   name: string;
   description: string;
 }
 
 /**
- * Hook for creating a new course board and updating the course boards list.
+ * Hook for upserting a course board and updating the course boards list.
  *
- * @param courseId the id of the course to create a board for
+ * @param courseId the id of the course to upsert a board in
  *
- * @returns a mutation object with methods for creating a course board.
+ * @returns a mutation object with methods for upserting a course board.
  */
-export const useCreateCourseBoard = (courseId: string) => {
+export const useUpsertCourseBoard = (courseId: string) => {
   const qc = useQueryClient();
   const { session } = useAuth();
 
   return useMutation({
-    mutationFn: async (courseBoardFormData: CourseBoardFormData) => {
+    mutationFn: async (data: CourseBoardFormData) => {
       const newCourseBoard = {
+        course_board_id: data.id,
         fk_course_id: courseId,
-        fk_created_by_user_id: session?.user.id,
-        name: courseBoardFormData.name,
-        description: courseBoardFormData.description,
+        fk_created_by_user_id: data.id ? session?.user.id : undefined,
+        name: data.name,
+        description: data.description,
       };
 
       await supabase
         .from('course_board')
-        .insert([newCourseBoard])
+        .upsert([newCourseBoard], {
+          onConflict: 'course_board_id',
+        })
         .throwOnError();
     },
     onSuccess: () => {
       qc.invalidateQueries({
         queryKey: ['whiteboardapp/course-boards', courseId],
-      });
-    },
-  });
-};
-
-/**
- * Hook for editing a course board and updating the course boards list.
- *
- * @param boardId the id of the board to edit
- *
- * @returns a mutation object with methods for editing a course board.
- */
-export const useEditCourseBoard = (boardId: string) => {
-  const qc = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (courseBoardFormData: Partial<CourseBoardFormData>) => {
-      await supabase
-        .from('course_board')
-        .update({
-          name: courseBoardFormData.name,
-          description: courseBoardFormData.description,
-        })
-        .eq('course_board_id', boardId)
-        .throwOnError();
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({
-        // TODO: update the queryKey with courseId?
-        queryKey: ['whiteboardapp/course-boards', boardId],
       });
     },
   });
