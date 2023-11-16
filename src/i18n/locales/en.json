@@ -23,6 +23,14 @@
     "LAST": "Last"
   },
   "FEATURES": {
+    "ANNOUNCEMENTS": {
+      "ANNOUNCEMENTS": "Announcements",
+      "ANNOUNCEMENT": "Announcement",
+      "TITLE": "Title",
+      "CONTENT": "Content",
+      "CREATE_ANNOUNCEMENT": "Create announcement",
+      "NEW_ANNOUNCEMENT": "New announcement"
+    },
     "COURSES": {
       "ACTIVE_COURSES": "Active courses",
       "COMPLETED_COURSES": "Completed courses",

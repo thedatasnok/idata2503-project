@@ -23,6 +23,7 @@ import {
   ActionsheetItem,
   ActionsheetItemText,
   Box,
+  Divider,
   Heading,
   Icon,
   Pressable,
@@ -281,7 +282,10 @@ const CourseScreen = () => {
               boardId={selectedBoard?.course_board_id}
               boardName={selectedBoard?.name}
               boardDescription={selectedBoard?.description}
-              onSuccess={() => setShowBoardSheet(false)}
+              onSuccess={() => {
+                setShowBoardSheet(false);
+                setSelectedBoard(undefined);
+              }}
             />
           </ActionsheetItem>
           <ActionsheetItem
@@ -290,12 +294,15 @@ const CourseScreen = () => {
               setShowBoardSheet(false);
             }}
           >
-            <ActionsheetIcon as={Trash} />
-            <ActionsheetItemText>Delete</ActionsheetItemText>
+            <ActionsheetIcon as={Trash} color='$error600' />
+            <ActionsheetItemText color='$error600'>Delete</ActionsheetItemText>
           </ActionsheetItem>
+
+          <Divider />
+
           <ActionsheetItem onPress={() => setShowBoardSheet(false)}>
-            <ActionsheetIcon as={X} />
-            <ActionsheetItemText>Cancel</ActionsheetItemText>
+            <ActionsheetIcon as={X} color='$gray800' />
+            <ActionsheetItemText color='$gray800'>Cancel</ActionsheetItemText>
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>

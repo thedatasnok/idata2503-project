@@ -3,15 +3,21 @@ import { useAnnouncement, useCourse } from '@/services/courses';
 import { Box, ScrollView, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 const AnnouncementScreen = () => {
   const { courseId, id: announcementId } = useLocalSearchParams();
   const { data: course } = useCourse(courseId as string);
   const { data: announcement } = useAnnouncement(announcementId as string);
+  const { t } = useTranslation();
 
   return (
     <>
-      <Header context={course?.course_code} title='Announcement' back />
+      <Header
+        context={course?.course_code}
+        title={t('FEATURES.ANNOUNCEMENTS.ANNOUNCEMENT')}
+        back
+      />
 
       <ScrollView px='$3'>
         <Box display='flex' flexDirection='column'>
