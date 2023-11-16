@@ -47,7 +47,7 @@ const AnnouncementsScreen = () => {
     <>
       <Header
         context={course?.course_code}
-        title={t('FEATURES.ANNOUNCEMENTS.ANNOUNCEMENTS')}
+        title={t('GENERAL.ANNOUNCEMENTS')}
         back
       />
 

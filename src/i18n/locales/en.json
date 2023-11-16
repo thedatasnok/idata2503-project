@@ -24,7 +24,6 @@
   },
   "FEATURES": {
     "ANNOUNCEMENTS": {
-      "ANNOUNCEMENTS": "Announcements",
       "ANNOUNCEMENT": "Announcement",
       "TITLE": "Title",
       "CONTENT": "Content",
@@ -49,6 +48,13 @@
       "LEAVE_COURSE_CONFIRMATION_TITLE": "Are you sure you want to leave {{course}}?",
       "LEAVE_COURSE_CONFIRMATION_BODY": "You will no longer have access to the course. You will not able to sign up again for the course until the next semester.",
       "SIGN_UP": "Sign up"
+    },
+    "COURSE_BOARDS": {
+      "DELETE_BOARD": "Delete board",
+      "BOARD_NAME": "Board name",
+      "BOARD_DESCRIPTION": "Board description",
+      "UPDATE_BOARD": "Update board",
+      "CREATE_BOARD": "Create board"
     },
     "SETTINGS": {
       "FULL_NAME": "Full name",

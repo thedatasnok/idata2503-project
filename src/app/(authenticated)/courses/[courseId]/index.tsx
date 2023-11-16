@@ -295,14 +295,18 @@ const CourseScreen = () => {
             }}
           >
             <ActionsheetIcon as={Trash} color='$error600' />
-            <ActionsheetItemText color='$error600'>Delete</ActionsheetItemText>
+            <ActionsheetItemText color='$error600'>
+              {t('FEATURES.COURSE_BOARDS.DELETE_BOARD')}
+            </ActionsheetItemText>
           </ActionsheetItem>
 
           <Divider />
 
           <ActionsheetItem onPress={() => setShowBoardSheet(false)}>
             <ActionsheetIcon as={X} color='$gray800' />
-            <ActionsheetItemText color='$gray800'>Cancel</ActionsheetItemText>
+            <ActionsheetItemText color='$gray800'>
+              {t('GENERAL.CANCEL')}
+            </ActionsheetItemText>
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>

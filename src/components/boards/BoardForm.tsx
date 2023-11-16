@@ -13,8 +13,8 @@ import {
   VStack,
 } from '@gluestack-ui/themed';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 const boardValidationSchema = z.object({
@@ -41,11 +41,12 @@ const BoardForm: React.FC<BoardFormProps> = ({
   onSuccess,
 }) => {
   const upsertBoard = useUpsertCourseBoard(courseId);
+  const { t } = useTranslation();
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<BoardFormData>({
     resolver: zodResolver(boardValidationSchema),
     defaultValues: {
@@ -79,7 +80,9 @@ const BoardForm: React.FC<BoardFormProps> = ({
       <VStack>
         <FormControl isInvalid={'name' in errors}>
           <FormControlLabel>
-            <FormControlLabelText color='$gray950'>Name</FormControlLabelText>
+            <FormControlLabelText color='$gray950'>
+              {t('FEATURES.COURSE_BOARDS.BOARD_NAME')}
+            </FormControlLabelText>
           </FormControlLabel>
 
           <Controller
@@ -102,7 +105,7 @@ const BoardForm: React.FC<BoardFormProps> = ({
 
         <FormControl isInvalid={'description' in errors}>
           <FormControlLabelText color='$gray950' pt='$2'>
-            Description
+            {t('FEATURES.COURSE_BOARDS.BOARD_DESCRIPTION')}
           </FormControlLabelText>
 
           <Controller
@@ -131,7 +134,11 @@ const BoardForm: React.FC<BoardFormProps> = ({
 
         <Box pt='$5' alignItems='center'>
           <Button w='100%' onPress={handleSubmit(onSubmit)}>
-            <ButtonText>{boardId ? 'Save changes' : 'Create board'}</ButtonText>
+            <ButtonText>
+              {boardId
+                ? t('FEATURES.COURSE_BOARDS.UPDATE_BOARD')
+                : t('FEATURES.COURSE_BOARDS.CREATE_BOARD')}
+            </ButtonText>
           </Button>
         </Box>
       </VStack>

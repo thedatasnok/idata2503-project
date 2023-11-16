@@ -24,7 +24,6 @@
   },
   "FEATURES": {
     "ANNOUNCEMENTS": {
-      "ANNOUNCEMENTS": "Kunngjøringer",
       "ANNOUNCEMENT": "Kunngjøring",
       "TITLE": "Tittel",
       "CONTENT": "Innhold",
@@ -49,6 +48,13 @@
       "LEAVE_COURSE_CONFIRMATION_TITLE": "Er du sikker på at du vil forlate {{course}}?",
       "LEAVE_COURSE_CONFIRMATION_BODY": "Du vil ikke lenger ha tilgang til emnet. Det er ikke mulig å melde seg på igjen før neste semester.",
       "SIGN_UP": "Meld deg på"
+    },
+    "COURSE_BOARDS": {
+      "DELETE_BOARD": "Slett kanal",
+      "BOARD_NAME": "Kanalnavn",
+      "BOARD_DESCRIPTION": "Kanalbeskrivelse",
+      "UPDATE_BOARD": "Oppdater kanal",
+      "CREATE_BOARD": "Lag kanal"
     },
     "SETTINGS": {
       "FULL_NAME": "Fullt navn",
