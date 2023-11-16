@@ -23,6 +23,14 @@
     "LAST": "Forrige"
   },
   "FEATURES": {
+    "ANNOUNCEMENTS": {
+      "ANNOUNCEMENTS": "Kunngjøringer",
+      "ANNOUNCEMENT": "Kunngjøring",
+      "TITLE": "Tittel",
+      "CONTENT": "Innhold",
+      "CREATE_ANNOUNCEMENT": "Lag kunngjøring",
+      "NEW_ANNOUNCEMENT": "Ny kunngjøring"
+    },
     "COURSES": {
       "ACTIVE_COURSES": "Aktive emner",
       "COMPLETED_COURSES": "Fullførte emner",

@@ -17,6 +17,7 @@ import {
 import dayjs from 'dayjs';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Dot, PlusIcon } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
 // TODO: CHECK ROLES LECTURER AND ASSISTANT, IT IS CHANGED FOR TESTING PURPOSES
@@ -36,6 +37,7 @@ const AnnouncementsScreen = () => {
   const { data: announcements } = useAnnouncements(courseId as string);
   const { data: membership } = useCourseMembership(courseId as string);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const canCreate =
     membership?.role &&
@@ -43,7 +45,11 @@ const AnnouncementsScreen = () => {
 
   return (
     <>
-      <Header context={course?.course_code} title='Announcements' back />
+      <Header
+        context={course?.course_code}
+        title={t('FEATURES.ANNOUNCEMENTS.ANNOUNCEMENTS')}
+        back
+      />
 
       <FlatList
         data={announcements}

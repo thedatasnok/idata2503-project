@@ -59,7 +59,11 @@ const CreateAnnouncementScreen = () => {
 
   return (
     <>
-      <Header context={course?.course_code} title='New announcement' back />
+      <Header
+        context={course?.course_code}
+        title={t('FEATURES.ANNOUNCEMENTS.NEW_ANNOUNCEMENT')}
+        back
+      />
 
       <ScrollView>
         <Box display='flex' flexDirection='column' p='$4' flex={1}>
@@ -67,8 +71,7 @@ const CreateAnnouncementScreen = () => {
             <FormControl isInvalid={'title' in errors}>
               <FormControlLabel>
                 <FormControlLabelText color='$gray950'>
-                  {/* {t('FEATURES.SETTINGS.FULL_NAME')} */}
-                  Title
+                  {t('FEATURES.ANNOUNCEMENTS.TITLE')}
                 </FormControlLabelText>
               </FormControlLabel>
 
@@ -94,8 +97,7 @@ const CreateAnnouncementScreen = () => {
 
             <FormControl isInvalid={'content' in errors}>
               <FormControlLabelText color='$gray950' pt='$2'>
-                {/* {t('FEATURES.SETTINGS.content')} */}
-                Content
+                {t('FEATURES.ANNOUNCEMENTS.CONTENT')}
               </FormControlLabelText>
 
               <Controller
@@ -125,8 +127,7 @@ const CreateAnnouncementScreen = () => {
             <Box pt='$5' alignItems='center'>
               <Button w='100%' onPress={handleSubmit(onSubmit)}>
                 <ButtonText>
-                  {/* {t('FEATURES.SETTINGS.UPDATE_PROFILE')} */}
-                  Create announcement
+                  {t('FEATURES.ANNOUNCEMENTS.CREATE_ANNOUNCEMENT')}
                 </ButtonText>
               </Button>
             </Box>
