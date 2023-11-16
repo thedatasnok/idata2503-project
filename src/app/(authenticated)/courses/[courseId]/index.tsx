@@ -56,7 +56,7 @@ const CourseScreen = () => {
   const [showLeaveConfirmation, setShowLeaveConfirmation] = useState(false);
   const [showBoardSheet, setShowBoardSheet] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState<CourseBoard>();
-  const { leave } = useCourseMembership(courseId);
+  const { leave, data: membership } = useCourseMembership(courseId);
   const { data: course, isLoading: isCourseLoading } = useCourse(courseId);
   const { data: announcements, isLoading: isAnnouncementLoading } =
     useAnnouncements(courseId);
@@ -65,7 +65,6 @@ const CourseScreen = () => {
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId);
 
-  const { data: membership } = useCourseMembership(courseId);
   const deleteBoard = useDeleteCourseBoard(courseId);
 
   const onDeleteBoard = async (boardId: string) => {
@@ -288,21 +287,29 @@ const CourseScreen = () => {
               }}
             />
           </ActionsheetItem>
+          {selectedBoard && (
+            <>
+              <ActionsheetItem
+                onPress={() => {
+                  onDeleteBoard(selectedBoard?.course_board_id);
+                  setShowBoardSheet(false);
+                }}
+              >
+                <ActionsheetIcon as={Trash} color='$error600' />
+                <ActionsheetItemText color='$error600'>
+                  {t('FEATURES.COURSE_BOARDS.DELETE_BOARD')}
+                </ActionsheetItemText>
+              </ActionsheetItem>
+              <Divider />
+            </>
+          )}
+
           <ActionsheetItem
             onPress={() => {
-              onDeleteBoard(selectedBoard?.course_board_id!);
               setShowBoardSheet(false);
+              setShowCourseSheet(true);
             }}
           >
-            <ActionsheetIcon as={Trash} color='$error600' />
-            <ActionsheetItemText color='$error600'>
-              {t('FEATURES.COURSE_BOARDS.DELETE_BOARD')}
-            </ActionsheetItemText>
-          </ActionsheetItem>
-
-          <Divider />
-
-          <ActionsheetItem onPress={() => setShowBoardSheet(false)}>
             <ActionsheetIcon as={X} color='$gray800' />
             <ActionsheetItemText color='$gray800'>
               {t('GENERAL.CANCEL')}
