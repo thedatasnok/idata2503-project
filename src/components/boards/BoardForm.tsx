@@ -1,4 +1,4 @@
-import { useCreateCourseBoard, useEditCourseBoard } from '@/services/courses';
+import { useUpsertCourseBoard } from '@/services/courses';
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const boardValidationSchema = z.object({
+  id: z.string().uuid().optional(),
   name: z.string().min(1, { message: 'name is required' }),
   description: z.string().min(1, { message: 'description is required' }),
 });
@@ -25,6 +26,7 @@ const boardValidationSchema = z.object({
 type BoardFormData = z.infer<typeof boardValidationSchema>;
 
 type BoardFormProps = {
+  courseId: string;
   boardId?: string;
   boardName?: string;
   boardDescription?: string;
@@ -32,16 +34,13 @@ type BoardFormProps = {
 };
 
 const BoardForm: React.FC<BoardFormProps> = ({
+  courseId,
   boardId,
   boardName,
   boardDescription,
   onSuccess,
 }) => {
-  const { courseId } = useLocalSearchParams();
-  const createBoard = useCreateCourseBoard(
-    !boardId ? (courseId as string) : ''
-  );
-  const editBoard = useEditCourseBoard(boardId ?? '');
+  const upsertBoard = useUpsertCourseBoard(courseId);
 
   const {
     control,
@@ -50,38 +49,33 @@ const BoardForm: React.FC<BoardFormProps> = ({
   } = useForm<BoardFormData>({
     resolver: zodResolver(boardValidationSchema),
     defaultValues: {
+      id: boardId,
       name: boardName ?? '',
       description: boardDescription ?? '',
     },
   });
 
   const onSubmit = async (data: BoardFormData) => {
-    if (boardId) {
-      if (data.name === boardName && data.description === boardDescription) {
-        console.log('No changes made.');
-        return;
-      }
+    if (data.name === boardName && data.description === boardDescription) {
+      console.log('No changes made.');
+      return;
+    }
 
-      try {
-        editBoard.mutateAsync(data);
+    try {
+      upsertBoard.mutateAsync(data);
+      if (boardId) {
+        console.log('announcement edited successfully: ', data);
+      } else {
         console.log('announcement created successfully: ', data);
-        onSuccess();
-      } catch (error) {
-        console.error('Unexpected error:', error);
       }
-    } else {
-      try {
-        createBoard.mutateAsync(data);
-        console.log('announcement created successfully: ', data);
-        onSuccess();
-      } catch (error) {
-        console.error('Unexpected error:', error);
-      }
+      onSuccess();
+    } catch (error) {
+      console.error('Unexpected error:', error);
     }
   };
 
   return (
-    <Box display='flex' flexDirection='column' p='$4' flex={1}>
+    <Box display='flex' flexDirection='column' flex={1}>
       <VStack>
         <FormControl isInvalid={'name' in errors}>
           <FormControlLabel>
