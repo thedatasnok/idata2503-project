@@ -22,6 +22,7 @@ import {
   ActionsheetItem,
   ActionsheetItemText,
   Box,
+  Divider,
   Heading,
   Icon,
   Pressable,
@@ -278,12 +279,17 @@ const CourseScreen = () => {
               setShowBoardSheet(false);
             }}
           >
-            <ActionsheetIcon as={Trash} />
-            <ActionsheetItemText>Delete</ActionsheetItemText>
+            <ActionsheetIcon as={Trash} color='$error600' />
+            <ActionsheetItemText color='$error600'>Delete</ActionsheetItemText>
           </ActionsheetItem>
+
+          <Divider />
+
           <ActionsheetItem onPress={() => setShowBoardSheet(false)}>
-            <ActionsheetIcon as={X} />
-            <ActionsheetItemText>Cancel</ActionsheetItemText>
+            <ActionsheetIcon as={X} color='$gray800' />
+            <ActionsheetItemText color='$gray800'>
+              {t('FEATURES.COURSES.NEW_TEXT_CHANNEL')}
+            </ActionsheetItemText>
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>
