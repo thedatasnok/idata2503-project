@@ -9,6 +9,7 @@ import {
   useCourseBoards,
   useCourseDescription,
   useCourseMembership,
+  useDeleteCourseBoard,
 } from '@/services/courses';
 import { getToken } from '@/theme';
 import {
@@ -63,6 +64,15 @@ const CourseScreen = () => {
     useCourseBoards(courseId as string);
 
   const { data: membership } = useCourseMembership(courseId as string);
+  const deleteBoard = useDeleteCourseBoard(courseId as string);
+
+  const onDeleteBoard = async (boardId: string) => {
+    try {
+      await deleteBoard.mutateAsync(boardId);
+    } catch (error) {
+      console.error('Unexpected error:', error);
+    }
+  };
 
   const assignments = [
     {
@@ -255,13 +265,19 @@ const CourseScreen = () => {
           <ActionsheetItem>
             <BoardForm
               key={selectedBoard?.course_board_id}
+              courseId={courseId as string}
               boardId={selectedBoard?.course_board_id}
               boardName={selectedBoard?.name}
               boardDescription={selectedBoard?.description}
               onSuccess={() => setShowBoardSheet(false)}
             />
           </ActionsheetItem>
-          <ActionsheetItem onPress={() => 'delete'}>
+          <ActionsheetItem
+            onPress={() => {
+              onDeleteBoard(selectedBoard?.course_board_id as string);
+              setShowBoardSheet(false);
+            }}
+          >
             <ActionsheetIcon as={Trash} />
             <ActionsheetItemText>Delete</ActionsheetItemText>
           </ActionsheetItem>
