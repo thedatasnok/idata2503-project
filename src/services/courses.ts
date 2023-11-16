@@ -372,17 +372,18 @@ export const useUpsertCourseBoard = (courseId: string) => {
 
   return useMutation({
     mutationFn: async (data: CourseBoardFormData) => {
-      const newCourseBoard = {
-        course_board_id: data.id,
+      let courseBoard: any = {
         fk_course_id: courseId,
-        fk_created_by_user_id: data.id ? session?.user.id : undefined,
         name: data.name,
         description: data.description,
       };
 
+      if (data.id) courseBoard.course_board_id = data.id;
+      if (!data.id) courseBoard.fk_created_by_user_id = session?.user.id;
+
       await supabase
         .from('course_board')
-        .upsert([newCourseBoard], {
+        .upsert([courseBoard], {
           onConflict: 'course_board_id',
         })
         .throwOnError();
@@ -402,18 +403,18 @@ export const useUpsertCourseBoard = (courseId: string) => {
  *
  * @returns a mutation object with methods for deleting a course board.
  */
-export const useDeleteCourseBoard = (boardId: string) => {
+export const useDeleteCourseBoard = (courseId: string) => {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (boardId: string) => {
       await supabase
         .from('course_board')
         .delete()
         .eq('course_board_id', boardId)
         .throwOnError();
     },
-    onSuccess: () => {
+    onSuccess: (_data, boardId) => {
       qc.invalidateQueries({
         queryKey: [CacheKey.COURSE_BOARDS],
       });

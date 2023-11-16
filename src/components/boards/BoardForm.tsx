@@ -1,8 +1,4 @@
-import {
-  useCourseBoard,
-  useCreateCourseBoard,
-  useEditCourseBoard,
-} from '@/services/courses';
+import { useUpsertCourseBoard } from '@/services/courses';
 import {
   Box,
   Button,
@@ -17,11 +13,12 @@ import {
   VStack,
 } from '@gluestack-ui/themed';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const boardValidationSchema = z.object({
+  id: z.string().uuid().optional(),
   name: z.string().min(1, { message: 'name is required' }),
   description: z.string().min(1, { message: 'description is required' }),
 });
@@ -29,17 +26,21 @@ const boardValidationSchema = z.object({
 type BoardFormData = z.infer<typeof boardValidationSchema>;
 
 type BoardFormProps = {
+  courseId: string;
   boardId?: string;
+  boardName?: string;
+  boardDescription?: string;
+  onSuccess: () => void;
 };
 
-const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
-  const { courseId } = useLocalSearchParams();
-  const { data: board } = useCourseBoard(boardId ?? '');
-  const createBoard = useCreateCourseBoard(
-    !boardId ? (courseId as string) : ''
-  );
-  const editBoard = useEditCourseBoard(boardId ?? '');
-  const router = useRouter();
+const BoardForm: React.FC<BoardFormProps> = ({
+  courseId,
+  boardId,
+  boardName,
+  boardDescription,
+  onSuccess,
+}) => {
+  const upsertBoard = useUpsertCourseBoard(courseId);
 
   const {
     control,
@@ -48,43 +49,33 @@ const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
   } = useForm<BoardFormData>({
     resolver: zodResolver(boardValidationSchema),
     defaultValues: {
-      name: board?.name ?? '',
-      description: board?.description ?? '',
+      id: boardId,
+      name: boardName ?? '',
+      description: boardDescription ?? '',
     },
   });
 
   const onSubmit = async (data: BoardFormData) => {
-    if (boardId) {
-      if (
-        data.name === board?.name &&
-        data.description === board?.description
-      ) {
-        console.log('No changes made.');
-        return;
-      }
+    if (data.name === boardName && data.description === boardDescription) {
+      console.log('No changes made.');
+      return;
+    }
 
-      try {
-        editBoard.mutateAsync(data);
+    try {
+      upsertBoard.mutateAsync(data);
+      if (boardId) {
+        console.log('announcement edited successfully: ', data);
+      } else {
         console.log('announcement created successfully: ', data);
-        // TODO: go back?
-        router.back();
-      } catch (error) {
-        console.error('Unexpected error:', error);
       }
-    } else {
-      try {
-        createBoard.mutateAsync(data);
-        console.log('announcement created successfully: ', data);
-        // TODO: go back?
-        router.back();
-      } catch (error) {
-        console.error('Unexpected error:', error);
-      }
+      onSuccess();
+    } catch (error) {
+      console.error('Unexpected error:', error);
     }
   };
 
   return (
-    <Box display='flex' flexDirection='column' p='$4' flex={1}>
+    <Box display='flex' flexDirection='column' flex={1}>
       <VStack>
         <FormControl isInvalid={'name' in errors}>
           <FormControlLabel>
