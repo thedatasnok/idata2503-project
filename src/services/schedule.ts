@@ -2,6 +2,7 @@ import { DateFormats } from '@/util/date';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { supabase } from './supabase';
+import { CacheKey } from './cache';
 
 export interface UseEventsParams {
   /**
@@ -43,7 +44,7 @@ export const useEvents = (params: UseEventsParams) => {
   const { month } = params;
 
   return useQuery({
-    queryKey: ['whiteboardapp/events', month],
+    queryKey: [CacheKey.EVENTS, month],
     queryFn: async () => {
       const result = await supabase
         .from('user_schedule_view')
@@ -65,7 +66,7 @@ export const useEvents = (params: UseEventsParams) => {
  */
 export const useEvent = (eventId: string) => {
   return useQuery({
-    queryKey: ['whiteboardapp/event', eventId],
+    queryKey: [CacheKey.INDIVIDUAL_EVENT, eventId],
     queryFn: async () => {
       const result = await supabase
         .from('user_schedule_view')

@@ -1,6 +1,7 @@
 import { useAuth } from '@/store/global';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from './supabase';
+import { CacheKey } from './cache';
 
 export interface UseCoursesParams {
   active?: boolean;
@@ -26,7 +27,7 @@ export const useCourses = (params: UseCoursesParams) => {
   const { active, enrolled, limit, searchString } = params;
 
   return useQuery({
-    queryKey: ['whiteboardapp/courses', active, enrolled, limit, searchString],
+    queryKey: [CacheKey.COURSES, active, enrolled, limit, searchString],
     queryFn: async () => {
       let query = supabase
         .from('course_membership_view')
@@ -62,7 +63,7 @@ export interface CourseDetails {
  */
 export const useCourse = (courseId: string) => {
   return useQuery({
-    queryKey: ['whiteboardapp/course', courseId],
+    queryKey: [CacheKey.INDIVIDUAL_COURSE, courseId],
     queryFn: async () => {
       const result = await supabase
         .from('course')
@@ -101,8 +102,6 @@ export interface CourseDescription {
   staff: CourseMember[];
 }
 
-const DESCRIPTION_KEY = 'whiteboardapp/course-description';
-
 /**
  * Hook to fetch a course's description from Supabase.
  *
@@ -112,7 +111,7 @@ const DESCRIPTION_KEY = 'whiteboardapp/course-description';
  */
 export const useCourseDescription = (courseId: string) => {
   return useQuery({
-    queryKey: [DESCRIPTION_KEY, courseId],
+    queryKey: [CacheKey.COURSE_DESCRIPTION, courseId],
     queryFn: async () => {
       const result = await supabase
         .from('current_user_course_description')
@@ -158,7 +157,7 @@ export const useCreateCourseAnnouncement = (courseId: string) => {
     },
     onSuccess: () => {
       qc.invalidateQueries({
-        queryKey: ['whiteboardapp/announcements', courseId],
+        queryKey: [CacheKey.ANNOUNCEMENTS, courseId],
       });
     },
   });
@@ -182,7 +181,7 @@ export interface AnnouncementWithCreatedBy {
  */
 export const useAnnouncements = (courseId: string) => {
   return useQuery({
-    queryKey: ['whiteboardapp/announcements', courseId],
+    queryKey: [CacheKey.ANNOUNCEMENTS, courseId],
     queryFn: async () => {
       const result = await supabase
         .from('course_announcement_view')
@@ -206,7 +205,7 @@ export const useAnnouncements = (courseId: string) => {
  */
 export const useAnnouncement = (announcementId: string) => {
   return useQuery({
-    queryKey: ['whiteboardapp/announcement', announcementId],
+    queryKey: [CacheKey.INDIVIDUAL_ANNOUNCEMENT, announcementId],
     queryFn: async () => {
       const result = await supabase
         .from('course_announcement_view')
@@ -236,7 +235,7 @@ export interface CourseMembership {
  */
 export const useCourseMembership = (courseId: string) => {
   const { session } = useAuth();
-  const queryKey = ['whiteboardapp/course-member', courseId];
+  const queryKey = [CacheKey.INDIVIDUAL_COURSE_MEMBER, courseId];
   const qc = useQueryClient();
 
   const query = useQuery({
@@ -256,9 +255,10 @@ export const useCourseMembership = (courseId: string) => {
   });
 
   const onMembershipMutated = () => {
-    qc.invalidateQueries({ queryKey: ['whiteboardapp/courses'] });
+    qc.invalidateQueries({ queryKey: [CacheKey.COURSES] });
     qc.invalidateQueries({ queryKey });
-    qc.invalidateQueries({ queryKey: [DESCRIPTION_KEY, courseId] });
+    qc.invalidateQueries({ queryKey: [CacheKey.EVENTS] });
+    qc.invalidateQueries({ queryKey: [CacheKey.COURSE_DESCRIPTION, courseId] });
   };
 
   const signUpMutation = useMutation({
@@ -318,7 +318,7 @@ export interface CourseBoard {
  */
 export const useCourseBoards = (courseId: string) => {
   return useQuery({
-    queryKey: ['whiteboardapp/course-boards', courseId],
+    queryKey: [CacheKey.COURSE_BOARDS, courseId],
     queryFn: async () => {
       const result = await supabase
         .from('course_board')
@@ -339,7 +339,7 @@ export const useCourseBoards = (courseId: string) => {
  */
 export const useCourseBoard = (boardId: string) => {
   return useQuery({
-    queryKey: ['whiteboardapp/course-board', boardId],
+    queryKey: [CacheKey.INDIVIDUAL_COURSE_BOARD, boardId],
     queryFn: async () => {
       const result = await supabase
         .from('course_board')
@@ -389,7 +389,7 @@ export const useUpsertCourseBoard = (courseId: string) => {
     },
     onSuccess: () => {
       qc.invalidateQueries({
-        queryKey: ['whiteboardapp/course-boards', courseId],
+        queryKey: [CacheKey.COURSE_BOARDS, courseId],
       });
     },
   });
@@ -415,7 +415,10 @@ export const useDeleteCourseBoard = (boardId: string) => {
     },
     onSuccess: () => {
       qc.invalidateQueries({
-        queryKey: ['whiteboardapp/course-boards', boardId],
+        queryKey: [CacheKey.COURSE_BOARDS],
+      });
+      qc.invalidateQueries({
+        queryKey: [CacheKey.INDIVIDUAL_COURSE_BOARD, boardId],
       });
     },
   });
