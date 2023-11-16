@@ -132,15 +132,17 @@ const BoardForm: React.FC<BoardFormProps> = ({
           </FormControlError>
         </FormControl>
 
-        <Box pt='$5' alignItems='center'>
-          <Button w='100%' onPress={handleSubmit(onSubmit)}>
-            <ButtonText>
-              {boardId
-                ? t('FEATURES.COURSE_BOARDS.UPDATE_BOARD')
-                : t('FEATURES.COURSE_BOARDS.CREATE_BOARD')}
-            </ButtonText>
-          </Button>
-        </Box>
+        {isDirty && (
+          <Box pt='$5' alignItems='center'>
+            <Button w='100%' onPress={handleSubmit(onSubmit)}>
+              <ButtonText>
+                {boardId
+                  ? t('FEATURES.COURSE_BOARDS.UPDATE_BOARD')
+                  : t('FEATURES.COURSE_BOARDS.CREATE_BOARD')}
+              </ButtonText>
+            </Button>
+          </Box>
+        )}
       </VStack>
     </Box>
   );
