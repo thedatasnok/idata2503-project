@@ -1,10 +1,14 @@
+import BoardForm from '@/components/boards/BoardForm';
 import CourseSheet from '@/components/course/CourseSheet';
 import Header from '@/components/navigation/Header';
 import {
+  CourseBoard,
+  CourseRole,
   useAnnouncements,
   useCourse,
   useCourseBoards,
   useCourseDescription,
+  useCourseMembership,
 } from '@/services/courses';
 import { getToken } from '@/theme';
 import {
@@ -13,6 +17,9 @@ import {
   ActionsheetContent,
   ActionsheetDragIndicator,
   ActionsheetDragIndicatorWrapper,
+  ActionsheetIcon,
+  ActionsheetItem,
+  ActionsheetItemText,
   Box,
   Heading,
   Icon,
@@ -24,6 +31,7 @@ import {
 import dayjs from 'dayjs';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
+import { X } from 'lucide-react-native';
 import {
   ArrowRight,
   ChevronRight,
@@ -33,6 +41,7 @@ import {
   Megaphone,
   MessageSquare,
   MoreVerticalIcon,
+  Trash,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
@@ -41,6 +50,8 @@ const CourseScreen = () => {
   const router = useRouter();
   const { courseId } = useLocalSearchParams();
   const [showCourseSheet, setShowCourseSheet] = useState(false);
+  const [showBoardSheet, setShowBoardSheet] = useState(false);
+  const [selectedBoard, setSelectedBoard] = useState<CourseBoard>();
   const { data: course, isLoading: isCourseLoading } = useCourse(
     courseId as string
   );
@@ -50,6 +61,8 @@ const CourseScreen = () => {
     useCourseDescription(courseId as string);
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId as string);
+
+  const { data: membership } = useCourseMembership(courseId as string);
 
   const assignments = [
     {
@@ -168,6 +181,11 @@ const CourseScreen = () => {
                     `/courses/${courseId}/boards/${board.course_board_id}`
                   );
                 }}
+                onLongPress={() => {
+                  setShowBoardSheet(true);
+                  setSelectedBoard(board);
+                }}
+                role={membership?.role as CourseRole}
               />
             ))}
           </Box>
@@ -217,8 +235,40 @@ const CourseScreen = () => {
             onClose={() => setShowCourseSheet(false)}
             onLeavePressed={() => console.log('y')}
             onNewAnnouncementPressed={() => console.log('y')}
-            onNewTextChannelPressed={() => console.log('y')}
+            onNewTextChannelPressed={() => {
+              setShowBoardSheet(true);
+              setSelectedBoard(undefined);
+            }}
           />
+        </ActionsheetContent>
+      </Actionsheet>
+
+      <Actionsheet
+        isOpen={showBoardSheet}
+        onClose={() => setShowBoardSheet(false)}
+      >
+        <ActionsheetBackdrop />
+        <ActionsheetContent>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <ActionsheetItem>
+            <BoardForm
+              key={selectedBoard?.course_board_id}
+              boardId={selectedBoard?.course_board_id}
+              boardName={selectedBoard?.name}
+              boardDescription={selectedBoard?.description}
+              onSuccess={() => setShowBoardSheet(false)}
+            />
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => 'delete'}>
+            <ActionsheetIcon as={Trash} />
+            <ActionsheetItemText>Delete</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => setShowBoardSheet(false)}>
+            <ActionsheetIcon as={X} />
+            <ActionsheetItemText>Cancel</ActionsheetItemText>
+          </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>
     </>
@@ -360,9 +410,16 @@ const AssignmentCard: React.FC<AssignmentsProps> = ({
 interface BoardProps {
   title: string;
   onPress?: () => void;
+  onLongPress?: () => void;
+  role: CourseRole;
 }
 
-const BoardCard: React.FC<BoardProps> = ({ title, onPress }) => {
+const BoardCard: React.FC<BoardProps> = ({
+  title,
+  onPress,
+  onLongPress,
+  role,
+}) => {
   return (
     <Pressable
       flexDirection='row'
@@ -370,6 +427,8 @@ const BoardCard: React.FC<BoardProps> = ({ title, onPress }) => {
       gap='$2'
       py='$2'
       onPress={onPress}
+      // TODO: changed for testing purposes, remember to change with {role === 'LECTURER' ? onLongPress : undefined}
+      onLongPress={role === 'LECTURER' ? onLongPress : onLongPress}
     >
       <Icon as={Hash} />
       <Text color='$gray950' numberOfLines={1}>

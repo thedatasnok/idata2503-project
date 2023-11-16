@@ -1,8 +1,4 @@
-import {
-  useCourseBoard,
-  useCreateCourseBoard,
-  useEditCourseBoard,
-} from '@/services/courses';
+import { useCreateCourseBoard, useEditCourseBoard } from '@/services/courses';
 import {
   Box,
   Button,
@@ -17,7 +13,7 @@ import {
   VStack,
 } from '@gluestack-ui/themed';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -30,16 +26,22 @@ type BoardFormData = z.infer<typeof boardValidationSchema>;
 
 type BoardFormProps = {
   boardId?: string;
+  boardName?: string;
+  boardDescription?: string;
+  onSuccess: () => void;
 };
 
-const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
+const BoardForm: React.FC<BoardFormProps> = ({
+  boardId,
+  boardName,
+  boardDescription,
+  onSuccess,
+}) => {
   const { courseId } = useLocalSearchParams();
-  const { data: board } = useCourseBoard(boardId ?? '');
   const createBoard = useCreateCourseBoard(
     !boardId ? (courseId as string) : ''
   );
   const editBoard = useEditCourseBoard(boardId ?? '');
-  const router = useRouter();
 
   const {
     control,
@@ -48,17 +50,14 @@ const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
   } = useForm<BoardFormData>({
     resolver: zodResolver(boardValidationSchema),
     defaultValues: {
-      name: board?.name ?? '',
-      description: board?.description ?? '',
+      name: boardName ?? '',
+      description: boardDescription ?? '',
     },
   });
 
   const onSubmit = async (data: BoardFormData) => {
     if (boardId) {
-      if (
-        data.name === board?.name &&
-        data.description === board?.description
-      ) {
+      if (data.name === boardName && data.description === boardDescription) {
         console.log('No changes made.');
         return;
       }
@@ -66,8 +65,7 @@ const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
       try {
         editBoard.mutateAsync(data);
         console.log('announcement created successfully: ', data);
-        // TODO: go back?
-        router.back();
+        onSuccess();
       } catch (error) {
         console.error('Unexpected error:', error);
       }
@@ -75,8 +73,7 @@ const BoardForm: React.FC<BoardFormProps> = ({ boardId }) => {
       try {
         createBoard.mutateAsync(data);
         console.log('announcement created successfully: ', data);
-        // TODO: go back?
-        router.back();
+        onSuccess();
       } catch (error) {
         console.error('Unexpected error:', error);
       }
