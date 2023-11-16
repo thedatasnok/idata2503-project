@@ -270,7 +270,10 @@ const CourseScreen = () => {
               boardId={selectedBoard?.course_board_id}
               boardName={selectedBoard?.name}
               boardDescription={selectedBoard?.description}
-              onSuccess={() => setShowBoardSheet(false)}
+              onSuccess={() => {
+                setShowBoardSheet(false);
+                setSelectedBoard(undefined);
+              }}
             />
           </ActionsheetItem>
           <ActionsheetItem
@@ -287,9 +290,7 @@ const CourseScreen = () => {
 
           <ActionsheetItem onPress={() => setShowBoardSheet(false)}>
             <ActionsheetIcon as={X} color='$gray800' />
-            <ActionsheetItemText color='$gray800'>
-              {t('FEATURES.COURSES.NEW_TEXT_CHANNEL')}
-            </ActionsheetItemText>
+            <ActionsheetItemText color='$gray800'>Cancel</ActionsheetItemText>
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>
