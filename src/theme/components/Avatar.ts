@@ -37,8 +37,8 @@ export const Avatar = createStyle({
       },
 
       md: {
-        w: '$12',
-        h: '$12',
+        w: '$10',
+        h: '$10',
 
         _badge: {
           w: '$3',
