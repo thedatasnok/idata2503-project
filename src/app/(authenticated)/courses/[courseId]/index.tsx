@@ -1,4 +1,5 @@
 import BoardForm from '@/components/boards/BoardForm';
+import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import CourseSheet from '@/components/course/CourseSheet';
 import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfirmationDialog';
 import Header from '@/components/navigation/Header';
@@ -7,12 +8,12 @@ import {
   CourseRole,
   useAnnouncements,
   useCourse,
+  useCourseAssignments,
   useCourseBoards,
   useCourseDescription,
   useCourseMembership,
   useDeleteCourseBoard,
 } from '@/services/courses';
-import { getToken } from '@/theme';
 import {
   Actionsheet,
   ActionsheetBackdrop,
@@ -22,6 +23,9 @@ import {
   ActionsheetIcon,
   ActionsheetItem,
   ActionsheetItemText,
+  Avatar,
+  AvatarFallbackText,
+  AvatarImage,
   Box,
   Divider,
   Heading,
@@ -36,8 +40,9 @@ import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
 import {
   ArrowRight,
-  ChevronRight,
-  Clock,
+  ClipboardIcon,
+  ClipboardX,
+  ClipboardXIcon,
   GraduationCap,
   Hash,
   Megaphone,
@@ -46,7 +51,7 @@ import {
   Trash,
   X,
 } from 'lucide-react-native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 
 const CourseScreen = () => {
@@ -64,6 +69,7 @@ const CourseScreen = () => {
     useCourseDescription(courseId);
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId);
+  const { data: assignments } = useCourseAssignments(courseId, false);
 
   const deleteBoard = useDeleteCourseBoard(courseId);
 
@@ -74,33 +80,6 @@ const CourseScreen = () => {
       console.error('Unexpected error:', error);
     }
   };
-
-  const assignments = [
-    {
-      title: 'Assignment 1',
-      dueDate: '2023-11-07 23:18:50',
-    },
-    {
-      title: 'Assignment 2',
-      dueDate: '2023-11-13 14:20:50',
-    },
-    {
-      title: 'Assignment 3',
-      dueDate: '2023-11-26 09:24:50',
-    },
-    {
-      title: 'Assignment 4',
-      dueDate: '2023-11-26 09:24:50',
-    },
-    {
-      title: 'Assignment 5',
-      dueDate: '2023-11-26 09:24:50',
-    },
-    {
-      title: 'Assignment 6',
-      dueDate: '2023-11-26 09:24:50',
-    },
-  ];
 
   const handleLeave = async () => {
     try {
@@ -138,10 +117,9 @@ const CourseScreen = () => {
       <ScrollView nestedScrollEnabled px='$4'>
         <ComponentHeader
           title={t('GENERAL.ANNOUNCEMENTS')}
-          courseId={courseId}
           showAll={announcements && announcements.length > 0}
+          route={`/courses/${courseId}/announcements/`}
         />
-
         {announcements && announcements.length > 0 ? (
           <FlatList
             horizontal={true}
@@ -169,27 +147,40 @@ const CourseScreen = () => {
             </Text>
           </Box>
         )}
-
-        <ComponentHeader title={t('GENERAL.ASSIGNMENTS')} showAll={true} />
-        {assignments.slice(0, 2).map((assignment, index) => (
-          <AssignmentCard
-            key={index}
-            title={assignment.title}
-            dueDate={assignment.dueDate}
-            onPress={() => router.push(`/courses/${courseId}/announcements/`)}
-          />
-        ))}
-
+        <ComponentHeader
+          title={t('GENERAL.ASSIGNMENTS')}
+          showAll={assignments && assignments.length > 0}
+          route={`/courses/${courseId}/assignments/`}
+        />
+        {assignments && assignments.length > 0 ? (
+          <Box gap='$2'>
+            {assignments?.slice(0, 2).map((assignment) => (
+              <CourseAssignmentCard
+                key={assignment.assignment_id}
+                title={assignment.name}
+                evaluation={assignment.evaluation}
+                submittedAt={assignment.submitted_at}
+                dueDate={assignment.due_at}
+                onPress={() =>
+                  router.push(
+                    `/courses/${courseId}/assignments/${assignment.assignment_id}`
+                  )
+                }
+              />
+            ))}
+          </Box>
+        ) : (
+          <Box alignItems='center' justifyContent='center'>
+            <Icon as={ClipboardIcon} size='3xl' />
+            <Text color='$gray950'>
+              {t('FEATURES.COURSES.NO_ASSIGNMENTS_YET')}
+            </Text>
+          </Box>
+        )}
+        
         <ComponentHeader title={t('GENERAL.TEXT_CHANNEL')} />
-
         {courseBoards && courseBoards.length > 0 ? (
-          <Box
-            backgroundColor='$gray50'
-            rounded='$md'
-            px='$2'
-            borderWidth='$1'
-            borderColor='$gray200'
-          >
+          <Box rounded='$md' px='$1' gap='$3'>
             {courseBoards.map((board) => (
               <BoardCard
                 key={board.course_board_id}
@@ -215,14 +206,13 @@ const CourseScreen = () => {
             </Text>
           </Box>
         )}
-
         <ComponentHeader title={t('GENERAL.LECTURERS')} />
-
         {courseDescription?.staff && courseDescription?.staff.length > 0 ? (
           courseDescription?.staff.map((lecturer) => (
             <Lecturer
               key={lecturer.user_id}
               name={lecturer.name}
+              avatarUrl={lecturer.avatar_url}
               email={lecturer.email}
               onPress={() => {
                 router.push(`/messages/${lecturer.user_id}`);
@@ -330,26 +320,28 @@ const CourseScreen = () => {
 
 interface ComponentHeaderProps {
   title: string;
-  courseId?: string;
   showAll?: boolean;
+  route?: string;
 }
 
 const ComponentHeader: React.FC<ComponentHeaderProps> = ({
   title,
-  courseId,
   showAll,
+  route,
 }) => {
   return (
-    <Box flexDirection='row' justifyContent='space-between' pt='$2'>
+    <Box flexDirection='row' justifyContent='space-between' pt='$2' pb='$1'>
       <Heading fontSize='$md'>{title}</Heading>
       {showAll && (
         <Pressable
           flexDirection='row'
           alignItems='center'
           gap='$1'
-          onPress={() =>
-            router.push(`/courses/${courseId}/announcements` as any)
-          }
+          onPress={() => {
+            if (route) {
+              router.push(route as any);
+            }
+          }}
         >
           <Heading fontSize='$md'> {t('GENERAL.SHOW_ALL')}</Heading>
           <Icon as={ArrowRight} />
@@ -378,12 +370,12 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
 
   return (
     <Pressable
-      backgroundColor='$gray50'
       borderWidth='$1'
       borderColor='$gray200'
+      backgroundColor='$gray50'
       mr='$2'
       p='$2'
-      width='$80'
+      width='$72'
       height='$32'
       rounded='$md'
       onPress={onPress}
@@ -397,65 +389,6 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
           {formattedDate} | {author}
         </Text>
       </Box>
-    </Pressable>
-  );
-};
-
-interface AssignmentsProps {
-  title: string;
-  dueDate: string;
-  onPress: () => void;
-}
-
-const AssignmentCard: React.FC<AssignmentsProps> = ({
-  title,
-  dueDate,
-  onPress,
-}) => {
-  const formattedDate = dayjs(dueDate).calendar();
-  const [timeLeft, setTimeLeft] = useState(dayjs(dueDate).fromNow());
-
-  const isUnderTwoDays = dayjs(dueDate).diff(dayjs(), 'day') < 2;
-
-  const color = isUnderTwoDays
-    ? getToken('colors', 'error500')
-    : getToken('colors', 'gray950');
-
-  //Create an interval to update the time left every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft(dayjs(dueDate).fromNow());
-    }, 10000);
-
-    //Clear the interval when the component unmounts
-    return () => clearInterval(interval);
-  }, [dueDate]);
-
-  return (
-    <Pressable
-      rounded='$md'
-      onPress={onPress}
-      p='$2'
-      mb='$1'
-      flexDirection='row'
-      backgroundColor='$gray50'
-      borderColor='$gray200'
-      borderWidth='$1'
-      alignItems='center'
-      justifyContent='space-between'
-    >
-      <Icon as={Clock} color={color} mr='$3' size='xl' />
-      <Box flex={1}>
-        <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1} color={color}>
-          {title}
-        </Text>
-        <Box flexDirection='row'>
-          <Text fontSize='$sm' color={color} numberOfLines={1}>
-            {formattedDate} - {timeLeft}
-          </Text>
-        </Box>
-      </Box>
-      <Icon as={ChevronRight} color={color} />
     </Pressable>
   );
 };
@@ -476,14 +409,13 @@ const BoardCard: React.FC<BoardProps> = ({
   return (
     <Pressable
       flexDirection='row'
-      alignItems='flex-end'
+      alignItems='center'
       gap='$2'
-      py='$2'
       onPress={onPress}
       // TODO: changed for testing purposes, remember to change with {role === 'LECTURER' ? onLongPress : undefined}
       onLongPress={role === 'LECTURER' ? onLongPress : onLongPress}
     >
-      <Icon as={Hash} />
+      <Icon as={Hash} size='lg' />
       <Text color='$gray950' numberOfLines={1}>
         {title}
       </Text>
@@ -493,32 +425,38 @@ const BoardCard: React.FC<BoardProps> = ({
 
 interface LecturerProps {
   name: string;
+  avatarUrl?: string;
   email: string;
   onPress?: () => void;
 }
 
-const Lecturer: React.FC<LecturerProps> = ({ name, email, onPress }) => {
+const Lecturer: React.FC<LecturerProps> = ({
+  name,
+  avatarUrl,
+  email,
+  onPress,
+}) => {
   return (
-    <Pressable rounded='$md' onPress={onPress} pb='$1'>
+    <Pressable rounded='$md' onPress={onPress}>
       <Box
-        p='$2'
         flexDirection='row'
-        backgroundColor='$gray50'
-        borderColor='$gray200'
-        borderWidth='$1'
         rounded='$md'
         alignItems='center'
         justifyContent='space-between'
+        gap='$2'
       >
+        <Avatar size='md'>
+          <AvatarFallbackText>{name}</AvatarFallbackText>
+          {avatarUrl && <AvatarImage source={{ uri: avatarUrl }} />}
+        </Avatar>
+
         <Box flex={1}>
           <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1}>
             {name}
           </Text>
-          <Box flexDirection='row'>
-            <Text fontSize='$sm' numberOfLines={1}>
-              {email}
-            </Text>
-          </Box>
+          <Text fontSize='$sm' numberOfLines={1}>
+            {email}
+          </Text>
         </Box>
         <Icon as={MessageSquare} size='xl' />
       </Box>
