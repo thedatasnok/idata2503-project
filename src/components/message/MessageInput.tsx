@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
 import {
   Box,
   Button,
+  ButtonText,
   Input,
   InputField,
-  ButtonText,
   Spinner,
 } from '@gluestack-ui/themed';
+import React, { useState } from 'react';
 
 interface MessageInputProps {
   isSending: boolean;
@@ -34,6 +34,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       <Input flex={1}>
         <InputField
           value={messageContent}
+          onSubmitEditing={handleSendMessage}
+          enterKeyHint='send'
           onChangeText={(text: any) => setMessageContent(text)}
           placeholder='Type a message'
         />
