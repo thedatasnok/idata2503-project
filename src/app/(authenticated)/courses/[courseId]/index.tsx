@@ -152,7 +152,7 @@ const CourseScreen = () => {
         />
         {assignments && assignments.length > 0 ? (
           <Box gap='$2'>
-            {assignments?.slice(0, 2).map((assignment) => (
+            {assignments?.slice(0, 2).reverse().map((assignment) => (
               <CourseAssignmentCard
                 key={assignment.assignment_id}
                 title={assignment.name}
