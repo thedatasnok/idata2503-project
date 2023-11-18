@@ -425,3 +425,68 @@ export const useDeleteCourseBoard = (courseId: string) => {
     },
   });
 };
+
+export interface CourseMember {
+  userId: string;
+  fullName: string;
+  avatarUrl: string;
+}
+
+export interface AssignmentEvaluation {
+  comment: string;
+  grade: number;
+  requiredGrade: number;
+  maxGrade: number;
+}
+
+export interface CourseAssignment {
+  assignment_id: string;
+  name: string;
+  description: string;
+  created_at: string;
+  due_at: string;
+  fk_course_id: string;
+  evaluation: AssignmentEvaluation;
+  submitted_at: string;
+  evaluted_at: string;
+  evaluator: CourseMember;
+  created_by: CourseMember;
+}
+
+/**
+ * Hook to fetch course assignments for a specific course
+ */
+export const useCourseAssignments = (courseId: string) => {
+  return useQuery({
+    queryKey: [CacheKey.ASSIGNMENTS, courseId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('current_user_assignment_view')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .eq('fk_course_id', courseId)
+        .throwOnError();
+
+      return result.data as CourseAssignment[];
+    },
+  });
+};
+
+/**
+ * Hook to fetch a single course assignment
+ */
+export const useCourseAssignment = (assignmentId: string) => {
+  return useQuery({
+    queryKey: [CacheKey.INDIVIDUAL_ASSIGNMENT, assignmentId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('current_user_assignment_view')
+        .select('*')
+        .eq('assignment_id', assignmentId)
+        .single()
+        .throwOnError();
+
+      return result.data as CourseAssignment;
+    },
+  });
+};

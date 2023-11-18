@@ -1,19 +1,47 @@
+import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import Header from '@/components/navigation/Header';
-import { useCourse } from '@/services/courses';
-import { Text } from '@gluestack-ui/themed';
-import { useLocalSearchParams } from 'expo-router';
+import { useCourse, useCourseAssignments } from '@/services/courses';
+import { Box, Divider } from '@gluestack-ui/themed';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { FlatList } from 'react-native';
 
 const AssignmentsScreen = () => {
-  const { courseId } = useLocalSearchParams();
-  const { data: course } = useCourse(courseId as string);
+  const { courseId } = useLocalSearchParams<{ courseId: string }>();
+  const { data: course } = useCourse(courseId);
   const { t } = useTranslation();
+  const { data: assignments } = useCourseAssignments(courseId);
 
   return (
     <>
-      <Header context={course?.course_code} title={t('GENERAL.ASSIGNMENTS')} />
-      <Text>todo</Text>
+      <Header
+        context={course?.course_code}
+        title={t('GENERAL.ASSIGNMENTS')}
+        back
+      />
+
+      <Box px='$4' pt='$4'>
+        <FlatList
+          data={assignments}
+          ItemSeparatorComponent={() => <Divider my='$3' />}
+          renderItem={({ item: assignment }) => (
+            <CourseAssignmentCard
+              key={assignment.assignment_id}
+              title={assignment.name}
+              evaluation={assignment.evaluation}
+              submittedAt={assignment.submitted_at}
+              dueDate={assignment.due_at}
+              onPress={() =>
+                router.push(
+                  `/courses/${courseId}/assignments/${assignment.assignment_id}`
+                )
+              }
+            />
+          )}
+        />
+      </Box>
     </>
   );
 };
+
 export default AssignmentsScreen;
