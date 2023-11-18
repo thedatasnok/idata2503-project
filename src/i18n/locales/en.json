@@ -40,6 +40,7 @@
       "NO_ANNOUNCEMENTS_YET": "No announcements yet",
       "NO_TEXT_CHANNEL_CREATED": "No text channel created",
       "NO_LECTURERS_ASSIGNED": "No lecturers assigned",
+      "NO_ASSIGNMENTS_YET": "No assignments yet",
       "NEW_ANNOUNCEMENT": "New announcement",
       "NEW_TEXT_CHANNEL": "New text channel",
       "VIEW_COURSE_DESCRIPTION": "View course description",
@@ -48,6 +49,12 @@
       "LEAVE_COURSE_CONFIRMATION_TITLE": "Are you sure you want to leave {{course}}?",
       "LEAVE_COURSE_CONFIRMATION_BODY": "You will no longer have access to the course. You will not able to sign up again for the course until the next semester.",
       "SIGN_UP": "Sign up"
+    },
+    "ASSIGNMENT": {
+      "ASSIGNMENT_GRADED": "Assignment graded",
+      "YOUR_SUBMISSION": "Your submission",
+      "WAITING_FOR_GRADE": "Currently waiting for grading",
+      "ASSIGNMENT": "Assignment"
     },
     "COURSE_BOARDS": {
       "DELETE_BOARD": "Delete board",

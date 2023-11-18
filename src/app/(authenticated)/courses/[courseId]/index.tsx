@@ -41,15 +41,13 @@ import { t } from 'i18next';
 import {
   ArrowRight,
   ClipboardIcon,
-  ClipboardX,
-  ClipboardXIcon,
   GraduationCap,
   Hash,
   Megaphone,
   MessageSquare,
   MoreVerticalIcon,
   Trash,
-  X,
+  X
 } from 'lucide-react-native';
 import { useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';

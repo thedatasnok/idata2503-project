@@ -40,6 +40,7 @@
       "NO_ANNOUNCEMENTS_YET": "Ingen kunngjøringer enda",
       "NO_TEXT_CHANNEL_CREATED": "Ingen tekst kanal opprettet",
       "NO_LECTURERS_ASSIGNED": "Ingen forelesere tildelt",
+      "NO_ASSIGNMENTS_YET": "Ingen innleveringer enda",
       "NEW_ANNOUNCEMENT": "Ny kunngjøring",
       "NEW_TEXT_CHANNEL": "Ny tekstkanal",
       "VIEW_COURSE_DESCRIPTION": "Vis emnebeskrivelse",
@@ -48,6 +49,12 @@
       "LEAVE_COURSE_CONFIRMATION_TITLE": "Er du sikker på at du vil forlate {{course}}?",
       "LEAVE_COURSE_CONFIRMATION_BODY": "Du vil ikke lenger ha tilgang til emnet. Det er ikke mulig å melde seg på igjen før neste semester.",
       "SIGN_UP": "Meld deg på"
+    },
+    "ASSIGNMENT": {
+      "ASSIGNMENT_GRADED": "Innlevering vurdert",
+      "YOUR_SUBMISSION": "Din innlevering",
+      "WAITING_FOR_GRADE": "Venter på vurdering",
+      "ASSIGNMENT": "Innlevering"
     },
     "COURSE_BOARDS": {
       "DELETE_BOARD": "Slett kanal",

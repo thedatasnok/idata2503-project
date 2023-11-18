@@ -15,6 +15,7 @@ import {
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { t } from 'i18next';
 import { ArrowLeftIcon, ClockIcon } from 'lucide-react-native';
 
 const AssignmentScreen = () => {
@@ -68,7 +69,7 @@ const AssignmentScreen = () => {
         {assignment?.evaluation && (
           <Box flexDirection='column'>
             <Heading pt='$2' fontSize='$xl'>
-              Assignment Graded:
+              {t('FEATURES.ASSIGNMENT.ASSIGNMENT_GRADED')}
             </Heading>
             <Box
               flexDirection='row'
@@ -103,7 +104,7 @@ const AssignmentScreen = () => {
         {assignment?.submitted_at && (
           <>
             <Heading pt='$2' fontSize='$md'>
-              Your Submission:
+              {t('FEATURES.ASSIGNMENT.YOUR_SUBMISSION')}
             </Heading>
             <Pressable
               flexDirection='row'
@@ -120,7 +121,7 @@ const AssignmentScreen = () => {
                   {assignment?.submitted_at && !assignment?.evaluation && (
                     <Box flexDirection='row' gap='$1' alignItems='center'>
                       <Icon as={ClockIcon} />
-                      <Text>Currently waiting for grading</Text>
+                      <Text>{t('FEATURES.ASSIGNMENT.WAITING_FOR_GRADE')}</Text>
                     </Box>
                   )}
 
@@ -137,7 +138,7 @@ const AssignmentScreen = () => {
 
         {assignment?.submitted_at && <Divider mt='$2' />}
 
-        <Heading fontSize='$md'>Assignment:</Heading>
+        <Heading fontSize='$md'>{t('FEATURES.ASSIGNMENT.ASSIGNMENT')}</Heading>
         <Text fontSize='$md'>{assignment?.description}</Text>
       </ScrollView>
     </>
