@@ -69,6 +69,14 @@
       "USER_PROFILE": "Brukerprofil",
       "UPDATE_PROFILE": "Oppdater profil",
       "SIGN_OUT": "Logg ut"
+    },
+    "SIGN_IN": {
+      "WELCOME_MESSAGE": "Velkommen!",
+      "SIGN_IN_MESSAGE": "Logg inn for å fortsette",
+      "ERROR_INCORRECT_CREDENTIALS": "Feil e-postaddresse eller passord",
+      "EMAIL": "E-postadresse",
+      "PASSWORD": "Passord",
+      "SIGN_IN": "Logg inn"
     }
   }
 }

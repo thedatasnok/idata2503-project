@@ -69,6 +69,14 @@
       "USER_PROFILE": "User profile",
       "UPDATE_PROFILE": "Update profile",
       "SIGN_OUT": "Sign out"
+    },
+    "SIGN_IN": {
+      "WELCOME_MESSAGE": "Welcome!",
+      "SIGN_IN_MESSAGE": "Sign in to continue",
+      "ERROR_INCORRECT_CREDENTIALS": "Incorrect email or password",
+      "EMAIL": "Email",
+      "PASSWORD": "Password",
+      "SIGN_IN": "Sign in"
     }
   }
 }
