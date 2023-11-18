@@ -1,7 +1,7 @@
 import { useAuth } from '@/store/global';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from './supabase';
 import { CacheKey } from './cache';
+import { supabase } from './supabase';
 
 export interface UseCoursesParams {
   active?: boolean;
@@ -456,14 +456,17 @@ export interface CourseAssignment {
 /**
  * Hook to fetch course assignments for a specific course
  */
-export const useCourseAssignments = (courseId: string) => {
+export const useCourseAssignments = (
+  courseId: string,
+  ascending: boolean = true
+) => {
   return useQuery({
-    queryKey: [CacheKey.ASSIGNMENTS, courseId],
+    queryKey: [CacheKey.ASSIGNMENTS, courseId, ascending],
     queryFn: async () => {
       const result = await supabase
         .from('current_user_assignment_view')
         .select('*')
-        .order('created_at', { ascending: true })
+        .order('created_at', { ascending: ascending })
         .eq('fk_course_id', courseId)
         .throwOnError();
 
