@@ -1,6 +1,8 @@
 export const enum CacheKey {
   ANNOUNCEMENTS = 'whiteboardapp/announcements',
   INDIVIDUAL_ANNOUNCEMENT = 'whiteboardapp/announcement',
+  ASSIGNMENTS = 'whiteboardapp/assignments',
+  INDIVIDUAL_ASSIGNMENT = 'whiteboardapp/assignment',
   EVENTS = 'whiteboardapp/events',
   INDIVIDUAL_EVENT = 'whiteboardapp/event',
   COURSES = 'whiteboardapp/courses',
