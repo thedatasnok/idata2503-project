@@ -20,6 +20,7 @@ import {
 } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface CourseSheetProps {
   /**
@@ -60,6 +61,7 @@ const CourseSheet: React.FC<CourseSheetProps> = ({
   const { data: description } = useCourseDescription(courseId);
   const { t } = useTranslation();
   const router = useRouter();
+  const { bottom } = useSafeAreaInsets();
 
   if (!description) {
     return <ActivityIndicator color={getToken('colors', 'primary600')} />;
@@ -71,8 +73,8 @@ const CourseSheet: React.FC<CourseSheetProps> = ({
   };
 
   return (
-    <>
-      <Box w='$full' px='$2' mb='$2'>
+    <Box pb={bottom} w='$full'>
+      <Box px='$2' mb='$2'>
         <Heading>{description.course_code}</Heading>
         <Text fontWeight='$medium' color='$gray800'>
           {description.name}
@@ -132,7 +134,7 @@ const CourseSheet: React.FC<CourseSheetProps> = ({
           {t('FEATURES.COURSES.LEAVE_COURSE')}
         </ActionsheetItemText>
       </ActionsheetItem>
-    </>
+    </Box>
   );
 };
 
