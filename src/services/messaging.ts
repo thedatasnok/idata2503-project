@@ -6,10 +6,11 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { CacheKey } from './cache';
 import { supabase } from './supabase';
 
 const directMessageKey = (counterpartId: string) => [
-  'whiteboardapp/direct-messages',
+  CacheKey.DIRECT_MESSAGES,
   counterpartId,
 ];
 
@@ -82,6 +83,9 @@ export const useDirectMessages = (
           }
 
           if (postedMessage !== null) {
+            qc.invalidateQueries({
+              queryKey: [CacheKey.RECENT_DIRECT_MESSAGES],
+            });
             qc.setQueryData(
               directMessageKey(counterpartId),
               (oldData: DirectMessage[]) => {
@@ -113,7 +117,7 @@ export const useDirectMessages = (
   });
 
   const { mutateAsync: sendMessage, isPending } = useMutation({
-    mutationKey: ['whiteboardapp/direct-messages'],
+    mutationKey: [CacheKey.DIRECT_MESSAGES],
     mutationFn: async (content: string) => {
       return await supabase
         .from('direct_message')
@@ -129,7 +133,7 @@ export const useDirectMessages = (
   // @ts-ignore
   const variables: string[] = useMutationState({
     filters: {
-      mutationKey: ['whiteboardapp/direct-messages'],
+      mutationKey: [CacheKey.DIRECT_MESSAGES],
       status: 'pending',
     },
     select: (mut) => mut.state.variables,
@@ -196,7 +200,7 @@ export const useCourseBoardMessages = (boardId: string, inverted?: boolean) => {
 
           if (postedMessage !== null) {
             qc.setQueryData(
-              ['whiteboardapp/course-board-messages', boardId],
+              [CacheKey.COURSE_BOARD_MESSAGES, boardId],
               (oldData: CourseBoardMessage[]) => {
                 if (inverted) return [postedMessage, ...oldData];
                 return [...oldData, postedMessage];
@@ -213,7 +217,7 @@ export const useCourseBoardMessages = (boardId: string, inverted?: boolean) => {
   }, []);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['whiteboardapp/course-board-messages', boardId],
+    queryKey: [CacheKey.COURSE_BOARD_MESSAGES, boardId],
     queryFn: async () => {
       const initialMessages = await supabase
         .from('course_board_message_view')
@@ -226,7 +230,7 @@ export const useCourseBoardMessages = (boardId: string, inverted?: boolean) => {
   });
 
   const { mutateAsync: sendMessage, isPending } = useMutation({
-    mutationKey: ['whiteboardapp/course-board-messages'],
+    mutationKey: [CacheKey.COURSE_BOARD_MESSAGES],
     mutationFn: async (content: string) => {
       return await supabase
         .rpc('current_user_post_course_board_message', {
@@ -241,7 +245,7 @@ export const useCourseBoardMessages = (boardId: string, inverted?: boolean) => {
   // @ts-ignore
   const variables: string[] = useMutationState({
     filters: {
-      mutationKey: ['whiteboardapp/course-board-messages'],
+      mutationKey: [CacheKey.COURSE_BOARD_MESSAGES],
       status: 'pending',
     },
     select: (mut) => mut.state.variables,
@@ -268,7 +272,7 @@ export interface DirectMessageThread extends DirectMessage {
  */
 export const useRecentDirectMessages = () => {
   return useQuery({
-    queryKey: ['whiteboardapp/recent-direct-messages'],
+    queryKey: [CacheKey.RECENT_DIRECT_MESSAGES],
     queryFn: async () => {
       const threads = await supabase
         .from('current_user_direct_messages_threads_view')
