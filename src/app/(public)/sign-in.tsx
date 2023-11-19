@@ -1,3 +1,5 @@
+import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
+import KeyboardDismissingView from '@/components/utils/KeyboardDismissingView';
 import { useEmailSignIn } from '@/services/auth';
 import {
   Box,
@@ -12,7 +14,6 @@ import {
   InputField,
   InputIcon,
   InputSlot,
-  KeyboardAvoidingView,
   Text,
   VStack,
   View,
@@ -21,12 +22,7 @@ import { router } from 'expo-router';
 import { EyeIcon, EyeOffIcon, Mail } from 'lucide-react-native';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Keyboard,
-  Platform,
-  TextInput,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { TextInput } from 'react-native';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -48,11 +44,8 @@ const SignInScreen = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      flex={1}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <ConfiguredKeyboardAvoidingView flex={1}>
+      <KeyboardDismissingView>
         <Box
           display='flex'
           alignItems='center'
@@ -123,8 +116,8 @@ const SignInScreen = () => {
             </VStack>
           </FormControl>
         </Box>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </KeyboardDismissingView>
+    </ConfiguredKeyboardAvoidingView>
   );
 };
 

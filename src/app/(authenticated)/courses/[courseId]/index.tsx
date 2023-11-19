@@ -1,8 +1,9 @@
-import BoardForm from '@/components/boards/BoardForm';
+import BoardSheet from '@/components/boards/BoardSheet';
 import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import CourseSheet from '@/components/course/CourseSheet';
 import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfirmationDialog';
 import Header from '@/components/navigation/Header';
+import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
 import {
   CourseBoard,
   CourseRole,
@@ -20,14 +21,10 @@ import {
   ActionsheetContent,
   ActionsheetDragIndicator,
   ActionsheetDragIndicatorWrapper,
-  ActionsheetIcon,
-  ActionsheetItem,
-  ActionsheetItemText,
   Avatar,
   AvatarFallbackText,
   AvatarImage,
   Box,
-  Divider,
   Heading,
   Icon,
   Pressable,
@@ -46,8 +43,6 @@ import {
   Megaphone,
   MessageSquare,
   MoreVerticalIcon,
-  Trash,
-  X
 } from 'lucide-react-native';
 import { useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
@@ -152,20 +147,23 @@ const CourseScreen = () => {
         />
         {assignments && assignments.length > 0 ? (
           <Box gap='$2'>
-            {assignments?.slice(0, 2).reverse().map((assignment) => (
-              <CourseAssignmentCard
-                key={assignment.assignment_id}
-                title={assignment.name}
-                evaluation={assignment.evaluation}
-                submittedAt={assignment.submitted_at}
-                dueDate={assignment.due_at}
-                onPress={() =>
-                  router.push(
-                    `/courses/${courseId}/assignments/${assignment.assignment_id}`
-                  )
-                }
-              />
-            ))}
+            {assignments
+              ?.slice(0, 2)
+              .reverse()
+              .map((assignment) => (
+                <CourseAssignmentCard
+                  key={assignment.assignment_id}
+                  title={assignment.name}
+                  evaluation={assignment.evaluation}
+                  submittedAt={assignment.submitted_at}
+                  dueDate={assignment.due_at}
+                  onPress={() =>
+                    router.push(
+                      `/courses/${courseId}/assignments/${assignment.assignment_id}`
+                    )
+                  }
+                />
+              ))}
           </Box>
         ) : (
           <Box alignItems='center' justifyContent='center'>
@@ -175,7 +173,7 @@ const CourseScreen = () => {
             </Text>
           </Box>
         )}
-        
+
         <ComponentHeader title={t('GENERAL.TEXT_CHANNEL')} />
         {courseBoards && courseBoards.length > 0 ? (
           <Box rounded='$md' px='$1' gap='$3'>
@@ -258,52 +256,25 @@ const CourseScreen = () => {
         onClose={() => setShowBoardSheet(false)}
       >
         <ActionsheetBackdrop />
-        <ActionsheetContent>
-          <ActionsheetDragIndicatorWrapper>
-            <ActionsheetDragIndicator />
-          </ActionsheetDragIndicatorWrapper>
-          <ActionsheetItem>
-            <BoardForm
-              key={selectedBoard?.course_board_id}
-              courseId={courseId}
-              boardId={selectedBoard?.course_board_id}
-              boardName={selectedBoard?.name}
-              boardDescription={selectedBoard?.description}
-              onSuccess={() => {
-                setShowBoardSheet(false);
-                setSelectedBoard(undefined);
-              }}
-            />
-          </ActionsheetItem>
-          {selectedBoard && (
-            <>
-              <ActionsheetItem
-                onPress={() => {
-                  onDeleteBoard(selectedBoard?.course_board_id);
-                  setShowBoardSheet(false);
-                }}
-              >
-                <ActionsheetIcon as={Trash} color='$error600' />
-                <ActionsheetItemText color='$error600'>
-                  {t('FEATURES.COURSE_BOARDS.DELETE_BOARD')}
-                </ActionsheetItemText>
-              </ActionsheetItem>
-              <Divider />
-            </>
-          )}
+        <ConfiguredKeyboardAvoidingView>
+          <ActionsheetContent zIndex={999}>
+            <ActionsheetDragIndicatorWrapper>
+              <ActionsheetDragIndicator />
+            </ActionsheetDragIndicatorWrapper>
 
-          <ActionsheetItem
-            onPress={() => {
-              setShowBoardSheet(false);
-              setShowCourseSheet(true);
-            }}
-          >
-            <ActionsheetIcon as={X} color='$gray800' />
-            <ActionsheetItemText color='$gray800'>
-              {t('GENERAL.CANCEL')}
-            </ActionsheetItemText>
-          </ActionsheetItem>
-        </ActionsheetContent>
+            <BoardSheet
+              courseId={courseId}
+              selectedBoard={selectedBoard}
+              onClose={() => setShowBoardSheet(false)}
+              onCancel={() => {
+                setShowBoardSheet(false);
+                setShowCourseSheet(true);
+              }}
+              onDeleteBoard={onDeleteBoard}
+              onDeselect={() => setSelectedBoard(undefined)}
+            />
+          </ActionsheetContent>
+        </ConfiguredKeyboardAvoidingView>
       </Actionsheet>
 
       <LeaveCourseConfirmationDialog
@@ -410,8 +381,7 @@ const BoardCard: React.FC<BoardProps> = ({
       alignItems='center'
       gap='$2'
       onPress={onPress}
-      // TODO: changed for testing purposes, remember to change with {role === 'LECTURER' ? onLongPress : undefined}
-      onLongPress={role === 'LECTURER' ? onLongPress : onLongPress}
+      onLongPress={role === CourseRole.LECTURER ? onLongPress : undefined}
     >
       <Icon as={Hash} size='lg' />
       <Text color='$gray950' numberOfLines={1}>

@@ -1,6 +1,5 @@
 import { useUpsertCourseBoard } from '@/services/courses';
 import {
-  Box,
   Button,
   ButtonText,
   FormControl,
@@ -76,75 +75,66 @@ const BoardForm: React.FC<BoardFormProps> = ({
   };
 
   return (
-    <Box display='flex' flexDirection='column' flex={1}>
-      <VStack>
-        <FormControl isInvalid={'name' in errors}>
-          <FormControlLabel>
-            <FormControlLabelText color='$gray950'>
-              {t('FEATURES.COURSE_BOARDS.BOARD_NAME')}
-            </FormControlLabelText>
-          </FormControlLabel>
-
-          <Controller
-            control={control}
-            name='name'
-            render={({ field: { onChange, value } }) => (
-              <Input>
-                <InputField
-                  onChangeText={(val) => onChange(val)}
-                  value={value}
-                />
-              </Input>
-            )}
-          />
-
-          <FormControlError>
-            <FormControlErrorText>{errors.name?.message}</FormControlErrorText>
-          </FormControlError>
-        </FormControl>
-
-        <FormControl isInvalid={'description' in errors}>
-          <FormControlLabelText color='$gray950' pt='$2'>
-            {t('FEATURES.COURSE_BOARDS.BOARD_DESCRIPTION')}
+    <VStack>
+      <FormControl isInvalid={'name' in errors}>
+        <FormControlLabel>
+          <FormControlLabelText color='$gray950'>
+            {t('FEATURES.COURSE_BOARDS.BOARD_NAME')}
           </FormControlLabelText>
+        </FormControlLabel>
 
-          <Controller
-            control={control}
-            name='description'
-            render={({ field: { onChange, value } }) => (
-              <Input h='auto'>
-                <InputField
-                  onChangeText={(val) => onChange(val)}
-                  value={value}
-                  multiline
-                  py='$1.5'
-                  textAlignVertical='top'
-                  numberOfLines={3}
-                />
-              </Input>
-            )}
-          />
+        <Controller
+          control={control}
+          name='name'
+          render={({ field: { onChange, value } }) => (
+            <Input>
+              <InputField onChangeText={(val) => onChange(val)} value={value} />
+            </Input>
+          )}
+        />
 
-          <FormControlError>
-            <FormControlErrorText>
-              {errors.description?.message}
-            </FormControlErrorText>
-          </FormControlError>
-        </FormControl>
+        <FormControlError>
+          <FormControlErrorText>{errors.name?.message}</FormControlErrorText>
+        </FormControlError>
+      </FormControl>
 
-        {isDirty && (
-          <Box pt='$5' alignItems='center'>
-            <Button w='100%' onPress={handleSubmit(onSubmit)}>
-              <ButtonText>
-                {boardId
-                  ? t('FEATURES.COURSE_BOARDS.UPDATE_BOARD')
-                  : t('FEATURES.COURSE_BOARDS.CREATE_BOARD')}
-              </ButtonText>
-            </Button>
-          </Box>
-        )}
-      </VStack>
-    </Box>
+      <FormControl isInvalid={'description' in errors}>
+        <FormControlLabelText color='$gray950' pt='$2'>
+          {t('FEATURES.COURSE_BOARDS.BOARD_DESCRIPTION')}
+        </FormControlLabelText>
+
+        <Controller
+          control={control}
+          name='description'
+          render={({ field: { onChange, value } }) => (
+            <Input h='auto'>
+              <InputField
+                onChangeText={(val) => onChange(val)}
+                value={value}
+                multiline
+                py='$1.5'
+                textAlignVertical='top'
+                numberOfLines={3}
+              />
+            </Input>
+          )}
+        />
+
+        <FormControlError>
+          <FormControlErrorText>
+            {errors.description?.message}
+          </FormControlErrorText>
+        </FormControlError>
+      </FormControl>
+
+      <Button mt='$4' onPress={handleSubmit(onSubmit)} isDisabled={!isDirty}>
+        <ButtonText>
+          {boardId
+            ? t('FEATURES.COURSE_BOARDS.UPDATE_BOARD')
+            : t('FEATURES.COURSE_BOARDS.CREATE_BOARD')}
+        </ButtonText>
+      </Button>
+    </VStack>
   );
 };
 
