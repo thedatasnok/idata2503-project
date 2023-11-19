@@ -22,6 +22,14 @@
     "TOMORROW": "I morgen",
     "LAST": "Forrige"
   },
+  "COURSE_MEMBER_ROLES": {
+    "LECTURER": "Foreleser",
+    "LECTURERS": "Forelesere",
+    "ASSISTANT": "Assistent",
+    "ASSISTANTS": "Assistenter",
+    "STUDENT": "Student",
+    "STUDENTS": "Studenter"
+  },
   "FEATURES": {
     "ANNOUNCEMENTS": {
       "ANNOUNCEMENT": "Kunngjøring",

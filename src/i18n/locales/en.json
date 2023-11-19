@@ -22,6 +22,14 @@
     "TOMORROW": "Tomorrow",
     "LAST": "Last"
   },
+  "COURSE_MEMBER_ROLES": {
+    "LECTURER": "Lecturer",
+    "LECTURERS": "Lecturers",
+    "ASSISTANT": "Assistant",
+    "ASSISTANTS": "Assistants",
+    "STUDENT": "Student",
+    "STUDENTS": "Students"
+  },
   "FEATURES": {
     "ANNOUNCEMENTS": {
       "ANNOUNCEMENT": "Announcement",
