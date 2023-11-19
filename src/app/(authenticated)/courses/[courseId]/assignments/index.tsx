@@ -1,8 +1,9 @@
 import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import Header from '@/components/navigation/Header';
 import { useCourse, useCourseAssignments } from '@/services/courses';
-import { ArrowLeftIcon, Box, Divider } from '@gluestack-ui/themed';
+import { Box, Divider } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams } from 'expo-router';
+import { ArrowLeftIcon } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
@@ -21,7 +22,6 @@ const AssignmentsScreen = () => {
       <Header
         context={course?.course_code}
         title={t('GENERAL.ASSIGNMENTS')}
-        // @ts-ignore
         leftIcon={ArrowLeftIcon}
         onLeftIconPress={onBack}
       />
