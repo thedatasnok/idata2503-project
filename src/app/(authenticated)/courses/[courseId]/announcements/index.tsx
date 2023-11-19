@@ -20,7 +20,6 @@ import { Dot, PlusIcon } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
-// TODO: CHECK ROLES LECTURER AND ASSISTANT, IT IS CHANGED FOR TESTING PURPOSES
 const CREATE_ANNOUNCEMENT_USER_ROLES = [
   CourseRole.LECTURER,
   CourseRole.ASSISTANT,
@@ -32,10 +31,10 @@ const FLATLIST_STYLE = {
 };
 
 const AnnouncementsScreen = () => {
-  const { courseId } = useLocalSearchParams();
-  const { data: course } = useCourse(courseId as string);
-  const { data: announcements } = useAnnouncements(courseId as string);
-  const { data: membership } = useCourseMembership(courseId as string);
+  const { courseId } = useLocalSearchParams<{ courseId: string }>();
+  const { data: course } = useCourse(courseId);
+  const { data: announcements } = useAnnouncements(courseId);
+  const { data: membership } = useCourseMembership(courseId);
   const router = useRouter();
   const { t } = useTranslation();
 

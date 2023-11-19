@@ -1,7 +1,7 @@
 import Header from '@/components/navigation/Header';
 import { IconType } from '@/icon';
 import { EventType, useEvents, type ScheduleEvent } from '@/services/schedule';
-import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
+import { Box, Divider, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
 import {
@@ -175,8 +175,8 @@ const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
         <Text>{locationCode}</Text>
       </Pressable>
 
-      {nextEventDate && !dayjs(nextEventDate).isSame(startsAt, 'day') && (
-        <Box h='$px' w='$full' bgColor='$gray200' mt='$2' />
+      {nextEventDate && dayjs(nextEventDate).isSame(startsAt, 'day') && (
+        <Divider bgColor='$gray200' mt='$2' />
       )}
     </>
   );

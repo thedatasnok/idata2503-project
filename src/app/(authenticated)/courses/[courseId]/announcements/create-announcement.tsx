@@ -1,9 +1,5 @@
 import Header from '@/components/navigation/Header';
-import {
-  Announcement,
-  useCourse,
-  useCreateCourseAnnouncement,
-} from '@/services/courses';
+import { useCourse, useCreateCourseAnnouncement } from '@/services/courses';
 import {
   Box,
   Button,
@@ -32,9 +28,9 @@ const announcementValidationSchema = z.object({
 type CreateAnnouncementForm = z.infer<typeof announcementValidationSchema>;
 
 const CreateAnnouncementScreen = () => {
-  const { courseId } = useLocalSearchParams();
-  const { data: course } = useCourse(courseId as string);
-  const createAnnouncement = useCreateCourseAnnouncement(courseId as string);
+  const { courseId } = useLocalSearchParams<{ courseId: string }>();
+  const { data: course } = useCourse(courseId);
+  const createAnnouncement = useCreateCourseAnnouncement(courseId);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -49,8 +45,6 @@ const CreateAnnouncementScreen = () => {
   const onSubmit = async (data: CreateAnnouncementForm) => {
     try {
       createAnnouncement.mutateAsync(data);
-      console.log('announcement created successfully: ', data);
-      // TODO: go back?
       router.back();
     } catch (error) {
       console.error('Unexpected error:', error);

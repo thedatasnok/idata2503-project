@@ -21,9 +21,9 @@ import { FlatList } from 'react-native';
  * Description of the course, here you can signup if you are not signed up for the course yet
  */
 const CourseDescriptionScreen = () => {
-  const { courseId } = useLocalSearchParams();
-  const { data: courseDescription } = useCourseDescription(courseId as string);
-  const { signUp, isSigningUp } = useCourseMembership(courseId as string);
+  const { courseId } = useLocalSearchParams<{ courseId: string }>();
+  const { data: courseDescription } = useCourseDescription(courseId);
+  const { signUp, isSigningUp } = useCourseMembership(courseId);
   const { t } = useTranslation();
   const router = useRouter();
 
