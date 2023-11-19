@@ -426,7 +426,7 @@ export const useDeleteCourseBoard = (courseId: string) => {
   });
 };
 
-export interface CourseMember {
+export interface UserProfile {
   userId: string;
   fullName: string;
   avatarUrl: string;
@@ -449,8 +449,8 @@ export interface CourseAssignment {
   evaluation: AssignmentEvaluation;
   submitted_at: string;
   evaluted_at: string;
-  evaluator: CourseMember;
-  created_by: CourseMember;
+  evaluator: UserProfile;
+  created_by: UserProfile;
 }
 
 /**

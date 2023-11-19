@@ -1,6 +1,6 @@
-import GradePill from '@/components/course/Grade/GradePill';
+import CourseAssignmentGradePill from '@/components/course/CourseAssignmentGradePill';
 import Header from '@/components/navigation/Header';
-import { useCourseAssignment } from '@/services/courses';
+import { useCourse, useCourseAssignment } from '@/services/courses';
 import {
   Avatar,
   AvatarFallbackText,
@@ -14,31 +14,26 @@ import {
   Text,
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { t } from 'i18next';
-import { ArrowLeftIcon, ClockIcon } from 'lucide-react-native';
+import { ClockIcon } from 'lucide-react-native';
 
 const AssignmentScreen = () => {
-  const { courseId, id: _assignmentId } = useLocalSearchParams<{
+  const { courseId, id: assignmentId } = useLocalSearchParams<{
     courseId: string;
     id: string;
   }>();
-  const router = useRouter();
-  const { data: assignment } = useCourseAssignment(_assignmentId);
-
-  const onBack = () => {
-    // @ts-ignore
-    router.push(`/courses/${courseId}/assignments`);
-  };
+  const { data: course } = useCourse(courseId);
+  const { data: assignment } = useCourseAssignment(assignmentId);
 
   return (
     <>
       <Header
-        context='COURSE'
-        title={assignment?.name || ''}
-        leftIcon={ArrowLeftIcon}
-        onLeftIconPress={onBack}
+        context={course?.course_code ?? ''}
+        title={assignment?.name ?? ''}
+        back
       />
+
       <ScrollView px='$3'>
         <Box display='flex' flexDirection='column'>
           <Text fontSize='$xl' fontWeight='bold' pt={'$3'}>
@@ -58,7 +53,7 @@ const AssignmentScreen = () => {
             <Box gap='$1' flexDirection='row'>
               <Text fontSize='$xs'>{assignment?.created_by.fullName}</Text>
               <Text fontSize='$xs'>
-                {dayjs(assignment?.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                {dayjs(assignment?.created_at).format('L LT')}
               </Text>
             </Box>
           </Box>
@@ -91,7 +86,7 @@ const AssignmentScreen = () => {
                   {assignment.evaluator?.fullName}
                 </Text>
               </Box>
-              <GradePill
+              <CourseAssignmentGradePill
                 evaluation={assignment?.evaluation}
                 submittedAt={assignment?.created_at}
               />
@@ -110,9 +105,11 @@ const AssignmentScreen = () => {
               flexDirection='row'
               justifyContent='space-between'
               alignItems='center'
-              pl='$3'
+              px='$3'
               py='$2'
               backgroundColor='$gray100'
+              borderColor='$gray200'
+              borderWidth='$1'
               rounded='$full'
               //onPress={} to the submission
             >
@@ -128,7 +125,7 @@ const AssignmentScreen = () => {
                   <Text>{assignment.name}</Text>
                 </>
               </Box>
-              <GradePill
+              <CourseAssignmentGradePill
                 evaluation={assignment?.evaluation}
                 submittedAt={assignment?.created_at}
               />
