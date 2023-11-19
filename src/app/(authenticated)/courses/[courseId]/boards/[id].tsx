@@ -3,7 +3,7 @@ import { MessageInput } from '@/components/message/MessageInput';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
 import KeyboardDismissingView from '@/components/utils/KeyboardDismissingView';
-import { useCourseBoard, useCourseDescription } from '@/services/courses2';
+import { useCourseBoard, useCourseDescription } from '@/services/courses';
 import { useCourseBoardMessages } from '@/services/messaging';
 import { Box, Text } from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';

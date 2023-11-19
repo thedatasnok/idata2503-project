@@ -1,5 +1,5 @@
 import Header from '@/components/navigation/Header';
-import { useCourse } from '@/services/courses2';
+import { useCourse } from '@/services/courses';
 import { CourseMember, useCourseMembers } from '@/services/membership';
 import { useAuth } from '@/store/global';
 import { getToken } from '@/theme';
