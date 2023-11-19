@@ -1,7 +1,7 @@
 import { IconType } from '@/icon';
 import { useDrawer } from '@/store/global';
 import { getToken } from '@/theme';
-import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
+import { Box, Icon, Pressable, Text, styled } from '@gluestack-ui/themed';
 import { useRouter } from 'expo-router';
 import { ArrowLeftIcon, BellIcon, MenuIcon } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -41,6 +41,13 @@ export interface HeaderProps {
   title: string;
 }
 
+const HeaderPressable = styled(Pressable, {
+  p: '$4',
+  ':active': {
+    bg: '$primary700'
+  }
+})
+
 const Header: React.FC<HeaderProps> = ({
   leftIcon: passedLeftIcon,
   rightIcon,
@@ -74,9 +81,9 @@ const Header: React.FC<HeaderProps> = ({
       pt={paddingTop}
       pb='$2'
     >
-      <Pressable onPress={onLeftPressed} px='$4'>
+      <HeaderPressable onPress={onLeftPressed}>
         <Icon as={leftIcon} color='$primary50' />
-      </Pressable>
+      </HeaderPressable>
 
       <Box flex={1} display='flex' alignItems='center' gap={-6}>
         {context && (
@@ -89,14 +96,14 @@ const Header: React.FC<HeaderProps> = ({
         </Text>
       </Box>
 
-      <Pressable onPress={onRightPressed} px='$4'>
+      <HeaderPressable onPress={onRightPressed}>
         {rightIcon ? (
           <Icon as={rightIcon} color='$primary50' />
         ) : (
           // i am transparent. i am invisible. i am the bell icon.
           <Icon as={BellIcon} color='$primary600' />
         )}
-      </Pressable>
+      </HeaderPressable>
     </Box>
   );
 };
