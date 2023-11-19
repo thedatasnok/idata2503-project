@@ -71,7 +71,7 @@ export const useEvent = (eventId: string) => {
       const result = await supabase
         .from('user_schedule_view')
         .select('*')
-        .eq('course_event_id', eventId)
+        .eq('event_id', eventId)
         .throwOnError()
         .single();
 
