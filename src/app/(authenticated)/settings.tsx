@@ -128,7 +128,7 @@ const SettingsScreen = () => {
       <Header title={t('NAVIGATION.MORE')} />
 
       <ScrollView>
-        <Box display='flex' flexDirection='column' p='$4' flex={1}>
+        <Box display='flex' flexDirection='column' p='$2' flex={1}>
           <Heading pb='$2'>{t('FEATURES.SETTINGS.USER_PROFILE')}</Heading>
 
           <VStack>
