@@ -1,3 +1,4 @@
+import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
 import { useCourseDescription, useCourseMembership } from '@/services/courses';
 import {
@@ -73,7 +74,11 @@ const CourseDescriptionScreen = () => {
             </Text>
           )}
           renderItem={({ item: lecturer }) => (
-            <Lecturer name={lecturer.name} email={lecturer.email} />
+            <Lecturer
+              name={lecturer.name}
+              email={lecturer.email}
+              avatarUrl={lecturer.avatar_url}
+            />
           )}
         />
 
@@ -93,41 +98,6 @@ const CourseDescriptionScreen = () => {
         </Button>
       )}
     </>
-  );
-};
-
-interface LecturerProps {
-  name: string;
-  email: string;
-}
-
-const Lecturer: React.FC<LecturerProps> = ({ name, email }) => {
-  return (
-    <Box
-      display='flex'
-      flexDirection='row'
-      alignItems='center'
-      px='$1'
-      gap='$1'
-      my='$1'
-      py='$1'
-    >
-      <Box
-        flex={1}
-        gap={-4}
-        display='flex'
-        flexDirection='row'
-        alignItems='center'
-      >
-        <Box display='flex' flexDirection='column' flexGrow={1}>
-          <Text color='$gray600' fontWeight='$semibold' fontSize='$md'>
-            {name}
-          </Text>
-          <Text fontSize='$xs'>{email}</Text>
-        </Box>
-      </Box>
-      <Icon as={Mail} />
-    </Box>
   );
 };
 

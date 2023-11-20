@@ -2,6 +2,7 @@ import BoardSheet from '@/components/boards/BoardSheet';
 import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import CourseSheet from '@/components/course/CourseSheet';
 import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfirmationDialog';
+import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
 import {
@@ -387,47 +388,6 @@ const BoardCard: React.FC<BoardProps> = ({
       <Text color='$gray950' numberOfLines={1}>
         {title}
       </Text>
-    </Pressable>
-  );
-};
-
-interface LecturerProps {
-  name: string;
-  avatarUrl?: string;
-  email: string;
-  onPress?: () => void;
-}
-
-const Lecturer: React.FC<LecturerProps> = ({
-  name,
-  avatarUrl,
-  email,
-  onPress,
-}) => {
-  return (
-    <Pressable rounded='$md' onPress={onPress}>
-      <Box
-        flexDirection='row'
-        rounded='$md'
-        alignItems='center'
-        justifyContent='space-between'
-        gap='$2'
-      >
-        <Avatar size='md'>
-          <AvatarFallbackText>{name}</AvatarFallbackText>
-          {avatarUrl && <AvatarImage source={{ uri: avatarUrl }} />}
-        </Avatar>
-
-        <Box flex={1}>
-          <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1}>
-            {name}
-          </Text>
-          <Text fontSize='$sm' numberOfLines={1}>
-            {email}
-          </Text>
-        </Box>
-        <Icon as={MessageSquare} size='xl' />
-      </Box>
     </Pressable>
   );
 };
