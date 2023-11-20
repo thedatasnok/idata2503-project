@@ -71,7 +71,7 @@ const SignInScreen = () => {
 
           <FormControl isInvalid={isError}>
             <VStack gap='$2'>
-              <Input borderWidth='$1' borderRadius='$sm' width={250} p='$1.5'>
+              <Input width={250}>
                 <InputField
                   type='text'
                   placeholder={t('FEATURES.SIGN_IN.EMAIL')}
@@ -80,11 +80,11 @@ const SignInScreen = () => {
                   onSubmitEditing={() => passwordRef.current?.focus()}
                   onChangeText={setEmail}
                 />
-                <InputSlot>
+                <InputSlot pr='$2'>
                   <InputIcon as={Mail} color='$gray400' />
                 </InputSlot>
               </Input>
-              <Input borderWidth='$1' borderRadius='$sm' width={250} p='$1.5'>
+              <Input width={250}>
                 <InputField
                   // @ts-ignore
                   ref={passwordRef}
@@ -94,7 +94,7 @@ const SignInScreen = () => {
                   placeholder={t('FEATURES.SIGN_IN.PASSWORD')}
                   onChangeText={setPassword}
                 />
-                <InputSlot onPress={handleShowPassword}>
+                <InputSlot pr='$2' onPress={handleShowPassword}>
                   <InputIcon
                     as={showPassword ? EyeIcon : EyeOffIcon}
                     color='$primary600'
