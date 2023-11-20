@@ -1,4 +1,5 @@
 import BoardSheet from '@/components/boards/BoardSheet';
+import CourseAnnouncementCard from '@/components/course/CourseAnnouncementCard';
 import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import CourseSheet from '@/components/course/CourseSheet';
 import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfirmationDialog';
@@ -120,7 +121,7 @@ const CourseScreen = () => {
             data={announcements.slice(0, 3)}
             keyExtractor={(item) => item.announcement_id}
             renderItem={({ item }) => (
-              <AnnouncementCard
+              <CourseAnnouncementCard
                 title={item.title}
                 content={item.content}
                 createdAt={item.created_at}
@@ -318,48 +319,6 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
         </Pressable>
       )}
     </Box>
-  );
-};
-
-interface AnnouncementCardProps {
-  title: string;
-  content: string;
-  createdAt: string;
-  author: string;
-  onPress: () => void;
-}
-
-const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
-  title,
-  content,
-  createdAt,
-  author,
-  onPress,
-}) => {
-  const formattedDate = dayjs(createdAt).calendar();
-
-  return (
-    <Pressable
-      borderWidth='$1'
-      borderColor='$gray200'
-      backgroundColor='$gray50'
-      mr='$2'
-      p='$2'
-      width='$72'
-      height='$32'
-      rounded='$md'
-      onPress={onPress}
-    >
-      <Heading numberOfLines={1}>{title}</Heading>
-      <Box flex={1} justifyContent='space-between'>
-        <Text numberOfLines={2} color='$gray950'>
-          {content}
-        </Text>
-        <Text color='$gray950' numberOfLines={1}>
-          {formattedDate} | {author}
-        </Text>
-      </Box>
-    </Pressable>
   );
 };
 
