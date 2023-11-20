@@ -2,7 +2,7 @@ import { Box, Divider, Heading, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 
 interface CourseAnnouncementCardProps {
-  courseTitle?: string;
+  courseCode?: string;
   title: string;
   content: string;
   createdAt: string;
@@ -11,7 +11,7 @@ interface CourseAnnouncementCardProps {
 }
 
 const CourseAnnouncementCard: React.FC<CourseAnnouncementCardProps> = ({
-  courseTitle,
+  courseCode,
   title,
   content,
   createdAt,
@@ -28,13 +28,13 @@ const CourseAnnouncementCard: React.FC<CourseAnnouncementCardProps> = ({
       mr='$2'
       p='$2'
       width='$72'
-      height='$32'
+      height={courseCode ? '$40' : '$32'}
       rounded='$md'
       onPress={onPress}
     >
-      {courseTitle && (
+      {courseCode && (
         <>
-          <Heading numberOfLines={1}>{courseTitle}</Heading>
+          <Heading numberOfLines={1}>{courseCode}</Heading>
           <Divider />
         </>
       )}

@@ -6,6 +6,7 @@ import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfir
 import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
+import { CacheKey } from '@/services/cache';
 import {
   CourseBoard,
   CourseRole,
@@ -34,6 +35,7 @@ import {
   Spinner,
   Text,
 } from '@gluestack-ui/themed';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
@@ -65,6 +67,7 @@ const CourseScreen = () => {
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId);
   const { data: assignments } = useCourseAssignments(courseId, false);
+  const qc = useQueryClient();
 
   const deleteBoard = useDeleteCourseBoard(courseId);
 
@@ -80,6 +83,9 @@ const CourseScreen = () => {
     try {
       await leave();
       setShowLeaveConfirmation(false);
+      qc.invalidateQueries({
+        queryKey: [CacheKey.ALL_ANNOUNCEMENTS, course],
+      });
       router.push('/courses/');
     } catch (error) {
       console.error('Failed to leave course', error);

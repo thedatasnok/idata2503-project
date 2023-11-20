@@ -165,6 +165,7 @@ export const useCreateCourseAnnouncement = (courseId: string) => {
 
 export interface AnnouncementWithCreatedBy {
   announcement_id: string;
+  fk_course_id: string;
   created_by_full_name: string;
   created_by_role: string;
   created_by_avatar_url: string;
@@ -218,6 +219,32 @@ export const useAnnouncement = (announcementId: string) => {
 
       return result.data as AnnouncementWithCreatedBy;
     },
+  });
+};
+
+/**
+ * Hook to fetch announcements for all courses the user is enrolled in
+ */
+export const useAllAnnouncements = () => {
+  const { data: courses, isSuccess: coursesLoaded } = useCourses({
+    enrolled: true,
+  });
+
+  return useQuery({
+    queryKey: [CacheKey.ALL_ANNOUNCEMENTS, courses],
+    queryFn: async () => {
+      const result = await supabase
+        .from('course_announcement_view')
+        .select(
+          'announcement_id, fk_course_id, created_by_full_name, created_by_role, created_by_avatar_url, content, title, created_at, fk_course_id'
+        )
+        .in('fk_course_id', courses?.map((c) => c.course_id) ?? [])
+        .order('created_at', { ascending: false })
+        .throwOnError();
+
+      return result.data as AnnouncementWithCreatedBy[];
+    },
+    enabled: coursesLoaded, // only fetch announcements when courses are loaded
   });
 };
 
