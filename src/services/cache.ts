@@ -16,4 +16,5 @@ export const enum CacheKey {
   INDIVIDUAL_COURSE_BOARD = 'whiteboardapp/course-board',
   RECENT_DIRECT_MESSAGES = 'whiteboardapp/recent-direct-messages',
   DIRECT_MESSAGES = 'whiteboardapp/direct-messages',
+  USER_PROFILES = 'whiteboardapp/user-profiles',
 }
