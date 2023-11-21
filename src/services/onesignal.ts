@@ -43,3 +43,12 @@ export const associateUserId = async (userId: string) => {
   if (os === null) return;
   os.login(userId);
 };
+
+/**
+ * Disassociates the users id with OneSignal.
+ */
+export const disassociateUserId = async () => {
+  await waitForOneSignal();
+  if (os === null) return;
+  os.logout();
+};

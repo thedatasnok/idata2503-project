@@ -31,6 +31,10 @@
     "STUDENT": "Student",
     "STUDENTS": "Students"
   },
+  "ERRORS": {
+    "FAILED_TO_SAVE_CHANGES_HEADER": "Failed to save changes!",
+    "FAILED_TO_SAVE_CHANGES_MESSAGE": "Please try again later, or contact an administrator."
+  },
   "FEATURES": {
     "ANNOUNCEMENTS": {
       "ANNOUNCEMENT": "Announcement",
@@ -77,8 +81,10 @@
       "FULL_NAME_REQUIRED": "Full name is required",
       "EMAIL": "Email",
       "EMAIL_REQUIRED": "Invalid email address",
-      "EMAIL_NOTIFICATIONS": "Email notifications",
-      "PUSH_NOTIFICATIONS": "Push notifications",
+      "NOTIFICATIONS_ENABLED_TITLE": "På",
+      "NOTIFICATIONS_ENABLED_DESCRIPTION": "Motta push notifikasjoner for kunngjøringer og direktemeldinger",
+      "NOTIFICATIONS_DISABLED_TITLE": "Av",
+      "NOTIFICATIONS_DISABLED_DESCRIPTION": "Vi vil ikke forstyrre deg",
       "NOTIFICATIONS": "Notifications",
       "LANGUAGE": "Language",
       "NO_LANGUAGE_SELECTED": "Choose language",

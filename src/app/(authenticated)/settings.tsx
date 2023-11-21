@@ -1,6 +1,8 @@
+import ToastMessage, { Severity } from '@/components/feedback/ToastMessage';
+import RadioInput from '@/components/input/RadioInput';
 import Header from '@/components/navigation/Header';
 import { useProfile, useUpdateProfileMutation } from '@/services/auth';
-import { supabase } from '@/services/supabase';
+import { disassociateUserId } from '@/services/onesignal';
 import { useAuth } from '@/store/global';
 import {
   AlertDialog,
@@ -12,7 +14,6 @@ import {
   Button,
   ButtonGroup,
   ButtonText,
-  Divider,
   FormControl,
   FormControlError,
   FormControlErrorText,
@@ -21,7 +22,6 @@ import {
   Heading,
   Input,
   InputField,
-  Pressable,
   ScrollView,
   Select,
   SelectBackdrop,
@@ -32,12 +32,12 @@ import {
   SelectItem,
   SelectPortal,
   SelectTrigger,
-  Switch,
-  Text,
   VStack,
+  useToast
 } from '@gluestack-ui/themed';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
+import { BellIcon, BellOffIcon } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -46,29 +46,35 @@ import { z } from 'zod';
 const profileValidationSchema = z.object({
   fullName: z.string().min(1, { message: 'Full name is required' }),
   email: z.string().email({ message: 'Invalid email address' }),
+  preferences: z.object({
+    notifications: z.boolean(),
+  }),
 });
 
 type UserProfileForm = z.infer<typeof profileValidationSchema>;
 
 const SettingsScreen = () => {
-  const [emailNotifications, setEmailNotifications] = useState(false);
-  const [pushNotifications, setPushNotifications] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const { t, i18n } = useTranslation();
   const { logout, session } = useAuth();
   const { data: userProfile } = useProfile();
   const updateProfileMutation = useUpdateProfileMutation();
+  const toast = useToast();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<UserProfileForm>({
     resolver: zodResolver(profileValidationSchema),
     defaultValues: {
       fullName: userProfile?.full_name,
       email: session?.user?.email,
+      preferences: {
+        notifications: true,
+      },
     },
   });
 
@@ -78,46 +84,54 @@ const SettingsScreen = () => {
     }
   }, [userProfile]);
 
-  const handleEmailNotificationToggle = () => {
-    setEmailNotifications(!emailNotifications);
-  };
-
-  const handlePushNotificationToggle = () => {
-    setPushNotifications(!pushNotifications);
-  };
-
   const handleLanguageChange = (languageCode: string) => {
     i18n.changeLanguage(languageCode);
   };
 
   const handleSignOut = () => {
     logout();
+    disassociateUserId();
     router.push('/sign-in');
   };
 
   const onSubmit = async (data: UserProfileForm) => {
     try {
-      if (userProfile?.full_name !== data.fullName) {
-        await updateProfileMutation.mutateAsync({ full_name: data.fullName });
-        console.log('Full name updated successfully:', data);
-      }
+      await updateProfileMutation.mutateAsync({
+        full_name: data.fullName,
+      });
     } catch (err) {
-      console.error('Unexpected error:', err);
+      toast.show({
+        duration: 3000,
+        render: () => (
+          <ToastMessage
+            severity={Severity.ERROR}
+            header={t('ERRORS.FAILED_TO_SAVE_CHANGES_HEADER')}
+            message={t('ERRORS.FAILED_TO_SAVE_CHANGES_MESSAGE')}
+          />
+        ),
+      });
     }
+  };
 
-    if (session?.user.email !== data.email) {
-      try {
-        const { error } = await supabase.auth.updateUser({ email: data.email });
-        if (error) {
-          //TODO: show message for error
-          console.error('Error updating email:', error.message);
-        } else {
-          //TODO: show message for success
-          console.log('Email confirmation successfully sent:', data);
-        }
-      } catch (err) {
-        console.error('Unexpected error:', err);
-      }
+  const onNotificationPreferenceChange = async (value: string) => {
+    try {
+      const notifications = value === 'true';
+      await updateProfileMutation.mutateAsync({
+        preferences: {
+          notifications,
+        },
+      });
+    } catch (err) {
+      toast.show({
+        duration: 3000,
+        render: () => (
+          <ToastMessage
+            severity={Severity.ERROR}
+            header={t('ERRORS.FAILED_TO_SAVE_CHANGES_HEADER')}
+            message={t('ERRORS.FAILED_TO_SAVE_CHANGES_MESSAGE')}
+          />
+        ),
+      });
     }
   };
 
@@ -196,36 +210,28 @@ const SettingsScreen = () => {
 
           <Heading mt='$2'>{t('FEATURES.SETTINGS.NOTIFICATIONS')}</Heading>
 
-          <VStack>
-            <Pressable
-              flexDirection='row'
-              justifyContent='space-between'
-              alignItems='center'
-              py='$2'
-              onPress={handleEmailNotificationToggle}
-            >
-              <Text>{t('FEATURES.SETTINGS.EMAIL_NOTIFICATIONS')}</Text>
-              <Switch
-                value={emailNotifications}
-                onValueChange={handleEmailNotificationToggle}
-              />
-            </Pressable>
-            <Divider />
-
-            <Pressable
-              flexDirection='row'
-              justifyContent='space-between'
-              alignItems='center'
-              py='$2'
-              onPress={handlePushNotificationToggle}
-            >
-              <Text>{t('FEATURES.SETTINGS.PUSH_NOTIFICATIONS')}</Text>
-              <Switch
-                value={pushNotifications}
-                onValueChange={handlePushNotificationToggle}
-              />
-            </Pressable>
-          </VStack>
+          <RadioInput
+            value={getValues('preferences.notifications').toString()}
+            onChange={onNotificationPreferenceChange}
+            options={[
+              {
+                icon: BellIcon,
+                label: t('FEATURES.SETTINGS.NOTIFICATIONS_ENABLED_TITLE'),
+                value: 'true',
+                description: t(
+                  'FEATURES.SETTINGS.NOTIFICATIONS_ENABLED_DESCRIPTION'
+                ),
+              },
+              {
+                icon: BellOffIcon,
+                label: t('FEATURES.SETTINGS.NOTIFICATIONS_DISABLED_TITLE'),
+                value: 'false',
+                description: t(
+                  'FEATURES.SETTINGS.NOTIFICATIONS_DISABLED_DESCRIPTION'
+                ),
+              },
+            ]}
+          />
 
           <Heading mt='$2'>{t('FEATURES.SETTINGS.LANGUAGE')}</Heading>
           <SelectLanguageView handleLanguageChange={handleLanguageChange} />

@@ -31,6 +31,10 @@
     "STUDENT": "Student",
     "STUDENTS": "Studenter"
   },
+  "ERRORS": {
+    "FAILED_TO_SAVE_CHANGES_HEADER": "Kunne ikke lagre endringene!",
+    "FAILED_TO_SAVE_CHANGES_MESSAGE": "Prøv igjen senere, eller kontakt en administrator."
+  },
   "FEATURES": {
     "ANNOUNCEMENTS": {
       "ANNOUNCEMENT": "Kunngjøring",
@@ -77,8 +81,10 @@
       "FULL_NAME_REQUIRED": "Fullt navn er påkrevd",
       "EMAIL": "E-postadresse",
       "EMAIL_REQUIRED": "Ugyldig e-postadresse",
-      "EMAIL_NOTIFICATIONS": "Email notifikasjoner",
-      "PUSH_NOTIFICATIONS": "Push notifikasjoner",
+      "NOTIFICATIONS_ENABLED_TITLE": "På",
+      "NOTIFICATIONS_ENABLED_DESCRIPTION": "Motta push notifikasjoner for kunngjøringer og direktemeldinger",
+      "NOTIFICATIONS_DISABLED_TITLE": "Av",
+      "NOTIFICATIONS_DISABLED_DESCRIPTION": "Vi vil ikke forstyrre deg",
       "NOTIFICATIONS": "Notifikasjoner",
       "LANGUAGE": "Språk",
       "NO_LANGUAGE_SELECTED": "Velg språk",
