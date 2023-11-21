@@ -92,7 +92,7 @@ const TabContainer = styled(Pressable, {
   },
 });
 
-// @ts-ignore
+// @ts-ignore - too complex type, out of our control
 const TabIcon = styled(Icon, {
   color: '$gray800',
   ':active': {
@@ -112,9 +112,11 @@ const TabText = styled(Text, {
 const Tab: React.FC<TabProps> = ({ active, icon, onPress, label }) => {
   return (
     <TabContainer states={{ active }} onPress={onPress}>
-      {/* @ts-ignore */}
+      {/* @ts-ignore same as the above, too complex */}
       <TabIcon as={icon} size={24} states={{ active }} />
-      <TabText numberOfLines={1} states={{ active }}>{label}</TabText>
+      <TabText numberOfLines={1} states={{ active }}>
+        {label}
+      </TabText>
     </TabContainer>
   );
 };

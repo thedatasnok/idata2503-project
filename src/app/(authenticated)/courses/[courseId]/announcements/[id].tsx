@@ -6,9 +6,13 @@ import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 const AnnouncementScreen = () => {
-  const { courseId, id: announcementId } = useLocalSearchParams();
-  const { data: course } = useCourse(courseId as string);
-  const { data: announcement } = useAnnouncement(announcementId as string);
+  const { courseId, id: announcementId } = useLocalSearchParams<{
+    courseId: string;
+    id: string;
+  }>();
+
+  const { data: course } = useCourse(courseId);
+  const { data: announcement } = useAnnouncement(announcementId);
   const { t } = useTranslation();
 
   return (
@@ -16,7 +20,7 @@ const AnnouncementScreen = () => {
       <Header
         context={course?.course_code}
         title={t('FEATURES.ANNOUNCEMENTS.ANNOUNCEMENT')}
-        back
+        back={`/courses/${courseId}/announcements`}
       />
 
       <ScrollView px='$3'>

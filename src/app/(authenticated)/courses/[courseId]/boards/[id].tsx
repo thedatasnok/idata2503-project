@@ -11,14 +11,14 @@ import React from 'react';
 import { FlatList } from 'react-native';
 
 const BoardMessageScreen = () => {
-  const { id, courseId } = useLocalSearchParams();
-  const { messages, isSending, sendMessage } = useCourseBoardMessages(
-    id as string,
-    true
-  );
+  const { id, courseId } = useLocalSearchParams<{
+    courseId: string;
+    id: string;
+  }>();
 
-  const { data: courseDescription } = useCourseDescription(courseId as string);
-  const { data: board } = useCourseBoard(id as string);
+  const { messages, isSending, sendMessage } = useCourseBoardMessages(id, true);
+  const { data: courseDescription } = useCourseDescription(courseId);
+  const { data: board } = useCourseBoard(id);
 
   const handleSendMessage = async (content: string) => {
     await sendMessage(content);
@@ -29,7 +29,7 @@ const BoardMessageScreen = () => {
       <KeyboardDismissingView>
         <Box flex={1}>
           <Header
-            back
+            back={`/courses/${courseId}/`}
             context={courseDescription?.course_code}
             title={board?.name ?? 'board'}
           />

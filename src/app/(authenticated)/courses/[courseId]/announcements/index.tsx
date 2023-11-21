@@ -47,7 +47,7 @@ const AnnouncementsScreen = () => {
       <Header
         context={course?.course_code}
         title={t('GENERAL.ANNOUNCEMENTS')}
-        back
+        back={`/courses/${courseId}`}
       />
 
       <FlatList
@@ -78,7 +78,6 @@ const AnnouncementsScreen = () => {
             )
           }
         >
-          {/* @ts-ignore */}
           <FabIcon as={PlusIcon} size='xl' m='-$1' />
         </Fab>
       )}

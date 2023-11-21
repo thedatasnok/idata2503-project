@@ -8,13 +8,11 @@ import {
   ButtonText,
   Divider,
   Heading,
-  Icon,
   ScrollView,
   Text,
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Mail } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
@@ -47,7 +45,7 @@ const CourseDescriptionScreen = () => {
       <Header
         context={courseDescription?.course_code}
         title={t('FEATURES.COURSES.COURSE_DESCRIPTION')}
-        back
+        back={`/courses/${courseId}/`}
       />
 
       <ScrollView p='$3' flex={1}>

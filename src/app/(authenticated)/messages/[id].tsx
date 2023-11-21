@@ -11,14 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
 const DirectMessageScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
-  const { messages, isSending, sendMessage } = useDirectMessages(
-    id as string,
-    true
-  );
-
-  const { data: userProfile } = useUserProfile(id as string);
+  const { messages, isSending, sendMessage } = useDirectMessages(id, true);
+  const { data: userProfile } = useUserProfile(id);
 
   const handleSendMessage = async (content: string) => {
     await sendMessage(content);
@@ -28,7 +24,7 @@ const DirectMessageScreen = () => {
     <ConfiguredKeyboardAvoidingView flex={1}>
       <KeyboardDismissingView>
         <Header
-          back
+          back='/messages/'
           context={t('NAVIGATION.MESSAGES')}
           title={userProfile?.full_name ?? 'Message'}
         />

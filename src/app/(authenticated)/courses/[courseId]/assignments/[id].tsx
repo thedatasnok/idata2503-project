@@ -31,7 +31,7 @@ const AssignmentScreen = () => {
       <Header
         context={course?.course_code ?? ''}
         title={assignment?.name ?? ''}
-        back
+        back={`/courses/${courseId}/assignments`}
       />
 
       <ScrollView px='$3'>

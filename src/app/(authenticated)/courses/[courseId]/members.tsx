@@ -28,7 +28,11 @@ const CourseMembersScreen = () => {
 
   return (
     <>
-      <Header back context={course?.course_code} title={t('GENERAL.MEMBERS')} />
+      <Header
+        back={`/courses/${courseId}`}
+        context={course?.course_code}
+        title={t('GENERAL.MEMBERS')}
+      />
 
       <SectionList
         sections={members ?? []}
@@ -65,7 +69,9 @@ const CourseMemberListItem: ListRenderItem<CourseMember> = ({
     >
       <Avatar>
         <AvatarFallbackText>{member.full_name}</AvatarFallbackText>
-        <AvatarImage source={{ uri: member.avatar_url }} />
+        {member.avatar_url.length > 0 && (
+          <AvatarImage source={{ uri: member.avatar_url }} />
+        )}
       </Avatar>
 
       <Text numberOfLines={1}>{member.full_name}</Text>

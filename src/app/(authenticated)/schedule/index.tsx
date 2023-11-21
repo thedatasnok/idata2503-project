@@ -160,7 +160,6 @@ const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
         my='$1'
         onPress={onPress}
       >
-        {/* @ts-ignore */}
         <Icon as={getEventTypeIcon(eventType)} color='$gray800' size='xl' />
 
         <Box flex={1} gap={-4}>

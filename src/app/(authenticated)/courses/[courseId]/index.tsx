@@ -24,9 +24,6 @@ import {
   ActionsheetContent,
   ActionsheetDragIndicator,
   ActionsheetDragIndicatorWrapper,
-  Avatar,
-  AvatarFallbackText,
-  AvatarImage,
   Box,
   Heading,
   Icon,
@@ -36,7 +33,6 @@ import {
   Text,
 } from '@gluestack-ui/themed';
 import { useQueryClient } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
 import {
@@ -45,7 +41,6 @@ import {
   GraduationCap,
   Hash,
   Megaphone,
-  MessageSquare,
   MoreVerticalIcon,
 } from 'lucide-react-native';
 import { useState } from 'react';
@@ -109,7 +104,7 @@ const CourseScreen = () => {
   return (
     <>
       <Header
-        back
+        back='/courses/'
         title={course?.course_code ?? 'Course'}
         rightIcon={MoreVerticalIcon}
         onRightIconPress={() => setShowCourseSheet(true)}

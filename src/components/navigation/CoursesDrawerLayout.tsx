@@ -54,8 +54,7 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
   const router = useRouter();
 
   const gotoCourse = (courseId: string) => {
-    // @ts-ignore should not be an error
-    router.push(`/courses/${courseId}`);
+    router.push(`/courses/${courseId}/`);
     onNavigate?.();
   };
 

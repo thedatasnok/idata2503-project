@@ -130,13 +130,12 @@ export const useDirectMessages = (
     },
   });
 
-  // @ts-ignore
   const variables: string[] = useMutationState({
     filters: {
       mutationKey: [CacheKey.DIRECT_MESSAGES],
       status: 'pending',
     },
-    select: (mut) => mut.state.variables,
+    select: (mut) => mut.state.variables as string,
   });
 
   return {
@@ -242,13 +241,12 @@ export const useCourseBoardMessages = (boardId: string, inverted?: boolean) => {
     },
   });
 
-  // @ts-ignore
   const variables: string[] = useMutationState({
     filters: {
       mutationKey: [CacheKey.COURSE_BOARD_MESSAGES],
       status: 'pending',
     },
-    select: (mut) => mut.state.variables,
+    select: (mut) => mut.state.variables as string,
   });
 
   return {

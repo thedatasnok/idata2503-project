@@ -86,7 +86,7 @@ const SignInScreen = () => {
               </Input>
               <Input width={250}>
                 <InputField
-                  // @ts-ignore
+                  // @ts-ignore missing type in gluestack
                   ref={passwordRef}
                   enterKeyHint='go'
                   onSubmitEditing={handleSignIn}

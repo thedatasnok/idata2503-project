@@ -5,9 +5,9 @@ import { XIcon } from 'lucide-react-native';
 import { WebView } from 'react-native-webview';
 
 const ScheduleEventScreen = () => {
-  const { id: eventId } = useLocalSearchParams();
+  const { id: eventId } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { data } = useEvent(eventId as string);
+  const { data } = useEvent(eventId);
 
   const onCancel = () => {
     router.back();

@@ -56,7 +56,7 @@ const CreateAnnouncementScreen = () => {
       <Header
         context={course?.course_code}
         title={t('FEATURES.ANNOUNCEMENTS.NEW_ANNOUNCEMENT')}
-        back
+        back={`/courses/${courseId}/announcements`}
       />
 
       <ScrollView>

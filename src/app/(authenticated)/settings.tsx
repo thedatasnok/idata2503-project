@@ -118,8 +118,6 @@ const SettingsScreen = () => {
       } catch (err) {
         console.error('Unexpected error:', err);
       }
-    } else {
-      console.log('Email is the same');
     }
   };
 
@@ -172,7 +170,7 @@ const SettingsScreen = () => {
                   <Input>
                     <InputField
                       color='$gray400'
-                      // @ts-ignore
+                      // @ts-ignore missing type in gluestack
                       readOnly={true}
                       onChangeText={(val) => onChange(val)}
                       defaultValue={session?.user.email}

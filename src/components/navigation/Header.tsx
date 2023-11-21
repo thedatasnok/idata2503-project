@@ -2,7 +2,7 @@ import { IconType } from '@/icon';
 import { useDrawer } from '@/store/global';
 import { getToken } from '@/theme';
 import { Box, Icon, Pressable, Text, styled } from '@gluestack-ui/themed';
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import { ArrowLeftIcon, BellIcon, MenuIcon } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -28,8 +28,10 @@ export interface HeaderProps {
   /**
    * If true, the left icon will be substituted with a back icon, and the press handler will
    * call `router.back()` to return to the previous screen.
+   *
+   * If a Href or string is passed, it will navigate to the route with that URL instead using `router.replace()`.
    */
-  back?: boolean;
+  back?: boolean | Href<string> | (string & {}); // NOSONAR: the object is just to make the autocomplete work
   /**
    * The context in which the header is displayed.
    * If set, a small text will be displayed above the title.
@@ -41,12 +43,15 @@ export interface HeaderProps {
   title: string;
 }
 
+/**
+ * Pressable used for the left and right icons in the header.
+ */
 const HeaderPressable = styled(Pressable, {
   p: '$4',
   ':active': {
-    bg: '$primary700'
-  }
-})
+    bg: '$primary700',
+  },
+});
 
 const Header: React.FC<HeaderProps> = ({
   leftIcon: passedLeftIcon,
@@ -64,9 +69,13 @@ const Header: React.FC<HeaderProps> = ({
   const paddingTop = insets.top || (getToken('space', '2') as number);
 
   const leftIcon = back ? ArrowLeftIcon : passedLeftIcon ?? MenuIcon;
-  const onLeftPressed = back
-    ? () => router.back()
-    : onLeftIconPress ?? openDrawer;
+  let onLeftPressed: () => void;
+
+  if (back !== undefined && typeof back !== 'boolean') {
+    onLeftPressed = () => router.replace(back as any);
+  } else {
+    onLeftPressed = onLeftIconPress ?? openDrawer;
+  }
 
   const onRightPressed = onRightIconPress;
 

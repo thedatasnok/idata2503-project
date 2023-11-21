@@ -1,8 +1,11 @@
-import { DEFAULT_STACK_SCREEN_OPTIONS } from '@/util/screen';
-import { Stack } from 'expo-router';
+import { DefaultStack } from '@/util/screen';
+
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
 
 const MessagesLayout = () => {
-  return <Stack screenOptions={DEFAULT_STACK_SCREEN_OPTIONS} />;
+  return <DefaultStack />;
 };
 
 export default MessagesLayout;

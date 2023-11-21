@@ -1,7 +1,7 @@
 import { DefaultStack } from '@/util/screen';
 
-const CoursesLayout: React.FC = () => {
+const CourseLayout: React.FC = () => {
   return <DefaultStack />;
 };
 
-export default CoursesLayout;
+export default CourseLayout;
