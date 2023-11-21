@@ -43,8 +43,11 @@ const Message: React.FC<MessageProps> = ({
   const displayAuthor =
     dayjs.duration(dateDiff).asMinutes() > 5 || isLastMessage || !sameSender;
 
-  const displayDateHeader =
-    dayjs.duration(dateDiff).asDays() > 1 || isLastMessage;
+  const sameDay = dayjs(createdAt).isSame(
+    dayjs(previousCreatedAt ?? createdAt),
+    'day'
+  );
+  const displayDateHeader = !sameDay || isLastMessage;
 
   return (
     <>
