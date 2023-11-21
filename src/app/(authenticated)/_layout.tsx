@@ -7,6 +7,10 @@ const SCREEN_OPTIONS = {
   header: () => <></>,
 } as const;
 
+const CONTAINER_STYLES = {
+  backgroundColor: '#ffffff',
+};
+
 const AuthenticatedLayout = () => {
   const { authenticated } = useAuth();
 
@@ -14,7 +18,11 @@ const AuthenticatedLayout = () => {
 
   return (
     <CoursesDrawerLayout>
-      <Tabs tabBar={() => <NavigationBar />} screenOptions={SCREEN_OPTIONS} />
+      <Tabs
+        tabBar={() => <NavigationBar />}
+        sceneContainerStyle={CONTAINER_STYLES}
+        screenOptions={SCREEN_OPTIONS}
+      />
     </CoursesDrawerLayout>
   );
 };
