@@ -1,4 +1,4 @@
-import { Box, Divider, Heading, Pressable, Text } from '@gluestack-ui/themed';
+import { Box, Heading, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 
 interface CourseAnnouncementCardProps {
@@ -9,7 +9,6 @@ interface CourseAnnouncementCardProps {
   author: string;
   onPress: () => void;
 }
-
 const CourseAnnouncementCard: React.FC<CourseAnnouncementCardProps> = ({
   courseCode,
   title,
@@ -26,21 +25,30 @@ const CourseAnnouncementCard: React.FC<CourseAnnouncementCardProps> = ({
       borderColor='$gray200'
       backgroundColor='$gray50'
       mr='$2'
-      p='$2'
       width='$72'
+      borderTopLeftRadius={courseCode ? '$lg' : '$md'}
+      borderTopRightRadius={courseCode ? '$lg' : '$md'}
       height={courseCode ? '$40' : '$32'}
       rounded='$md'
       onPress={onPress}
     >
       {courseCode && (
-        <>
-          <Heading numberOfLines={1}>{courseCode}</Heading>
-          <Divider />
-        </>
+        <Box
+          px='$2'
+          backgroundColor='$gray700'
+          borderColor='$gray200'
+          borderBottomWidth='$1'
+          borderTopLeftRadius='$lg'
+          borderTopRightRadius='$lg'
+        >
+          <Heading fontSize='$lg' numberOfLines={1} color='$white'>
+            {courseCode}
+          </Heading>
+        </Box>
       )}
 
-      <Heading numberOfLines={1}>{title}</Heading>
-      <Box flex={1} justifyContent='space-between'>
+      <Box p='$2' flex={1} justifyContent='space-between'>
+        <Heading numberOfLines={1}>{title}</Heading>
         <Text numberOfLines={2} color='$gray950'>
           {content}
         </Text>
