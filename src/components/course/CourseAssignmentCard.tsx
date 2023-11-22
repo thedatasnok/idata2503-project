@@ -8,7 +8,8 @@ import {
   CheckCircleIcon,
   ChevronRight,
   ClipboardListIcon,
-  XIcon
+  ClockIcon,
+  XIcon,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import CourseAssignmentGradePill from './CourseAssignmentGradePill';
@@ -16,6 +17,7 @@ import CourseAssignmentGradePill from './CourseAssignmentGradePill';
 const getAssignmentIcon = (status: AssignmentStatus): IconType => {
   switch (status) {
     case AssignmentStatus.OPEN:
+      return ClockIcon;
     case AssignmentStatus.NOT_GRADED:
       return ClipboardListIcon;
     case AssignmentStatus.GRADED_NOT_PASSED:
@@ -25,7 +27,23 @@ const getAssignmentIcon = (status: AssignmentStatus): IconType => {
   }
 };
 
+const formatAssignmentStatus = (status: AssignmentStatus): string => {
+  switch (status) {
+    case AssignmentStatus.OPEN:
+      return "Open";
+    case AssignmentStatus.NOT_GRADED:
+      return "Not graded yet";
+    case AssignmentStatus.GRADED_NOT_PASSED:
+      return "Failed";
+    case AssignmentStatus.GRADED_PASSED:
+      return "Passed";
+    default:
+      return "Unknown Status";
+  }
+};
+
 interface CourseAssignmentsProps {
+  courseCode?: string;
   title: string;
   dueDate: string;
   submittedAt?: string;
@@ -34,6 +52,7 @@ interface CourseAssignmentsProps {
 }
 
 const CourseAssignmentCard: React.FC<CourseAssignmentsProps> = ({
+  courseCode,
   title,
   dueDate,
   submittedAt,
@@ -83,17 +102,32 @@ const CourseAssignmentCard: React.FC<CourseAssignmentsProps> = ({
     >
       <Icon as={icon} color={color} mr='$3' size='xl' />
       <Box flex={1}>
+        {courseCode && (
+          <Text color='$gray950' fontSize='$lg' fontWeight='$bold'>
+            {courseCode}
+          </Text>
+        )}
         <Text fontSize='$lg' fontWeight='$bold' numberOfLines={1} color={color}>
           {title}
         </Text>
         <Box flexDirection='row'>
-          <Text fontSize='$sm' color={color} numberOfLines={1}>
-            {formattedDate} - {timeLeft}
-          </Text>
+          {!submittedAt && (
+            <Text fontSize='$sm' color={color} numberOfLines={1}>
+              {formattedDate} - {timeLeft}
+            </Text>
+          )}
         </Box>
+        {submittedAt && (
+          <Text fontSize='$sm' color={color} numberOfLines={1}>
+            status: {formatAssignmentStatus(status)}
+          </Text>
+        )}
       </Box>
       {(submittedAt && (
-        <CourseAssignmentGradePill submittedAt={submittedAt} evaluation={evaluation} />
+        <CourseAssignmentGradePill
+          submittedAt={submittedAt}
+          evaluation={evaluation}
+        />
       )) || <Icon as={ChevronRight} color={color} />}
     </Pressable>
   );

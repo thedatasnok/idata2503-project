@@ -520,3 +520,30 @@ export const useCourseAssignment = (assignmentId: string) => {
     },
   });
 };
+
+/**
+ * Hook to fetch all assignments for all courses the user is enrolled in
+ */
+export const useAllAssignments = (
+  ascending: boolean = true,
+  sortBy: 'due_at' | 'submitted_at'
+) => {
+  const { data: courses, isSuccess: coursesLoaded } = useCourses({
+    enrolled: true,
+  });
+
+  return useQuery({
+    queryKey: [CacheKey.ALL_ASSIGNMENTS, courses, sortBy, ascending],
+    queryFn: async () => {
+      const result = await supabase
+        .from('current_user_assignment_view')
+        .select('*')
+        .in('fk_course_id', courses?.map((c) => c.course_id) ?? [])
+        .order(sortBy, { ascending: ascending })
+        .throwOnError();
+
+      return result.data as CourseAssignment[];
+    },
+    enabled: coursesLoaded, // will only fetch assignments when courses are loaded
+  });
+};
