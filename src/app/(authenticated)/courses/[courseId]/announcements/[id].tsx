@@ -1,5 +1,6 @@
 import Header from '@/components/navigation/Header';
-import { useAnnouncement, useCourse } from '@/services/courses';
+import { useAnnouncement } from '@/services/announcements';
+import { useCourse } from '@/services/courses';
 import { Box, ScrollView, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams } from 'expo-router';

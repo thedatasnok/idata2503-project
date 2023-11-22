@@ -1,6 +1,7 @@
 import CourseAssignmentGradePill from '@/components/course/CourseAssignmentGradePill';
 import Header from '@/components/navigation/Header';
-import { useCourse, useCourseAssignment } from '@/services/courses';
+import { useCourseAssignment } from '@/services/assignments';
+import { useCourse } from '@/services/courses';
 import {
   Avatar,
   AvatarFallbackText,

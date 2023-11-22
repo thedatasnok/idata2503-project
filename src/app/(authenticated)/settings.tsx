@@ -1,8 +1,8 @@
 import ToastMessage, { Severity } from '@/components/feedback/ToastMessage';
 import RadioInput from '@/components/input/RadioInput';
 import Header from '@/components/navigation/Header';
-import { useProfile, useUpdateProfileMutation } from '@/services/auth';
 import { disassociateUserId } from '@/services/onesignal';
+import { useProfile, useUpdateProfileMutation } from '@/services/users';
 import { useAuth } from '@/store/global';
 import {
   AlertDialog,

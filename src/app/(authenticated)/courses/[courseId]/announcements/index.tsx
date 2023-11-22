@@ -1,7 +1,7 @@
 import Header from '@/components/navigation/Header';
+import { useAnnouncements } from '@/services/announcements';
 import {
   CourseRole,
-  useAnnouncements,
   useCourse,
   useCourseMembership,
 } from '@/services/courses';

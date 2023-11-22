@@ -6,13 +6,13 @@ import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfir
 import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
+import { useAnnouncements } from '@/services/announcements';
+import { useCourseAssignments } from '@/services/assignments';
 import { CacheKey } from '@/services/cache';
 import {
   CourseBoard,
   CourseRole,
-  useAnnouncements,
   useCourse,
-  useCourseAssignments,
   useCourseBoards,
   useCourseDescription,
   useCourseMembership,
@@ -119,7 +119,7 @@ const CourseScreen = () => {
         {announcements && announcements.length > 0 ? (
           <FlatList
             horizontal={true}
-            data={announcements.slice(0, 3)}
+            data={announcements}
             keyExtractor={(item) => item.announcement_id}
             renderItem={({ item }) => (
               <CourseAnnouncementCard
@@ -150,23 +150,20 @@ const CourseScreen = () => {
         />
         {assignments && assignments.length > 0 ? (
           <Box gap='$2'>
-            {assignments
-              ?.slice(0, 2)
-              .reverse()
-              .map((assignment) => (
-                <CourseAssignmentCard
-                  key={assignment.assignment_id}
-                  title={assignment.name}
-                  evaluation={assignment.evaluation}
-                  submittedAt={assignment.submitted_at}
-                  dueDate={assignment.due_at}
-                  onPress={() =>
-                    router.push(
-                      `/courses/${courseId}/assignments/${assignment.assignment_id}`
-                    )
-                  }
-                />
-              ))}
+            {assignments.map((assignment) => (
+              <CourseAssignmentCard
+                key={assignment.assignment_id}
+                title={assignment.name}
+                evaluation={assignment.evaluation}
+                submittedAt={assignment.submitted_at}
+                dueDate={assignment.due_at}
+                onPress={() =>
+                  router.push(
+                    `/courses/${courseId}/assignments/${assignment.assignment_id}`
+                  )
+                }
+              />
+            ))}
           </Box>
         ) : (
           <Box alignItems='center' justifyContent='center'>

@@ -39,7 +39,7 @@ const BoardForm: React.FC<BoardFormProps> = ({
   boardDescription,
   onSuccess,
 }) => {
-  const upsertBoard = useUpsertCourseBoard(courseId);
+  const { mutateAsync: upsertBoard } = useUpsertCourseBoard(courseId);
   const { t } = useTranslation();
 
   const {
@@ -62,12 +62,7 @@ const BoardForm: React.FC<BoardFormProps> = ({
     }
 
     try {
-      upsertBoard.mutateAsync(data);
-      if (boardId) {
-        console.log('announcement edited successfully: ', data);
-      } else {
-        console.log('announcement created successfully: ', data);
-      }
+      await upsertBoard(data);
       onSuccess();
     } catch (error) {
       console.error('Unexpected error:', error);
