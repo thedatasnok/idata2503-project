@@ -30,15 +30,15 @@ const getAssignmentIcon = (status: AssignmentStatus): IconType => {
 const formatAssignmentStatus = (status: AssignmentStatus): string => {
   switch (status) {
     case AssignmentStatus.OPEN:
-      return "Open";
+      return 'Open';
     case AssignmentStatus.NOT_GRADED:
-      return "Not graded yet";
+      return 'Not graded yet';
     case AssignmentStatus.GRADED_NOT_PASSED:
-      return "Failed";
+      return 'Failed';
     case AssignmentStatus.GRADED_PASSED:
-      return "Passed";
+      return 'Passed';
     default:
-      return "Unknown Status";
+      return 'Unknown Status';
   }
 };
 
@@ -103,7 +103,7 @@ const CourseAssignmentCard: React.FC<CourseAssignmentsProps> = ({
       <Icon as={icon} color={color} mr='$3' size='xl' />
       <Box flex={1}>
         {courseCode && (
-          <Text color='$gray950' fontSize='$lg' fontWeight='$bold'>
+          <Text color={color} fontSize='$lg' fontWeight='$bold'>
             {courseCode}
           </Text>
         )}
