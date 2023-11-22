@@ -1,5 +1,6 @@
 import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
+import { CacheKey } from '@/services/cache';
 import { useCourseDescription, useCourseMembership } from '@/services/courses';
 import {
   Box,
@@ -11,6 +12,7 @@ import {
   ScrollView,
   Text,
 } from '@gluestack-ui/themed';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -25,10 +27,15 @@ const CourseDescriptionScreen = () => {
   const { signUp, isSigningUp } = useCourseMembership(courseId);
   const { t } = useTranslation();
   const router = useRouter();
+  const qc = useQueryClient();
+
 
   const handleSignUp = async () => {
     try {
       await signUp();
+      qc.invalidateQueries({
+        queryKey: [CacheKey.ALL_ANNOUNCEMENTS, courseId],
+      });
       router.replace(`/courses/${courseId}/`);
     } catch (error) {
       console.error('SignUp error: ', error);
