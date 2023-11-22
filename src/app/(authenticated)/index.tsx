@@ -11,11 +11,16 @@ import {
   Box,
   Divider,
   Heading,
-  ScrollView
+  Icon,
+  Text,
+  ScrollView,
+  Spinner,
 } from '@gluestack-ui/themed';
 import { router } from 'expo-router';
+import { t } from 'i18next';
+import { ClipboardIcon, Megaphone } from 'lucide-react-native';
 import React from 'react';
-import { ActivityIndicator, FlatList } from 'react-native';
+import { FlatList } from 'react-native';
 
 const HomeScreen = () => {
   const { data: announcements, isLoading: isLoadingAnnouncements } =
@@ -49,31 +54,37 @@ const HomeScreen = () => {
     (assignment) => assignment.submitted_at !== null
   );
 
-  const loading =
+  const isLoading =
     isLoadingAnnouncements ||
     isLoadingCourses ||
     isLoadingAssignmentsDueAt ||
     isLoadingAssignmentsSubmittedAt;
 
+  if (isLoading) {
+    return (
+      <Box flex={1} alignItems='center' justifyContent='center'>
+        <Spinner size={48} />
+      </Box>
+    );
+  }
+
   return (
     <ScrollView>
-      <Header title='Home' />
-      {loading ? (
-        <Box flex={1} justifyContent='center' alignItems='center'>
-          <ActivityIndicator size='large' />
+      <Header title={t('NAVIGATION.HOME')} />
+      <Box p='$2'>
+        <Box
+          flexDirection='row'
+          alignItems='center'
+          justifyContent='space-between'
+        >
+          <Heading>
+            {t('GENERAL.WELCOME')} {user?.full_name}
+          </Heading>
         </Box>
-      ) : (
-        <Box p='$2'>
-          <Box
-            flexDirection='row'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            <Heading>Welcome {user?.full_name}</Heading>
-          </Box>
 
-          <Divider mb='$2' />
-          <Heading fontSize='$md'>Announcements</Heading>
+        <Divider mb='$2' />
+        <Heading fontSize='$md'>{t('GENERAL.ANNOUNCEMENTS')}</Heading>
+        {announcements && announcements.length > 0 ? (
           <FlatList
             horizontal={true}
             data={announcements?.slice(0, 3)}
@@ -89,12 +100,50 @@ const HomeScreen = () => {
               />
             )}
           />
+        ) : (
+          <Box alignItems='center' justifyContent='center'>
+            <Icon as={Megaphone} size='3xl' />
+            <Text color='$gray950'>
+              {t('FEATURES.COURSES.NO_ANNOUNCEMENTS_YET')}
+            </Text>
+          </Box>
+        )}
 
-          <Heading fontSize='$md' pt='$2'>
-            Upcoming assignments
-          </Heading>
+        <Heading fontSize='$md' pt='$2'>
+          {t('FEATURES.ASSIGNMENT.UPCOMING_ASSIGNMENTS')}
+        </Heading>
+        {upcomingAssignments && upcomingAssignments.length > 0 ? (
           <Box gap='$2' pt='$2'>
-            {upcomingAssignments?.slice(0, 4).map((assignment) => (
+            {upcomingAssignments.slice(0, 4).map((assignment) => (
+              <CourseAssignmentCard
+                key={assignment.assignment_id}
+                courseCode={getCourseNameById(assignment.fk_course_id)}
+                title={assignment.name}
+                evaluation={assignment.evaluation}
+                dueDate={assignment.due_at}
+                onPress={() =>
+                  router.push(
+                    `/courses/${assignment.fk_course_id}/assignments/${assignment.assignment_id}`
+                  )
+                }
+              />
+            ))}
+          </Box>
+        ) : (
+          <Box alignItems='center' justifyContent='center'>
+            <Icon as={ClipboardIcon} size='3xl' />
+            <Text color='$gray950'>
+              {t('FEATURES.ASSIGNMENT.NO_UPCOMING_ASSIGNMENTS')}
+            </Text>
+          </Box>
+        )}
+
+        <Heading fontSize='$md' pt='$2'>
+          {t('FEATURES.ASSIGNMENT.RECENTLY_SUBMITTED_ASSIGNMENTS')}
+        </Heading>
+        {completedAssignments && completedAssignments.length > 0 ? (
+          <Box gap='$2' pt='$2'>
+            {completedAssignments.slice(0, 4).map((assignment) => (
               <CourseAssignmentCard
                 key={assignment.assignment_id}
                 courseCode={getCourseNameById(assignment.fk_course_id)}
@@ -110,34 +159,15 @@ const HomeScreen = () => {
               />
             ))}
           </Box>
-
-          <Heading fontSize='$md' pt='$2'>
-            Recent submitted assignments
-          </Heading>
-          <Box gap='$2' pt='$2'>
-            {completedAssignments
-              ?.reverse()
-              .slice(0, 4)
-              .map((assignment) => (
-                <CourseAssignmentCard
-                  key={assignment.assignment_id}
-                  courseCode={getCourseNameById(assignment.fk_course_id)}
-                  title={assignment.name}
-                  evaluation={assignment.evaluation}
-                  submittedAt={assignment.submitted_at}
-                  dueDate={assignment.due_at}
-                  onPress={() =>
-                    router.push(
-                      `/courses/${assignment.fk_course_id}/assignments/${assignment.assignment_id}`
-                    )
-                  }
-                />
-              ))}
+        ) : (
+          <Box alignItems='center' justifyContent='center'>
+            <Icon as={ClipboardIcon} size='3xl' />
+            <Text color='$gray950'>
+              {t('FEATURES.ASSIGNMENT.NO_RECENTLY_SUBMITTED_ASSIGNMENTS')}
+            </Text>
           </Box>
-
-          
-        </Box>
-      )}
+        )}
+      </Box>
     </ScrollView>
   );
 };

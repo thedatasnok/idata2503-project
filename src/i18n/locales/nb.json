@@ -15,7 +15,8 @@
     "MEMBERS": "Medlemmer",
     "ANNOUNCEMENTS": "Kunngjøringer",
     "SEARCH": "Søk",
-    "TEXT_CHANNEL": "Tekst kanaler"
+    "TEXT_CHANNEL": "Tekst kanaler",
+    "WELCOME": "Velkommen"
   },
   "TIME": {
     "TODAY": "I dag",
@@ -66,6 +67,10 @@
     "ASSIGNMENT": {
       "ASSIGNMENT_GRADED": "Innlevering vurdert",
       "YOUR_SUBMISSION": "Din innlevering",
+      "UPCOMING_ASSIGNMENTS": "Kommende innleveringer",
+      "NO_UPCOMING_ASSIGNMENTS": "Ingen kommende innleveringer",
+      "RECENTLY_SUBMITTED_ASSIGNMENTS": "Nylig innleverte innleveringer",
+      "NO_RECENTLY_SUBMITTED_ASSIGNMENTS": "Ingen nylig innleverte innleveringer",
       "WAITING_FOR_GRADE": "Venter på vurdering",
       "ASSIGNMENT": "Innlevering"
     },

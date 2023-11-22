@@ -15,7 +15,8 @@
     "MEMBERS": "Members",
     "ANNOUNCEMENTS": "Announcements",
     "SEARCH": "Search",
-    "TEXT_CHANNEL": "Text channels"
+    "TEXT_CHANNEL": "Text channels",
+    "WELCOME": "Welcome"
   },
   "TIME": {
     "TODAY": "Today",
@@ -66,6 +67,10 @@
     "ASSIGNMENT": {
       "ASSIGNMENT_GRADED": "Assignment graded",
       "YOUR_SUBMISSION": "Your submission",
+      "UPCOMING_ASSIGNMENTS": "Upcoming assignments",
+      "NO_UPCOMING_ASSIGNMENTS": "No upcoming assignments",
+      "RECENTLY_SUBMITTED_ASSIGNMENTS": "Recently submitted assignments",
+      "NO_RECENTLY_SUBMITTED_ASSIGNMENTS": "No recently submitted assignments",
       "WAITING_FOR_GRADE": "Currently waiting for grading",
       "ASSIGNMENT": "Assignment"
     },
