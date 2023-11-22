@@ -10,6 +10,9 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
+  Avatar,
+  AvatarFallbackText,
+  AvatarImage,
   Box,
   Button,
   ButtonGroup,
@@ -33,7 +36,7 @@ import {
   SelectPortal,
   SelectTrigger,
   VStack,
-  useToast
+  useToast,
 } from '@gluestack-ui/themed';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
@@ -141,7 +144,15 @@ const SettingsScreen = () => {
 
       <ScrollView>
         <Box display='flex' flexDirection='column' p='$2' flex={1}>
-          <Heading pb='$2'>{t('FEATURES.SETTINGS.USER_PROFILE')}</Heading>
+          <Box flexDirection='row' justifyContent='space-between'>
+            <Heading pb='$2'>{t('FEATURES.SETTINGS.USER_PROFILE')}</Heading>
+            <Avatar>
+              <AvatarFallbackText>{userProfile?.full_name}</AvatarFallbackText>
+              {userProfile?.avatar_url && (
+                <AvatarImage source={{ uri: userProfile?.avatar_url }} />
+              )}
+            </Avatar>
+          </Box>
 
           <VStack>
             <FormControl isInvalid={'fullName' in errors}>
