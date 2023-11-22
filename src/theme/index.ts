@@ -1,16 +1,17 @@
-import {
-  createComponents,
-  createConfig,
-  config as defaultConfig,
-} from '@gluestack-ui/themed';
+import { config as defaultConfig } from '@gluestack-ui/config';
+import { createComponents, createConfig } from '@gluestack-ui/themed';
 import * as customComponents from './components';
 
 export const components = createComponents(customComponents);
 
+const { aliases, globalStyle, plugins } = defaultConfig;
+
 export const config = createConfig({
-  ...defaultConfig.theme,
+  aliases,
+  globalStyle,
+  plugins,
   tokens: {
-    ...defaultConfig.theme.tokens,
+    ...defaultConfig.tokens,
     colors: {
       gray50: '#fafafa',
       gray100: '#f4f4f5',
@@ -65,7 +66,9 @@ export type Components = typeof components;
 
 declare module '@gluestack-ui/themed' {
   interface UIConfig extends Config {}
-  interface UIComponents extends Components {}
+  interface UIComponents extends Components {
+    BaseIcon: typeof components.BaseIcon;
+  }
 }
 
 export const getToken = <TokenType extends keyof Config['tokens']>(

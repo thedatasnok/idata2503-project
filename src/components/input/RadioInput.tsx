@@ -74,6 +74,7 @@ const RadioInput = <T extends string>({
   );
 };
 
+// @ts-ignore too complex type, out of our control
 const StyledRadio = styled(Radio, {
   display: 'flex',
   alignItems: 'center',
