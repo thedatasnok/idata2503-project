@@ -29,7 +29,6 @@ const CourseDescriptionScreen = () => {
   const router = useRouter();
   const qc = useQueryClient();
 
-
   const handleSignUp = async () => {
     try {
       await signUp();
@@ -83,11 +82,14 @@ const CourseDescriptionScreen = () => {
               name={lecturer.name}
               email={lecturer.email}
               avatarUrl={lecturer.avatar_url}
+              onPress={() => {
+                router.push(`/messages/${lecturer.user_id}`);
+              }}
             />
           )}
         />
 
-        <Box h='$4' />
+        <Box h='$5' />
       </ScrollView>
 
       {canSignUp && (

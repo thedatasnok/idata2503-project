@@ -1,4 +1,8 @@
-import { useCourseDescription } from '@/services/courses';
+import {
+  CourseRole,
+  useCourseDescription,
+  useCourseMembership,
+} from '@/services/courses';
 import { getToken } from '@/theme';
 import { formatDuration } from '@/util/date';
 import {
@@ -62,6 +66,11 @@ const CourseSheet: React.FC<CourseSheetProps> = ({
   const { t } = useTranslation();
   const router = useRouter();
   const { bottom } = useSafeAreaInsets();
+  const { data: membership } = useCourseMembership(courseId);
+
+  const isStaff =
+    membership &&
+    [CourseRole.LECTURER, CourseRole.ASSISTANT].includes(membership.role);
 
   if (!description) {
     return <ActivityIndicator color={getToken('colors', 'primary600')} />;
@@ -110,23 +119,27 @@ const CourseSheet: React.FC<CourseSheetProps> = ({
 
       <Divider />
 
-      <ActionsheetItem onPress={() => closeWith(onNewAnnouncementPressed)}>
-        <ActionsheetIcon as={MegaphoneIcon} color='$gray800' />
-        <ActionsheetItemText color='$gray800'>
-          {t('FEATURES.COURSES.NEW_ANNOUNCEMENT')}
-        </ActionsheetItemText>
-      </ActionsheetItem>
+      {isStaff && (
+        <>
+          <ActionsheetItem onPress={() => closeWith(onNewAnnouncementPressed)}>
+            <ActionsheetIcon as={MegaphoneIcon} color='$gray800' />
+            <ActionsheetItemText color='$gray800'>
+              {t('FEATURES.COURSES.NEW_ANNOUNCEMENT')}
+            </ActionsheetItemText>
+          </ActionsheetItem>
 
-      <Divider />
+          <Divider />
 
-      <ActionsheetItem onPress={() => closeWith(onNewTextChannelPressed)}>
-        <ActionsheetIcon as={PlusIcon} color='$gray800' />
-        <ActionsheetItemText color='$gray800'>
-          {t('FEATURES.COURSES.NEW_TEXT_CHANNEL')}
-        </ActionsheetItemText>
-      </ActionsheetItem>
+          <ActionsheetItem onPress={() => closeWith(onNewTextChannelPressed)}>
+            <ActionsheetIcon as={PlusIcon} color='$gray800' />
+            <ActionsheetItemText color='$gray800'>
+              {t('FEATURES.COURSES.NEW_TEXT_CHANNEL')}
+            </ActionsheetItemText>
+          </ActionsheetItem>
 
-      <Divider />
+          <Divider />
+        </>
+      )}
 
       <ActionsheetItem onPress={() => closeWith(onLeavePressed)}>
         <ActionsheetIcon as={DoorOpenIcon} color='$error600' />
