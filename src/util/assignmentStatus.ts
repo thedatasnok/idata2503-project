@@ -1,4 +1,4 @@
-import { AssignmentEvaluation } from '@/services/courses';
+import { AssignmentEvaluation } from '@/services/assignments';
 
 export const enum AssignmentStatus {
   OPEN = 'OPEN',

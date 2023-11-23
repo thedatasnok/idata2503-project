@@ -1,5 +1,4 @@
 import { IconType } from '@/icon';
-import { AssignmentEvaluation } from '@/services/courses';
 import { getToken } from '@/theme';
 import { AssignmentStatus, getAssignmentStatus } from '@/util/assignmentStatus';
 import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
@@ -13,6 +12,7 @@ import {
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import CourseAssignmentGradePill from './CourseAssignmentGradePill';
+import { AssignmentEvaluation } from '@/services/assignments';
 
 const getAssignmentIcon = (status: AssignmentStatus): IconType => {
   switch (status) {

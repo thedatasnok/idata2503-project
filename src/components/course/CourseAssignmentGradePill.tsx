@@ -1,4 +1,4 @@
-import { AssignmentEvaluation } from '@/services/courses';
+import { AssignmentEvaluation } from '@/services/assignments';
 import { AssignmentStatus, getAssignmentStatus } from '@/util/assignmentStatus';
 import { styled } from '@gluestack-style/react';
 import { Box, Text } from '@gluestack-ui/themed';
