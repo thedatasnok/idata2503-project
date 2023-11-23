@@ -23,10 +23,6 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useCallback, useEffect, useState } from 'react';
 
-declare module 'expo-router' {
-  export function useLocalSearchParams<T extends Record<string, string>>(): T;
-}
-
 dayjs.extend(advancedFormat);
 dayjs.extend(calendar);
 dayjs.extend(duration);
