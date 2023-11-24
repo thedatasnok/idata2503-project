@@ -22,7 +22,7 @@ export const useAllAssignments = (params: UseAllAssignmentsQueryParams) => {
   } = params;
 
   return useQuery({
-    queryKey: [CacheKey.ALL_ASSIGNMENTS, sortBy, ascending],
+    queryKey: [CacheKey.ALL_ASSIGNMENTS, sortBy, ascending, limit],
     queryFn: async () => {
       let query = supabase
         .from('current_user_assignment_view')
