@@ -1,6 +1,7 @@
 import CancellableSearch from '@/components/input/CancellableSearch';
 import Header from '@/components/navigation/Header';
 import UserProfileListItem from '@/components/users/UserProfileListItem';
+import EmptyState from '@/components/utils/EmptyState';
 import {
   DirectMessageDirection,
   useRecentDirectMessages,
@@ -13,10 +14,12 @@ import {
   Box,
   Divider,
   Pressable,
+  Spinner,
   Text,
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
+import { MessageSquareDashed } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
@@ -27,7 +30,7 @@ const FLATLIST_STYLE = {
 };
 
 const MessagesScreen = () => {
-  const { data } = useRecentDirectMessages();
+  const { data, isLoading } = useRecentDirectMessages();
   const router = useRouter();
   const { t } = useTranslation();
   const [isSearching, setIsSearching] = useState(false);
@@ -36,6 +39,8 @@ const MessagesScreen = () => {
     searchString,
     !isSearching
   );
+
+  const noSearchResults = searchedUsers?.length === 0;
 
   return (
     <>
@@ -49,10 +54,20 @@ const MessagesScreen = () => {
         onCancel={() => setIsSearching(false)}
       />
 
+      {isLoading && (
+        <Box flex={1} alignItems='center' justifyContent='center'>
+          <Spinner size={48} />
+        </Box>
+      )}
       {isSearching && (
         <FlatList
           data={searchedUsers}
           style={FLATLIST_STYLE}
+          ListEmptyComponent={() =>
+            noSearchResults && (
+              <EmptyState description='Could not find any users matching your search' />
+            )
+          }
           keyExtractor={(user) => user.user_id}
           ItemSeparatorComponent={() => <Divider my='$1' />}
           renderItem={({ item: user }) => (
@@ -65,11 +80,17 @@ const MessagesScreen = () => {
         />
       )}
 
-      {!isSearching && (
+      {!isSearching && !isLoading && (
         <FlatList
           data={data}
           keyExtractor={(i) => i.direct_message_id}
           style={FLATLIST_STYLE}
+          ListEmptyComponent={() => (
+            <EmptyState
+              description={t('FEATURES.DIRECT_MESSAGES.NO_DIRECT_MESSAGES')}
+              icon={MessageSquareDashed}
+            />
+          )}
           ItemSeparatorComponent={() => <Divider my='$1' />}
           renderItem={({ item: message }) => (
             <Message

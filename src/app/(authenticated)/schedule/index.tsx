@@ -1,14 +1,17 @@
 import Header from '@/components/navigation/Header';
+import EmptyState from '@/components/utils/EmptyState';
 import { IconType } from '@/icon';
 import { EventType, useEvents, type ScheduleEvent } from '@/services/schedule';
 import { Box, Divider, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
+import { t } from 'i18next';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ClipboardListIcon,
   FlaskConicalIcon,
+  PalmtreeIcon,
   PenSquareIcon,
   PresentationIcon,
 } from 'lucide-react-native';
@@ -57,6 +60,13 @@ const ScheduleScreen = () => {
       <FlatList<ScheduleEvent>
         ref={listRef}
         data={events}
+        ListEmptyComponent={() => (
+          <EmptyState
+            pt="$8"
+            icon={PalmtreeIcon}
+            description={t('FEATURES.EVENTS.NO_EVENTS_THIS_PERIOD')}
+          />
+        )}
         keyExtractor={(i) => i.event_id}
         style={{
           paddingHorizontal: 12,

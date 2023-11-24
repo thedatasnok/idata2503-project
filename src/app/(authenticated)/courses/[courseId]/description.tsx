@@ -1,5 +1,6 @@
 import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
+import EmptyState from '@/components/utils/EmptyState';
 import { CacheKey } from '@/services/cache';
 import { useCourseDescription, useCourseMembership } from '@/services/courses';
 import {
@@ -10,6 +11,7 @@ import {
   Divider,
   Heading,
   ScrollView,
+  Spinner,
   Text,
 } from '@gluestack-ui/themed';
 import { useQueryClient } from '@tanstack/react-query';
@@ -23,7 +25,7 @@ import { FlatList } from 'react-native';
  */
 const CourseDescriptionScreen = () => {
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
-  const { data: courseDescription } = useCourseDescription(courseId);
+  const { data: courseDescription, isLoading } = useCourseDescription(courseId);
   const { signUp, isSigningUp } = useCourseMembership(courseId);
   const { t } = useTranslation();
   const router = useRouter();
@@ -32,9 +34,6 @@ const CourseDescriptionScreen = () => {
   const handleSignUp = async () => {
     try {
       await signUp();
-      qc.invalidateQueries({
-        queryKey: [CacheKey.ALL_ANNOUNCEMENTS, courseId],
-      });
       router.replace(`/courses/${courseId}/`);
     } catch (error) {
       console.error('SignUp error: ', error);
@@ -54,43 +53,51 @@ const CourseDescriptionScreen = () => {
         back={`/courses/${courseId}/`}
       />
 
-      <ScrollView p='$3' flex={1}>
-        <Heading>
-          {courseDescription?.course_code} {courseDescription?.name}
-        </Heading>
+      {isLoading ? (
+        <Box flex={1} alignItems='center' justifyContent='center'>
+          <Spinner size={48} />
+        </Box>
+      ) : (
+        <ScrollView p='$3' flex={1}>
+          <Heading>
+            {courseDescription?.course_code} {courseDescription?.name}
+          </Heading>
 
-        <Heading size='sm'>{t('FEATURES.COURSES.COURSE_DESCRIPTION')}</Heading>
+          <Heading size='sm'>
+            {t('FEATURES.COURSES.COURSE_DESCRIPTION')}
+          </Heading>
 
-        <Text>{courseDescription?.description}</Text>
+          <Text>{courseDescription?.description}</Text>
 
-        <Heading size='sm' mt='$2'>
-          {t('GENERAL.LECTURERS')}
-        </Heading>
+          <Heading size='sm' mt='$2'>
+            {t('GENERAL.LECTURERS')}
+          </Heading>
 
-        <FlatList
-          data={courseDescription?.staff}
-          scrollEnabled={false}
-          keyExtractor={(i) => i.user_id}
-          ItemSeparatorComponent={() => <Divider />}
-          ListEmptyComponent={() => (
-            <Text color='$gray600'>
-              {t('FEATURES.COURSES.NO_LECTURERS_ASSIGNED')}
-            </Text>
-          )}
-          renderItem={({ item: lecturer }) => (
-            <Lecturer
-              name={lecturer.name}
-              email={lecturer.email}
-              avatarUrl={lecturer.avatar_url}
-              onPress={() => {
-                router.push(`/messages/${lecturer.user_id}`);
-              }}
-            />
-          )}
-        />
+          <FlatList
+            data={courseDescription?.staff}
+            scrollEnabled={false}
+            keyExtractor={(i) => i.user_id}
+            ItemSeparatorComponent={() => <Divider />}
+            ListEmptyComponent={() => (
+              <Text color='$gray600'>
+                {t('FEATURES.COURSES.NO_LECTURERS_ASSIGNED')}
+              </Text>
+            )}
+            renderItem={({ item: lecturer }) => (
+              <Lecturer
+                name={lecturer.name}
+                email={lecturer.email}
+                avatarUrl={lecturer.avatar_url}
+                onPress={() => {
+                  router.push(`/messages/${lecturer.user_id}`);
+                }}
+              />
+            )}
+          />
 
-        <Box h='$5' />
-      </ScrollView>
+          <Box h='$5' />
+        </ScrollView>
+      )}
 
       {canSignUp && (
         <Button

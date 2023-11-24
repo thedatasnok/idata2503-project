@@ -55,6 +55,8 @@
       "NO_TEXT_CHANNEL_CREATED": "No text channel created",
       "NO_LECTURERS_ASSIGNED": "No lecturers assigned",
       "NO_ASSIGNMENTS_YET": "No assignments yet",
+      "NO_COURSES_SIGNED_UP": "You are not signed up for any courses",
+      "NO_COURSES_AVAILABLE": "No courses available",
       "NEW_ANNOUNCEMENT": "New announcement",
       "NEW_TEXT_CHANNEL": "New text channel",
       "VIEW_COURSE_DESCRIPTION": "View course description",
@@ -63,6 +65,9 @@
       "LEAVE_COURSE_CONFIRMATION_TITLE": "Are you sure you want to leave {{course}}?",
       "LEAVE_COURSE_CONFIRMATION_BODY": "You will no longer have access to the course. You will not able to sign up again for the course until the next semester.",
       "SIGN_UP": "Sign up"
+    },
+    "EVENTS": {
+      "NO_EVENTS_THIS_PERIOD": "No events scheduled for this period"
     },
     "ASSIGNMENT": {
       "ASSIGNMENT_GRADED": "Assignment graded",
@@ -79,7 +84,15 @@
       "BOARD_NAME": "Board name",
       "BOARD_DESCRIPTION": "Board description",
       "UPDATE_BOARD": "Update board",
-      "CREATE_BOARD": "Create board"
+      "CREATE_BOARD": "Create board",
+      "WELCOME_TO_THE_BOARD_FOR": "Welcome to the board for",
+      "BEGINNING_OF_BOARD": "You're at the beginning of the board #{{board}} board"
+    },
+    "DIRECT_MESSAGES": {
+      "DIRECT_MESSAGES": "Direct messages",
+      "NO_DIRECT_MESSAGES": "No direct messages",
+      "SEND": "Send",
+      "SEND_MESSAGE": "Send message"
     },
     "SETTINGS": {
       "FULL_NAME": "Full name",

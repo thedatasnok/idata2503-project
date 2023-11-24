@@ -6,6 +6,7 @@ import {
   InputField,
   Spinner,
 } from '@gluestack-ui/themed';
+import { t } from 'i18next';
 import React, { useState } from 'react';
 
 interface MessageInputProps {
@@ -37,14 +38,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           onSubmitEditing={handleSendMessage}
           enterKeyHint='send'
           onChangeText={(text: any) => setMessageContent(text)}
-          placeholder='Type a message'
+          placeholder={t('FEATURES.DIRECT_MESSAGES.SEND_MESSAGE')}
         />
       </Input>
       <Button onPress={handleSendMessage} width='$20'>
         {isSending ? (
           <Spinner color='$gray300' />
         ) : (
-          <ButtonText>Send</ButtonText>
+          <ButtonText>{t('FEATURES.DIRECT_MESSAGES.SEND')}</ButtonText>
         )}
       </Button>
     </Box>

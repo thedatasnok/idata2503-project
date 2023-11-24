@@ -55,6 +55,8 @@
       "NO_TEXT_CHANNEL_CREATED": "Ingen tekst kanal opprettet",
       "NO_LECTURERS_ASSIGNED": "Ingen forelesere tildelt",
       "NO_ASSIGNMENTS_YET": "Ingen innleveringer enda",
+      "NO_COURSES_SIGNED_UP": "Du er ikke påmeldt noen emner",
+      "NO_COURSES_AVAILABLE": "Ingen emner tilgjengelig",
       "NEW_ANNOUNCEMENT": "Ny kunngjøring",
       "NEW_TEXT_CHANNEL": "Ny tekstkanal",
       "VIEW_COURSE_DESCRIPTION": "Vis emnebeskrivelse",
@@ -63,6 +65,9 @@
       "LEAVE_COURSE_CONFIRMATION_TITLE": "Er du sikker på at du vil forlate {{course}}?",
       "LEAVE_COURSE_CONFIRMATION_BODY": "Du vil ikke lenger ha tilgang til emnet. Det er ikke mulig å melde seg på igjen før neste semester.",
       "SIGN_UP": "Meld deg på"
+    },
+    "EVENTS": {
+      "NO_EVENTS_THIS_PERIOD": "Ingen hendelser planlagt for denne perioden"
     },
     "ASSIGNMENT": {
       "ASSIGNMENT_GRADED": "Innlevering vurdert",
@@ -79,7 +84,15 @@
       "BOARD_NAME": "Kanalnavn",
       "BOARD_DESCRIPTION": "Kanalbeskrivelse",
       "UPDATE_BOARD": "Oppdater kanal",
-      "CREATE_BOARD": "Lag kanal"
+      "CREATE_BOARD": "Lag kanal",
+      "WELCOME_TO_THE_BOARD_FOR": "Velkommen til kanalen for",
+      "BEGINNING_OF_BOARD": "Du er på begynnelsen av #{{board}} kanalen."
+    },
+    "DIRECT_MESSAGES": {
+      "DIRECT_MESSAGES": "Direktemeldinger",
+      "NO_DIRECT_MESSAGES": "Ingen direktemeldinger",
+      "SEND": "Send",
+      "SEND_MESSAGE": "Send melding"
     },
     "SETTINGS": {
       "FULL_NAME": "Fullt navn",

@@ -7,6 +7,7 @@ import { useCourseBoard, useCourseDescription } from '@/services/courses';
 import { useCourseBoardMessages } from '@/services/messaging';
 import { Box, Text } from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
+import { t } from 'i18next';
 import React from 'react';
 import { FlatList } from 'react-native';
 
@@ -36,12 +37,12 @@ const BoardMessageScreen = () => {
 
           {messages?.length === 0 ? (
             <Box flex={1} justifyContent='flex-end' alignItems='center' pb='$4'>
-              <Text>Welcome to the board for</Text>
+              <Text>{t('FEATURES.COURSE_BOARDS.WELCOME_TO_THE_BOARD_FOR')}</Text>
               <Text color='$gray950' fontSize='$xl' fontWeight='bold'>
                 #{board?.name}
               </Text>
-              <Text fontStyle='italic' pt='$4' width='$4/5' textAlign='center'>
-                You're at the beginning of the #{board?.name} board
+              <Text fontStyle='italic' pt='$4' width='$4/6' textAlign='center'>
+                {t('FEATURES.COURSE_BOARDS.BEGINNING_OF_BOARD', {board: board?.name})}
               </Text>
             </Box>
           ) : (

@@ -6,9 +6,9 @@ import LeaveCourseConfirmationDialog from '@/components/course/LeaveCourseConfir
 import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
+import EmptyState from '@/components/utils/EmptyState';
 import { useAnnouncements } from '@/services/announcements';
 import { useCourseAssignments } from '@/services/assignments';
-import { CacheKey } from '@/services/cache';
 import {
   CourseBoard,
   CourseRole,
@@ -32,12 +32,11 @@ import {
   Spinner,
   Text,
 } from '@gluestack-ui/themed';
-import { useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
 import {
   ArrowRight,
-  ClipboardIcon,
+  ClipboardListIcon,
   GraduationCap,
   Hash,
   Megaphone,
@@ -62,7 +61,6 @@ const CourseScreen = () => {
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId);
   const { data: assignments } = useCourseAssignments(courseId, false);
-  const qc = useQueryClient();
 
   const deleteBoard = useDeleteCourseBoard(courseId);
 
@@ -78,9 +76,6 @@ const CourseScreen = () => {
     try {
       await leave();
       setShowLeaveConfirmation(false);
-      qc.invalidateQueries({
-        queryKey: [CacheKey.ALL_ANNOUNCEMENTS, course],
-      });
       router.push('/courses/');
     } catch (error) {
       console.error('Failed to leave course', error);
@@ -93,14 +88,6 @@ const CourseScreen = () => {
     isCourseDescriptionLoading ||
     isCourseBoardLoading;
 
-  if (isLoading) {
-    return (
-      <Box flex={1} alignItems='center' justifyContent='center'>
-        <Spinner size={48} />
-      </Box>
-    );
-  }
-
   return (
     <>
       <Header
@@ -110,120 +97,118 @@ const CourseScreen = () => {
         onRightIconPress={() => setShowCourseSheet(true)}
       />
 
-      <ScrollView nestedScrollEnabled px='$4'>
-        <ComponentHeader
-          title={t('GENERAL.ANNOUNCEMENTS')}
-          showAll={announcements && announcements.length > 0}
-          route={`/courses/${courseId}/announcements/`}
-        />
-        {announcements && announcements.length > 0 ? (
-          <FlatList
-            horizontal={true}
-            data={announcements}
-            keyExtractor={(item) => item.announcement_id}
-            renderItem={({ item }) => (
-              <CourseAnnouncementCard
-                title={item.title}
-                content={item.content}
-                createdAt={item.created_at}
-                author={item.created_by_full_name}
-                onPress={() => {
-                  router.push(
-                    `/courses/${courseId}/announcements/${item.announcement_id}`
-                  );
-                }}
-              />
-            )}
+      {isLoading ? (
+        <Box flex={1} alignItems='center' justifyContent='center'>
+          <Spinner size={48} />
+        </Box>
+      ) : (
+        <ScrollView nestedScrollEnabled px='$4'>
+          <ComponentHeader
+            title={t('GENERAL.ANNOUNCEMENTS')}
+            showAll={announcements && announcements.length > 0}
+            route={`/courses/${courseId}/announcements/`}
           />
-        ) : (
-          <Box alignItems='center' justifyContent='center'>
-            <Icon as={Megaphone} size='3xl' />
-            <Text color='$gray950'>
-              {t('FEATURES.COURSES.NO_ANNOUNCEMENTS_YET')}
-            </Text>
-          </Box>
-        )}
-        <ComponentHeader
-          title={t('GENERAL.ASSIGNMENTS')}
-          showAll={assignments && assignments.length > 0}
-          route={`/courses/${courseId}/assignments/`}
-        />
-        {assignments && assignments.length > 0 ? (
-          <Box gap='$2'>
-            {assignments.map((assignment) => (
-              <CourseAssignmentCard
-                key={assignment.assignment_id}
-                title={assignment.name}
-                evaluation={assignment.evaluation}
-                submittedAt={assignment.submitted_at}
-                dueDate={assignment.due_at}
-                onPress={() =>
-                  router.push(
-                    `/courses/${courseId}/assignments/${assignment.assignment_id}`
-                  )
-                }
-              />
-            ))}
-          </Box>
-        ) : (
-          <Box alignItems='center' justifyContent='center'>
-            <Icon as={ClipboardIcon} size='3xl' />
-            <Text color='$gray950'>
-              {t('FEATURES.COURSES.NO_ASSIGNMENTS_YET')}
-            </Text>
-          </Box>
-        )}
-
-        <ComponentHeader title={t('GENERAL.TEXT_CHANNEL')} />
-        {courseBoards && courseBoards.length > 0 ? (
-          <Box rounded='$md' px='$1' gap='$3'>
-            {courseBoards.map((board) => (
-              <BoardCard
-                key={board.course_board_id}
-                title={board.name}
-                onPress={() => {
-                  router.push(
-                    `/courses/${courseId}/boards/${board.course_board_id}`
-                  );
-                }}
-                onLongPress={() => {
-                  setShowBoardSheet(true);
-                  setSelectedBoard(board);
-                }}
-                role={membership?.role as CourseRole}
-              />
-            ))}
-          </Box>
-        ) : (
-          <Box alignItems='center' justifyContent='center'>
-            <Icon as={Hash} size='2xl' />
-            <Text color='$gray950'>
-              {t('FEATURES.COURSES.NO_TEXT_CHANNEL_CREATED')}
-            </Text>
-          </Box>
-        )}
-        <ComponentHeader title={t('GENERAL.LECTURERS')} />
-        {courseDescription?.staff && courseDescription?.staff.length > 0 ? (
-          courseDescription?.staff.map((lecturer) => (
-            <Lecturer
-              key={lecturer.user_id}
-              name={lecturer.name}
-              avatarUrl={lecturer.avatar_url}
-              email={lecturer.email}
-              onPress={() => {
-                router.push(`/messages/${lecturer.user_id}`);
-              }}
+          {announcements && announcements.length > 0 ? (
+            <FlatList
+              horizontal={true}
+              data={announcements}
+              keyExtractor={(item) => item.announcement_id}
+              renderItem={({ item }) => (
+                <CourseAnnouncementCard
+                  title={item.title}
+                  content={item.content}
+                  createdAt={item.created_at}
+                  author={item.created_by_full_name}
+                  onPress={() => {
+                    router.push(
+                      `/courses/${courseId}/announcements/${item.announcement_id}`
+                    );
+                  }}
+                />
+              )}
             />
-          ))
-        ) : (
-          <Box alignItems='center' justifyContent='center' pb='$2'>
-            <Icon as={GraduationCap} size='3xl' />
-            <Text color='$gray950'>
-              {t('FEATURES.COURSES.NO_LECTURERS_ASSIGNED')}
-            </Text>
-          </Box>
-        )}
-      </ScrollView>
+          ) : (
+            <EmptyState
+              description={t('FEATURES.COURSES.NO_ANNOUNCEMENTS_YET')}
+              icon={Megaphone}
+            />
+          )}
+          <ComponentHeader
+            title={t('GENERAL.ASSIGNMENTS')}
+            showAll={assignments && assignments.length > 0}
+            route={`/courses/${courseId}/assignments/`}
+          />
+          {assignments && assignments.length > 0 ? (
+            <Box gap='$2'>
+              {assignments.map((assignment) => (
+                <CourseAssignmentCard
+                  key={assignment.assignment_id}
+                  title={assignment.name}
+                  evaluation={assignment.evaluation}
+                  submittedAt={assignment.submitted_at}
+                  dueDate={assignment.due_at}
+                  onPress={() =>
+                    router.push(
+                      `/courses/${courseId}/assignments/${assignment.assignment_id}`
+                    )
+                  }
+                />
+              ))}
+            </Box>
+          ) : (
+            <EmptyState
+              description={t('FEATURES.COURSES.NO_ASSIGNMENTS_YET')}
+              icon={ClipboardListIcon}
+            />
+          )}
+
+          <ComponentHeader title={t('GENERAL.TEXT_CHANNEL')} />
+          {courseBoards && courseBoards.length > 0 ? (
+            <Box rounded='$md' px='$1' gap='$3'>
+              {courseBoards.map((board) => (
+                <BoardCard
+                  key={board.course_board_id}
+                  title={board.name}
+                  onPress={() => {
+                    router.push(
+                      `/courses/${courseId}/boards/${board.course_board_id}`
+                    );
+                  }}
+                  onLongPress={() => {
+                    setShowBoardSheet(true);
+                    setSelectedBoard(board);
+                  }}
+                  role={membership?.role as CourseRole}
+                />
+              ))}
+            </Box>
+          ) : (
+            <EmptyState
+              description={t('FEATURES.COURSES.NO_TEXT_CHANNEL_CREATED')}
+              icon={Hash}
+            />
+          )}
+          <ComponentHeader title={t('GENERAL.LECTURERS')} />
+          {courseDescription?.staff && courseDescription?.staff.length > 0 ? (
+            courseDescription?.staff.map((lecturer) => (
+              <Lecturer
+                key={lecturer.user_id}
+                name={lecturer.name}
+                avatarUrl={lecturer.avatar_url}
+                email={lecturer.email}
+                onPress={() => {
+                  router.push(`/messages/${lecturer.user_id}`);
+                }}
+              />
+            ))
+          ) : (
+            <EmptyState
+              description={t('FEATURES.COURSES.NO_LECTURERS_ASSIGNED')}
+              icon={GraduationCap}
+            />
+          )}
+        </ScrollView>
+      )}
 
       <Actionsheet
         isOpen={showCourseSheet}

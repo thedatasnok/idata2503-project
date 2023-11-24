@@ -1,4 +1,5 @@
 import Header from '@/components/navigation/Header';
+import EmptyState from '@/components/utils/EmptyState';
 import { IconType } from '@/icon';
 import { useCourses } from '@/services/courses';
 import { formatDuration } from '@/util/date';
@@ -13,7 +14,7 @@ import {
 } from '@gluestack-ui/themed';
 import { useRouter } from 'expo-router';
 import { t } from 'i18next';
-import { ChevronRightIcon } from 'lucide-react-native';
+import { BookXIcon, ChevronRightIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 
@@ -48,24 +49,37 @@ const CoursesScreen = () => {
           />
         </Box>
 
-        <Box p='$2'>
-          <FlatList
-            data={courses}
-            ItemSeparatorComponent={() => <Divider />}
-            renderItem={({ item: course }) => (
-              <CourseCard
-                key={course.course_id}
-                courseCode={course.course_code}
-                name={course.name}
-                date={formatDuration(course.starts_at, course.ends_at)}
-                icon={ChevronRightIcon}
-                onPress={() => handleCoursePressed(course.course_id)}
-              />
-            )}
-          />
-        </Box>
-
-        {isLoading && <Spinner pt='$8' size='large' />}
+        {isLoading ? (
+          <Box flex={1} alignItems='center' justifyContent='center'>
+            <Spinner size={48} />
+          </Box>
+        ) : (
+          <Box p='$2'>
+            <FlatList
+              data={courses}
+              ListEmptyComponent={() =>
+                personalTab ? (
+                  <EmptyState description={t('FEATURES.COURSES.NO_COURSES_SIGNED_UP')} />
+                ) : (
+                  !personalTab && (
+                    <EmptyState description={t('FEATURES.COURSES.NO_COURSES_AVAILABLE')} />
+                  )
+                )
+              }
+              ItemSeparatorComponent={() => <Divider />}
+              renderItem={({ item: course }) => (
+                <CourseCard
+                  key={course.course_id}
+                  courseCode={course.course_code}
+                  name={course.name}
+                  date={formatDuration(course.starts_at, course.ends_at)}
+                  icon={ChevronRightIcon}
+                  onPress={() => handleCoursePressed(course.course_id)}
+                />
+              )}
+            />
+          </Box>
+        )}
       </Box>
     </>
   );
