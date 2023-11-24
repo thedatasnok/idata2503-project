@@ -163,6 +163,8 @@ export const useCourseMembership = (courseId: string) => {
     qc.invalidateQueries({ queryKey });
     qc.invalidateQueries({ queryKey: [CacheKey.EVENTS] });
     qc.invalidateQueries({ queryKey: [CacheKey.COURSE_DESCRIPTION, courseId] });
+    qc.invalidateQueries({ queryKey: [CacheKey.ALL_ASSIGNMENTS, courseId] });
+    qc.invalidateQueries({ queryKey: [CacheKey.ALL_ANNOUNCEMENTS, courseId] });
   };
 
   const signUpMutation = useMutation({
