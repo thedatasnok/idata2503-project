@@ -5,7 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CacheKey } from './cache';
 import { supabase } from './supabase';
 
@@ -33,6 +33,91 @@ export interface DirectMessage extends BaseMessage {
   row_number: number;
   counterpart_user_id: string;
 }
+
+export interface DirectMessageQueueItem {
+  message: DirectMessage;
+  /**
+   * Function for removing the message from the queue.
+   */
+  pop: () => void;
+}
+
+/**
+ * Hook for subscribing to direct messages between the current user and any counterpart.
+ * The messages are placed into a queue, and kept there for until the pop function is called on the queue item.
+ */
+export const useDirectMessagesSubscription = () => {
+  const { session } = useAuth();
+  const qc = useQueryClient();
+  const [messagesQueue, setMessagesQueue] = useState<DirectMessageQueueItem[]>(
+    []
+  );
+
+  /**
+   * Listener effect for populating toast queue with new messages.
+   */
+  useEffect(() => {
+    const channel = supabase
+      .channel(`direct_messages`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'direct_message',
+        },
+        async (insertedMessage) => {
+          let postedMessage: DirectMessage | null = null;
+
+          try {
+            const newMessage = await supabase
+              .from('current_user_direct_messages_view')
+              .select('*')
+              .eq('direct_message_id', insertedMessage.new.direct_message_id)
+              .neq('sender_user_id', session?.user.id)
+              .maybeSingle()
+              .throwOnError();
+
+            if (newMessage.data) postedMessage = newMessage.data;
+          } catch (error) {
+            console.warn(error);
+          }
+
+          if (postedMessage !== null) {
+            const pop = () => {
+              setMessagesQueue((oldQueue) => {
+                return oldQueue.filter(
+                  (msg) =>
+                    msg.message.direct_message_id !==
+                    postedMessage?.direct_message_id
+                );
+              });
+            };
+
+            const newMessage: DirectMessageQueueItem = {
+              message: postedMessage,
+              pop,
+            };
+
+            setMessagesQueue((oldQueue) => {
+              return [...oldQueue, newMessage];
+            });
+
+            qc.invalidateQueries({
+              queryKey: [CacheKey.RECENT_DIRECT_MESSAGES],
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel?.unsubscribe();
+    };
+  }, []);
+
+  return { messagesQueue };
+};
 
 /**
  * Hook for fetching direct messages between the current user and a given counterpart.

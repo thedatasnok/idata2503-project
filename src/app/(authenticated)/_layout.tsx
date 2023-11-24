@@ -1,3 +1,4 @@
+import DirectMessageToastContainer from '@/components/feedback/DirectMessageToastContainer';
 import CoursesDrawerLayout from '@/components/navigation/CoursesDrawerLayout';
 import NavigationBar from '@/components/navigation/NavigationBar';
 import { useAuth } from '@/store/global';
@@ -23,6 +24,8 @@ const AuthenticatedLayout = () => {
         sceneContainerStyle={CONTAINER_STYLES}
         screenOptions={SCREEN_OPTIONS}
       />
+
+      <DirectMessageToastContainer />
     </CoursesDrawerLayout>
   );
 };
