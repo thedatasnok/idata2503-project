@@ -4,7 +4,11 @@ import type { OneSignal } from 'react-native-onesignal';
 let os: typeof OneSignal | null;
 
 // ignores onesignal when running through Expo Go
-if (Constants.appOwnership !== AppOwnership.Expo) {
+// or when missing configuration
+if (
+  Constants.appOwnership !== AppOwnership.Expo &&
+  Constants.expoConfig?.extra?.oneSignalAppId
+) {
   import('react-native-onesignal').then((mod) => {
     os = mod.OneSignal;
     os?.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
