@@ -18,5 +18,6 @@ export const enum CacheKey {
   RECENT_DIRECT_MESSAGES = 'whiteboardapp/recent-direct-messages',
   DIRECT_MESSAGES = 'whiteboardapp/direct-messages',
   USER_PROFILES = 'whiteboardapp/user-profiles',
+  INDIVIDUAL_USER_PROFILE = 'whiteboardapp/user-profile',
   CURRENT_USER_PROFILE = 'whiteboardapp/current-user-profile',
 }

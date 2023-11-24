@@ -2,13 +2,11 @@ import Message from '@/components/message/Message';
 import { MessageInput } from '@/components/message/MessageInput';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
-import EmptyState from '@/components/utils/EmptyState';
 import KeyboardDismissingView from '@/components/utils/KeyboardDismissingView';
 import { useDirectMessages } from '@/services/messaging';
-import { useUserProfile } from '@/services/users';
+import { usePublicUserProfileQuery } from '@/services/users';
 import { Box, Spinner } from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
-import { MessageSquareDashed } from 'lucide-react-native';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
@@ -20,7 +18,7 @@ const DirectMessageScreen = () => {
     id,
     true
   );
-  const { data: userProfile } = useUserProfile(id);
+  const { data: userProfile } = usePublicUserProfileQuery(id);
 
   const handleSendMessage = async (content: string) => {
     await sendMessage(content);

@@ -1,8 +1,8 @@
 import { useAuth } from '@/store/global';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { UserRole } from './auth';
 import { CacheKey } from './cache';
 import { supabase } from './supabase';
-import { UserRole } from './auth';
 
 export interface JsonUserProfile {
   userId: string;
@@ -39,6 +39,28 @@ export const usePublicUserProfiles = (searchString: string, skip?: boolean) => {
   });
 };
 
+/**
+ * Query hook to fetch a public user profile for a given user.
+ *
+ * @param userId the id of the user to find the profile for
+ *
+ * @returns a query object with the result of the query
+ */
+export const usePublicUserProfileQuery = (userId: string) => {
+  return useQuery({
+    queryKey: [CacheKey.INDIVIDUAL_USER_PROFILE, userId],
+    queryFn: async () => {
+      const result = await supabase
+        .from('public_user_profile_view')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      return result.data as PublicUserProfile;
+    },
+  });
+};
+
 export interface UserProfile {
   full_name: string;
   email: string;
@@ -59,24 +81,6 @@ export const useProfile = () => {
       const result = await supabase
         .from('user_profile_view')
         .select('*')
-        .single();
-
-      return result.data as UserProfile;
-    },
-  });
-};
-
-/**
- * Hook to fetch a user profile.
- */
-export const useUserProfile = (userId: string) => {
-  return useQuery({
-    queryKey: [CacheKey.USER_PROFILES, userId],
-    queryFn: async () => {
-      const result = await supabase
-        .from('user_profile')
-        .select('*')
-        .eq('fk_user_id', userId)
         .single();
 
       return result.data as UserProfile;
