@@ -14,6 +14,7 @@ const ConfiguredKeyboardAvoidingView: React.FC<
   ConfiguredKeyboardAvoidingViewProps
 > = ({ children, ...rest }) => (
   <KeyboardAvoidingView
+    flex={1}
     {...rest}
     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
   >

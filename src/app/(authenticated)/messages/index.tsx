@@ -1,7 +1,9 @@
 import CancellableSearch from '@/components/input/CancellableSearch';
 import Header from '@/components/navigation/Header';
 import UserProfileListItem from '@/components/users/UserProfileListItem';
+import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
 import EmptyState from '@/components/utils/EmptyState';
+import KeyboardDismissingView from '@/components/utils/KeyboardDismissingView';
 import {
   DirectMessageDirection,
   useRecentDirectMessages,
@@ -43,70 +45,72 @@ const MessagesScreen = () => {
   const noSearchResults = searchedUsers?.length === 0;
 
   return (
-    <>
-      <Header title={t('NAVIGATION.MESSAGES')} />
+    <ConfiguredKeyboardAvoidingView>
+      <KeyboardDismissingView>
+        <Header title={t('NAVIGATION.MESSAGES')} />
 
-      <CancellableSearch
-        m='$3'
-        isSearching={isSearching}
-        onSearch={setSearchString}
-        onFocus={setIsSearching}
-        onCancel={() => setIsSearching(false)}
-      />
-
-      {isLoading && (
-        <Box flex={1} alignItems='center' justifyContent='center'>
-          <Spinner size={48} />
-        </Box>
-      )}
-      {isSearching && (
-        <FlatList
-          data={searchedUsers}
-          style={FLATLIST_STYLE}
-          ListEmptyComponent={() =>
-            noSearchResults && (
-              <EmptyState description='Could not find any users matching your search' />
-            )
-          }
-          keyExtractor={(user) => user.user_id}
-          ItemSeparatorComponent={() => <Divider my='$1' />}
-          renderItem={({ item: user }) => (
-            <UserProfileListItem
-              fullName={user.full_name}
-              avatarUrl={user.avatar_url}
-              onPress={() => router.push(`/messages/${user.user_id}`)}
-            />
-          )}
+        <CancellableSearch
+          m='$3'
+          isSearching={isSearching}
+          onSearch={setSearchString}
+          onFocus={setIsSearching}
+          onCancel={() => setIsSearching(false)}
         />
-      )}
 
-      {!isSearching && !isLoading && (
-        <FlatList
-          data={data}
-          keyExtractor={(i) => i.direct_message_id}
-          style={FLATLIST_STYLE}
-          ListEmptyComponent={() => (
-            <EmptyState
-              description={t('FEATURES.DIRECT_MESSAGES.NO_DIRECT_MESSAGES')}
-              icon={MessageSquareDashed}
-            />
-          )}
-          ItemSeparatorComponent={() => <Divider my='$1' />}
-          renderItem={({ item: message }) => (
-            <Message
-              direction={message.direction}
-              createdAt={message.created_at}
-              counterPartName={message.counterpart_full_name}
-              content={message.content}
-              counterPartAvatarUrl={message.counterpart_avatar_url}
-              onPress={() =>
-                router.push(`/messages/${message.counterpart_user_id}`)
-              }
-            />
-          )}
-        />
-      )}
-    </>
+        {isLoading && (
+          <Box flex={1} alignItems='center' justifyContent='center'>
+            <Spinner size={48} />
+          </Box>
+        )}
+        {isSearching && (
+          <FlatList
+            data={searchedUsers}
+            style={FLATLIST_STYLE}
+            ListEmptyComponent={() =>
+              noSearchResults && (
+                <EmptyState description='Could not find any users matching your search' />
+              )
+            }
+            keyExtractor={(user) => user.user_id}
+            ItemSeparatorComponent={() => <Divider my='$1' />}
+            renderItem={({ item: user }) => (
+              <UserProfileListItem
+                fullName={user.full_name}
+                avatarUrl={user.avatar_url}
+                onPress={() => router.push(`/messages/${user.user_id}`)}
+              />
+            )}
+          />
+        )}
+
+        {!isSearching && !isLoading && (
+          <FlatList
+            data={data}
+            keyExtractor={(i) => i.direct_message_id}
+            style={FLATLIST_STYLE}
+            ListEmptyComponent={() => (
+              <EmptyState
+                description={t('FEATURES.DIRECT_MESSAGES.NO_DIRECT_MESSAGES')}
+                icon={MessageSquareDashed}
+              />
+            )}
+            ItemSeparatorComponent={() => <Divider my='$1' />}
+            renderItem={({ item: message }) => (
+              <Message
+                direction={message.direction}
+                createdAt={message.created_at}
+                counterPartName={message.counterpart_full_name}
+                content={message.content}
+                counterPartAvatarUrl={message.counterpart_avatar_url}
+                onPress={() =>
+                  router.push(`/messages/${message.counterpart_user_id}`)
+                }
+              />
+            )}
+          />
+        )}
+      </KeyboardDismissingView>
+    </ConfiguredKeyboardAvoidingView>
   );
 };
 
