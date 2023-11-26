@@ -10,6 +10,19 @@
 
 ## Architecture
 
+The following figure shows a rough overview of the backend architecture of the application.
+
+![architecture](docs/diagrams/architecture.drawio.svg)
+
+The backend is based on Supabase and uses their database, authentication and realtime services.
+To handle push notifications OneSignal is used.
+
+- [Supabase Auth](https://supabase.io/docs/guides/auth)
+- [Supabase Database](https://supabase.com/docs/guides/database)
+- [Supabase Realtime](https://supabase.com/docs/guides/realtime)
+- [Supabase Vault](https://supabase.com/docs/guides/database/vault)
+- [OneSignal](https://documentation.onesignal.com/docs)
+
 ## Contributing
 
 ### Prerequisites
