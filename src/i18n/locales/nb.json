@@ -67,7 +67,13 @@
       "SIGN_UP": "Meld deg på"
     },
     "EVENTS": {
-      "NO_EVENTS_THIS_PERIOD": "Ingen hendelser planlagt for denne perioden"
+      "NO_EVENTS_THIS_PERIOD": "Ingen hendelser planlagt for denne perioden",
+      "EVENT_TYPE": {
+        "EXAM": "Eksamen",
+        "LAB": "Lab",
+        "LECTURE": "Forelesning",
+        "ASSIGNMENT": "Innlevering"
+      }
     },
     "ASSIGNMENT": {
       "ASSIGNMENT_GRADED": "Innlevering vurdert",
