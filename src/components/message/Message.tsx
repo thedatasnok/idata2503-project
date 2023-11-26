@@ -31,7 +31,7 @@ const Message: React.FC<MessageProps> = ({
   previousCreatedAt,
   sameSender,
 }) => {
-  const shouldAbbreviate = dayjs().diff(createdAt, 'day') <= 1;
+  const shouldAbbreviate = dayjs().subtract(1, 'day').isSame(createdAt, 'day');
   const headerDate = dayjs(createdAt).format('LL');
   const formattedDate = shouldAbbreviate
     ? dayjs(createdAt).calendar()

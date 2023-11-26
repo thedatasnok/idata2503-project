@@ -131,7 +131,7 @@ const Message: React.FC<MessageProps> = ({
   counterPartAvatarUrl,
   onPress,
 }) => {
-  const formatAsCalendar = dayjs().diff(createdAt, 'day') < 2;
+  const formatAsCalendar = dayjs().subtract(1, 'day').isSame(createdAt, 'day');
 
   return (
     <Pressable
