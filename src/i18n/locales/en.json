@@ -36,6 +36,10 @@
     "FAILED_TO_SAVE_CHANGES_HEADER": "Failed to save changes!",
     "FAILED_TO_SAVE_CHANGES_MESSAGE": "Please try again later, or contact an administrator."
   },
+  "SUCCESSES": {
+    "CHANGES_SAVED_HEADER": "Changes saved!",
+    "CHANGES_SAVED_MESSAGE": "Your profile has been updated."
+  },
   "FEATURES": {
     "ANNOUNCEMENTS": {
       "ANNOUNCEMENT": "Announcement",

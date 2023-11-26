@@ -102,6 +102,16 @@ const SettingsScreen = () => {
       await updateProfileMutation.mutateAsync({
         full_name: data.fullName,
       });
+      toast.show({
+        duration: 3000,
+        render: () => (
+          <ToastMessage
+            severity={Severity.SUCCESS}
+            header={t('SUCCESSES.CHANGES_SAVED_HEADER')}
+            message={t('SUCCESSES.CHANGES_SAVED_MESSAGE')}
+          />
+        ),
+      });
     } catch (err) {
       toast.show({
         duration: 3000,

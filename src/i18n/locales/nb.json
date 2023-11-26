@@ -36,6 +36,10 @@
     "FAILED_TO_SAVE_CHANGES_HEADER": "Kunne ikke lagre endringene!",
     "FAILED_TO_SAVE_CHANGES_MESSAGE": "Prøv igjen senere, eller kontakt en administrator."
   },
+  "SUCCESSES": {
+    "CHANGES_SAVED_HEADER": "Endringer lagret!",
+    "CHANGES_SAVED_MESSAGE": "Din profil har blitt oppdatert."
+  },
   "FEATURES": {
     "ANNOUNCEMENTS": {
       "ANNOUNCEMENT": "Kunngjøring",
