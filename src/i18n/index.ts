@@ -32,13 +32,6 @@ declare module 'i18next' {
   }
 }
 
-i18next.use(initReactI18next).init({
-  compatibilityJSON: 'v3',
-  resources,
-  lng: 'nb',
-  fallbackLng: 'en',
-});
-
 /**
  * Enriches the dayjs locale with customized calendar strings.
  *
@@ -62,10 +55,22 @@ const configureDayjsLocale = (lng: keyof typeof resources) => {
   });
 };
 
-configureDayjsLocale('en');
-configureDayjsLocale('nb');
+const DEFAULT_LOCALE = 'nb';
 
-i18next.on('loaded', () => dayjs.locale(i18next.language));
 i18next.on('languageChanged', (lang) => dayjs.locale(lang));
+
+i18next
+  .use(initReactI18next)
+  .init({
+    compatibilityJSON: 'v3',
+    resources,
+    lng: DEFAULT_LOCALE,
+    fallbackLng: DEFAULT_LOCALE,
+  })
+  .then(() => {
+    configureDayjsLocale('en');
+    configureDayjsLocale('nb');
+    dayjs.locale(DEFAULT_LOCALE);
+  });
 
 export default i18next;
