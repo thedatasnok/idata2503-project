@@ -98,10 +98,9 @@ export const useUpdateProfileMutation = () => {
 
   return useMutation({
     mutationFn: async (updatedProfile: Partial<UserProfile>) => {
-      // Update full_name in user_profile table
       const { error } = await supabase
         .from('user_profile')
-        .update({ full_name: updatedProfile.full_name })
+        .update(updatedProfile)
         .eq('fk_user_id', session?.user?.id);
 
       if (error) throw error;
