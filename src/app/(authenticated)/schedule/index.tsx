@@ -2,7 +2,7 @@ import Header from '@/components/navigation/Header';
 import EmptyState from '@/components/utils/EmptyState';
 import { IconType } from '@/icon';
 import { EventType, useEvents, type ScheduleEvent } from '@/services/schedule';
-import { Box, Divider, Icon, Pressable, Text } from '@gluestack-ui/themed';
+import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
 import {
@@ -14,29 +14,16 @@ import {
   PenSquareIcon,
   PresentationIcon,
 } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
 const ScheduleScreen = () => {
   const [period, setPeriod] = useState(new Date());
-  const { data: events } = useEvents({ month: period });
+  const { data: events, isLoading } = useEvents({ month: period });
   const listRef = useRef<FlatList>(null);
   const router = useRouter();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (!events) return;
-    if (!dayjs().isSame(period, 'month')) return;
-
-    const index = events.findIndex((e) =>
-      dayjs(e.starts_at).isSame(new Date(), 'day')
-    );
-
-    if (index !== -1) {
-      listRef.current?.scrollToIndex({ index, animated: false });
-    }
-  }, [events]);
 
   const gotoEvent = (event: ScheduleEvent) => {
     if (event.event_type === EventType.ASSIGNMENT) {
@@ -64,6 +51,7 @@ const ScheduleScreen = () => {
         ListEmptyComponent={() => (
           <EmptyState
             pt='$8'
+            isLoading={isLoading}
             icon={PalmtreeIcon}
             description={t('FEATURES.EVENTS.NO_EVENTS_THIS_PERIOD')}
           />
@@ -75,10 +63,10 @@ const ScheduleScreen = () => {
         renderItem={({ item: event, index: i }) => (
           <ScheduleEventEntry
             previousEventDate={events?.[i - 1]?.starts_at}
-            nextEventDate={events?.[i + 1]?.starts_at}
             courseCode={event.course_code}
             startsAt={event.starts_at}
             endsAt={event.ends_at}
+            eventName={event.event_name}
             eventType={event.event_type}
             locationCode={event.room_number}
             onPress={() => gotoEvent(event)}
@@ -132,6 +120,7 @@ const PeriodSelector: React.FC<PeriodSelectorProps> = ({
 interface ScheduleEventEntryProps {
   previousEventDate?: string;
   nextEventDate?: string;
+  eventName?: string;
   courseCode: string;
   startsAt: string;
   endsAt: string;
@@ -150,11 +139,11 @@ const formatDuration = (startsAt: string, endsAt: string) => {
 
 const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
   previousEventDate,
-  nextEventDate,
   courseCode,
   startsAt,
   endsAt,
   eventType,
+  eventName,
   locationCode,
   onPress,
 }) => {
@@ -174,27 +163,30 @@ const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
         flexDirection='row'
         alignItems='center'
         px='$1'
-        gap='$1'
+        gap='$2'
         my='$1'
         onPress={onPress}
       >
         <Icon as={getEventTypeIcon(eventType)} color='$gray800' size='xl' />
 
         <Box flex={1} gap={-4}>
-          <Text color='$primary600' fontWeight='$semibold' fontSize='$md'>
-            {courseCode}
-          </Text>
+          <Box flexDirection='column' gap='-$1.5'>
+            <Text color='$primary600' fontWeight='$semibold' fontSize='$md'>
+              {courseCode}
+            </Text>
+
+            <Text fontSize='$sm' fontWeight='$medium'>
+              {eventName}
+            </Text>
+          </Box>
           <Text fontSize='$xs'>
-            {t(`FEATURES.EVENTS.EVENT_TYPE.${eventType}`)} | {formatDuration(startsAt, endsAt)}
+            {t(`FEATURES.EVENTS.EVENT_TYPE.${eventType}`)} |{' '}
+            {formatDuration(startsAt, endsAt)}
           </Text>
         </Box>
 
         <Text>{locationCode}</Text>
       </Pressable>
-
-      {nextEventDate && dayjs(nextEventDate).isSame(startsAt, 'day') && (
-        <Divider bgColor='$gray200' mt='$2' />
-      )}
     </>
   );
 };
