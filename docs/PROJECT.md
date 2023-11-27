@@ -9,10 +9,16 @@ A feature we want to focus on is the ability to send messages to lecturers and f
 
 ## Features
 
+- Home screen
+  - Overview of recent announcements
+  - Overview of recent/upcoming assignments
 - Courses
-  - Get an overview of courses
+  - Get an overview of courses (announcement, assignments, text channels, lecturers)
   - Get information about courses
-  - Find announcements related to a course
+  - View assignments & feedback on assignments
+  - View & create announcements
+  - View, create & edit course text channels
+  - View course members
   - Manage course membership (sign-up, leave)
 - Deadlines for assignments
   - Global overview
@@ -20,17 +26,18 @@ A feature we want to focus on is the ability to send messages to lecturers and f
 - Schedule
   - Global overview
 - Messaging
-  - Communicating with lecturers about courses
-  - Communicating with fellow students
+  - Communicating with others
+  - Direct messages
   - Course text channels
 - Push notifications
+- In-app notifications for direct messages
 - Storing data
   - Remotely in backend
   - Forms with validation logic
 - Authentication
   - Login
-  - Register
-  - Forgot password
+- Role based access control
+  - Course roles & user roles
 - Settings
   - Profile
   - Notifications
