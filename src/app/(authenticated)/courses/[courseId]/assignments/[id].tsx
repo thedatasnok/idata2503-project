@@ -17,7 +17,7 @@ import {
 import dayjs from 'dayjs';
 import { useLocalSearchParams } from 'expo-router';
 import { t } from 'i18next';
-import { ClockIcon } from 'lucide-react-native';
+import { ClockIcon, FileIcon } from 'lucide-react-native';
 
 const AssignmentScreen = () => {
   const { courseId, id: assignmentId } = useLocalSearchParams<{
@@ -102,34 +102,24 @@ const AssignmentScreen = () => {
             <Heading pt='$2' fontSize='$md'>
               {t('FEATURES.ASSIGNMENT.YOUR_SUBMISSION')}
             </Heading>
+
             <Pressable
               flexDirection='row'
               justifyContent='space-between'
               alignItems='center'
-              px='$3'
+              px='$2'
               py='$2'
               backgroundColor='$gray100'
-              borderColor='$gray200'
+              borderColor='$gray300'
               borderWidth='$1'
-              rounded='$full'
-              //onPress={} to the submission
+              rounded='$md'
             >
               <Box flexDirection='column'>
-                <>
-                  {assignment?.submitted_at && !assignment?.evaluation && (
-                    <Box flexDirection='row' gap='$1' alignItems='center'>
-                      <Icon as={ClockIcon} />
-                      <Text>{t('FEATURES.ASSIGNMENT.WAITING_FOR_GRADE')}</Text>
-                    </Box>
-                  )}
-
-                  <Text>{assignment.name}</Text>
-                </>
+                <Box flexDirection='row' gap='$1' alignItems='center'>
+                  <Icon as={FileIcon} />
+                  <Text fontWeight='$medium'>report.pdf</Text>
+                </Box>
               </Box>
-              <CourseAssignmentGradePill
-                evaluation={assignment?.evaluation}
-                submittedAt={assignment?.created_at}
-              />
             </Pressable>
           </>
         )}

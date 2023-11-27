@@ -60,7 +60,7 @@ const CourseScreen = () => {
     useCourseDescription(courseId);
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId);
-  const { data: assignments } = useCourseAssignments(courseId, false);
+  const { data: assignments } = useCourseAssignments(courseId, true);
 
   const deleteBoard = useDeleteCourseBoard(courseId);
 

@@ -1,4 +1,5 @@
 import { IconType } from '@/icon';
+import { AssignmentEvaluation } from '@/services/assignments';
 import { getToken } from '@/theme';
 import { AssignmentStatus, getAssignmentStatus } from '@/util/assignmentStatus';
 import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
@@ -11,8 +12,8 @@ import {
   XIcon,
 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CourseAssignmentGradePill from './CourseAssignmentGradePill';
-import { AssignmentEvaluation } from '@/services/assignments';
 
 const getAssignmentIcon = (status: AssignmentStatus): IconType => {
   switch (status) {
@@ -24,21 +25,6 @@ const getAssignmentIcon = (status: AssignmentStatus): IconType => {
       return XIcon;
     case AssignmentStatus.GRADED_PASSED:
       return CheckCircleIcon;
-  }
-};
-
-const formatAssignmentStatus = (status: AssignmentStatus): string => {
-  switch (status) {
-    case AssignmentStatus.OPEN:
-      return 'Open';
-    case AssignmentStatus.NOT_GRADED:
-      return 'Not graded yet';
-    case AssignmentStatus.GRADED_NOT_PASSED:
-      return 'Failed';
-    case AssignmentStatus.GRADED_PASSED:
-      return 'Passed';
-    default:
-      return 'Unknown Status';
   }
 };
 
@@ -62,6 +48,7 @@ const CourseAssignmentCard: React.FC<CourseAssignmentsProps> = ({
   const formattedDate = dayjs(dueDate).calendar();
   const [timeLeft, setTimeLeft] = useState(dayjs(dueDate).fromNow());
   const status = getAssignmentStatus(submittedAt, evaluation);
+  const { t } = useTranslation();
 
   const icon = getAssignmentIcon(status);
   let color = getToken('colors', 'gray950'); // Default color
@@ -119,7 +106,7 @@ const CourseAssignmentCard: React.FC<CourseAssignmentsProps> = ({
         </Box>
         {submittedAt && (
           <Text fontSize='$sm' color={color} numberOfLines={1}>
-            status: {formatAssignmentStatus(status)}
+            {t(`FEATURES.ASSIGNMENT.ASSIGNMENT_STATUS.${status}`)}
           </Text>
         )}
       </Box>

@@ -88,7 +88,14 @@
       "RECENTLY_SUBMITTED_ASSIGNMENTS": "Recently submitted assignments",
       "NO_RECENTLY_SUBMITTED_ASSIGNMENTS": "No recently submitted assignments",
       "WAITING_FOR_GRADE": "Currently waiting for grading",
-      "ASSIGNMENT": "Assignment"
+      "ASSIGNMENT": "Assignment",
+      "ASSIGNMENT_STATUS": {
+        "OPEN": "Open",
+        "NOT_GRADED": "Not graded",
+        "GRADED_NOT_PASSED": "Failed",
+        "GRADED_PASSED": "Passed",
+        "UNKNOWN": "Unknown"
+      }
     },
     "COURSE_BOARDS": {
       "DELETE_BOARD": "Delete board",

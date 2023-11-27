@@ -76,7 +76,7 @@ export const useCourseAssignments = (
       const result = await supabase
         .from('current_user_assignment_view')
         .select('*')
-        .order('created_at', { ascending: ascending })
+        .order('due_at', { ascending: ascending })
         .eq('fk_course_id', courseId)
         .throwOnError();
 

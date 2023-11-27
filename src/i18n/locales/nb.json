@@ -88,7 +88,14 @@
       "RECENTLY_SUBMITTED_ASSIGNMENTS": "Nylig innleverte innleveringer",
       "NO_RECENTLY_SUBMITTED_ASSIGNMENTS": "Ingen nylig innleverte innleveringer",
       "WAITING_FOR_GRADE": "Venter på vurdering",
-      "ASSIGNMENT": "Innlevering"
+      "ASSIGNMENT": "Innlevering",
+      "ASSIGNMENT_STATUS": {
+        "OPEN": "Åpen",
+        "NOT_GRADED": "Ikke vurdert",
+        "GRADED_NOT_PASSED": "Ikke godkjent",
+        "GRADED_PASSED": "Godkjent",
+        "UNKNOWN": "Ukjent"
+      }
     },
     "COURSE_BOARDS": {
       "DELETE_BOARD": "Slett kanal",
