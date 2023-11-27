@@ -32,17 +32,21 @@ const BoardMessageScreen = () => {
           <Header
             back={`/courses/${courseId}/`}
             context={courseDescription?.course_code}
-            title={board?.name ?? 'board'}
+            title={board === undefined ? 'board' : `#${board.name}`}
           />
 
           {messages?.length === 0 ? (
             <Box flex={1} justifyContent='flex-end' alignItems='center' pb='$4'>
-              <Text>{t('FEATURES.COURSE_BOARDS.WELCOME_TO_THE_BOARD_FOR')}</Text>
+              <Text>
+                {t('FEATURES.COURSE_BOARDS.WELCOME_TO_THE_BOARD_FOR')}
+              </Text>
               <Text color='$gray950' fontSize='$xl' fontWeight='bold'>
                 #{board?.name}
               </Text>
               <Text fontStyle='italic' pt='$4' width='$4/6' textAlign='center'>
-                {t('FEATURES.COURSE_BOARDS.BEGINNING_OF_BOARD', {board: board?.name})}
+                {t('FEATURES.COURSE_BOARDS.BEGINNING_OF_BOARD', {
+                  board: board?.name,
+                })}
               </Text>
             </Box>
           ) : (
