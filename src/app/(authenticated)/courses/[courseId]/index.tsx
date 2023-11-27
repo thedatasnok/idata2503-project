@@ -99,7 +99,7 @@ const CourseScreen = () => {
 
       {isLoading ? (
         <Box flex={1} alignItems='center' justifyContent='center'>
-          <Spinner size={48} />
+          <Spinner size="large" />
         </Box>
       ) : (
         <ScrollView nestedScrollEnabled px='$4'>
