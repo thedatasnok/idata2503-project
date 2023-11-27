@@ -4,6 +4,8 @@
 ## Useful resources
 
 - [Use case diagram](docs/diagrams/use-cases.drawio.svg)
+- [ER diagram](docs/diagrams/er-diagram.drawio.svg)
+- [Hierarchy diagram](docs/diagrams/hierarchy.drawio.svg)
 - [Figma wireframe](https://www.figma.com/file/bxtclztaQN2EbRWWXXD8Kh/Wireframe?type=design&node-id=0-1&mode=design)
 
 ## Showcase
