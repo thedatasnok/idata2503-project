@@ -1,10 +1,7 @@
 import Header from '@/components/navigation/Header';
+import EmptyState from '@/components/utils/EmptyState';
 import { useAnnouncements } from '@/services/announcements';
-import {
-  CourseRole,
-  useCourse,
-  useCourseMembership,
-} from '@/services/courses';
+import { CourseRole, useCourse, useCourseMembership } from '@/services/courses';
 import {
   Box,
   Divider,
@@ -16,7 +13,7 @@ import {
 } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Dot, PlusIcon } from 'lucide-react-native';
+import { Dot, Megaphone, PlusIcon } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
@@ -54,6 +51,14 @@ const AnnouncementsScreen = () => {
         data={announcements}
         keyExtractor={(i) => i.announcement_id}
         style={FLATLIST_STYLE}
+        ListEmptyComponent={() =>
+          announcements?.length == 0 && (
+            <EmptyState
+              description={t('FEATURES.COURSES.NO_ANNOUNCEMENTS_YET')}
+              icon={Megaphone}
+            />
+          )
+        }
         ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item: announcement }) => (
           <Announcement
