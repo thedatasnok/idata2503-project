@@ -63,7 +63,7 @@ BEGIN
       ELSE NEW.content
     END)::JSONB,
     ARRAY_AGG(cm.fk_user_id),
-    'whiteboardapp://courses/' || c.course_id || '/announcements/' || NEW.announcement_id;
+    'whiteboardapp://courses/' || c.course_id || '/announcements/' || NEW.announcement_id
   )
   FROM course_member cm
   INNER JOIN course c
