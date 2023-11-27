@@ -58,7 +58,7 @@ const HomeScreen = () => {
 
       {isLoading ? (
         <Box flex={1} alignItems='center' justifyContent='center'>
-          <Spinner size={48} />
+          <Spinner size="large" />
         </Box>
       ) : (
         <ScrollView>
@@ -74,7 +74,9 @@ const HomeScreen = () => {
             </Box>
 
             <Divider mb='$2' />
-            <Heading fontSize='$md'>{t('GENERAL.ANNOUNCEMENTS')}</Heading>
+            <Heading fontSize='$md' mb='$0'>
+              {t('FEATURES.ANNOUNCEMENTS.RECENT_ANNOUNCEMENTS')}{' '}
+            </Heading>
             {announcements && announcements.length > 0 ? (
               <FlatList
                 horizontal={true}

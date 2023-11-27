@@ -55,7 +55,7 @@ const CourseDescriptionScreen = () => {
 
       {isLoading ? (
         <Box flex={1} alignItems='center' justifyContent='center'>
-          <Spinner size={48} />
+          <Spinner size="large" />
         </Box>
       ) : (
         <ScrollView p='$3' flex={1}>
