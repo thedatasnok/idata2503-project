@@ -30,7 +30,7 @@ const FLATLIST_STYLE = {
 const AnnouncementsScreen = () => {
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
   const { data: course } = useCourse(courseId);
-  const { data: announcements } = useAnnouncements(courseId);
+  const { data: announcements, isLoading } = useAnnouncements(courseId);
   const { data: membership } = useCourseMembership(courseId);
   const router = useRouter();
   const { t } = useTranslation();
@@ -51,14 +51,13 @@ const AnnouncementsScreen = () => {
         data={announcements}
         keyExtractor={(i) => i.announcement_id}
         style={FLATLIST_STYLE}
-        ListEmptyComponent={() =>
-          announcements?.length == 0 && (
-            <EmptyState
-              description={t('FEATURES.COURSES.NO_ANNOUNCEMENTS_YET')}
-              icon={Megaphone}
-            />
-          )
-        }
+        ListEmptyComponent={() => (
+          <EmptyState
+            isLoading={isLoading}
+            description={t('FEATURES.COURSES.NO_ANNOUNCEMENTS_YET')}
+            icon={Megaphone}
+          />
+        )}
         ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item: announcement }) => (
           <Announcement
