@@ -130,7 +130,7 @@ const HomeScreen = () => {
             )}
 
             <Heading fontSize='$md' pt='$2'>
-              {t('FEATURES.ASSIGNMENT.RECENTLY_SUBMITTED_ASSIGNMENTS')}
+              {t('FEATURES.ASSIGNMENT.RECENTLY_SUBMITTED_ASSIGNMENTS')}{' '}
             </Heading>
             {completedAssignments && completedAssignments.length > 0 ? (
               <Box gap='$2' pt='$2'>

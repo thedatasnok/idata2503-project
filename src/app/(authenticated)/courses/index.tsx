@@ -35,52 +35,50 @@ const CoursesScreen = () => {
     <>
       <Header title={t('FEATURES.COURSES.COURSES_TITLE')} />
 
-      <Box flex={1}>
-        <Box flexDirection='row' p='$2'>
-          <Tab
-            label={t('FEATURES.COURSES.YOUR_COURSES')}
-            active={personalTab}
-            onPress={() => setPersonalTab(true)}
-          />
-          <Tab
-            label={t('FEATURES.COURSES.ALL_COURSES')}
-            active={!personalTab}
-            onPress={() => setPersonalTab(false)}
-          />
-        </Box>
-
-        {isLoading ? (
-          <Box flex={1} alignItems='center' justifyContent='center'>
-            <Spinner size="large" />
-          </Box>
-        ) : (
-          <Box p='$2'>
-            <FlatList
-              data={courses}
-              ListEmptyComponent={() =>
-                personalTab ? (
-                  <EmptyState description={t('FEATURES.COURSES.NO_COURSES_SIGNED_UP')} />
-                ) : (
-                  !personalTab && (
-                    <EmptyState description={t('FEATURES.COURSES.NO_COURSES_AVAILABLE')} />
-                  )
-                )
-              }
-              ItemSeparatorComponent={() => <Divider />}
-              renderItem={({ item: course }) => (
-                <CourseCard
-                  key={course.course_id}
-                  courseCode={course.course_code}
-                  name={course.name}
-                  date={formatDuration(course.starts_at, course.ends_at)}
-                  icon={ChevronRightIcon}
-                  onPress={() => handleCoursePressed(course.course_id)}
-                />
-              )}
-            />
-          </Box>
-        )}
+      <Box flexDirection='row' p='$2'>
+        <Tab
+          label={t('FEATURES.COURSES.YOUR_COURSES')}
+          active={personalTab}
+          onPress={() => setPersonalTab(true)}
+        />
+        <Tab
+          label={t('FEATURES.COURSES.ALL_COURSES')}
+          active={!personalTab}
+          onPress={() => setPersonalTab(false)}
+        />
       </Box>
+
+      {isLoading ? (
+        <Box flex={1} alignItems='center' justifyContent='center'>
+          <Spinner size='large' />
+        </Box>
+      ) : (
+        <FlatList
+          data={courses}
+          ListEmptyComponent={() =>
+            personalTab ? (
+              <EmptyState
+                description={t('FEATURES.COURSES.NO_COURSES_SIGNED_UP')}
+              />
+            ) : (
+              <EmptyState
+                description={t('FEATURES.COURSES.NO_COURSES_AVAILABLE')}
+              />
+            )
+          }
+          ItemSeparatorComponent={() => <Divider />}
+          renderItem={({ item: course }) => (
+            <CourseCard
+              key={course.course_id}
+              courseCode={course.course_code}
+              name={course.name}
+              date={formatDuration(course.starts_at, course.ends_at)}
+              icon={ChevronRightIcon}
+              onPress={() => handleCoursePressed(course.course_id)}
+            />
+          )}
+        />
+      )}
     </>
   );
 };
