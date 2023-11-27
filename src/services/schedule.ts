@@ -50,6 +50,7 @@ export const useEvents = (params: UseEventsParams) => {
         .from('user_schedule_view')
         .select('*')
         .eq('month', dayjs(month).startOf('month').format(DateFormats.DATE))
+        .order('starts_at', { ascending: true })
         .throwOnError();
 
       return result.data as ScheduleEvent[];
