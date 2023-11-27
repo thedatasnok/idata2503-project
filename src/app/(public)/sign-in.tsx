@@ -1,6 +1,6 @@
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
 import KeyboardDismissingView from '@/components/utils/KeyboardDismissingView';
-import { useEmailSignIn } from '@/services/auth';
+import { useEmailSignInMutation } from '@/services/auth';
 import {
   Box,
   Button,
@@ -28,7 +28,7 @@ const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { mutateAsync: signIn, isError } = useEmailSignIn();
+  const { mutateAsync: signIn, isError } = useEmailSignInMutation();
   const { t } = useTranslation();
   const passwordRef = useRef<TextInput>(null);
 

@@ -6,9 +6,9 @@ import EmptyState from '@/components/utils/EmptyState';
 import KeyboardDismissingView from '@/components/utils/KeyboardDismissingView';
 import {
   DirectMessageDirection,
-  useRecentDirectMessages,
+  useRecentDirectMessagesQuery,
 } from '@/services/messaging';
-import { usePublicUserProfiles } from '@/services/users';
+import { usePublicUserProfilesQuery } from '@/services/users';
 import {
   Avatar,
   AvatarFallbackText,
@@ -32,12 +32,12 @@ const FLATLIST_STYLE = {
 };
 
 const MessagesScreen = () => {
-  const { data, isLoading } = useRecentDirectMessages();
+  const { data, isLoading } = useRecentDirectMessagesQuery();
   const router = useRouter();
   const { t } = useTranslation();
   const [isSearching, setIsSearching] = useState(false);
   const [searchString, setSearchString] = useState('');
-  const { data: searchedUsers } = usePublicUserProfiles(
+  const { data: searchedUsers } = usePublicUserProfilesQuery(
     searchString,
     !isSearching
   );

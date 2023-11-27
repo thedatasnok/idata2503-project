@@ -18,7 +18,16 @@ export interface PublicUserProfile {
   common_course: boolean;
 }
 
-export const usePublicUserProfiles = (searchString: string, skip?: boolean) => {
+/**
+ * Hook for querying public user profiles with a given search string.
+ *
+ * @param searchString the search string to use for finding users
+ * @param skip whether or not to skip the query
+ */
+export const usePublicUserProfilesQuery = (
+  searchString: string,
+  skip?: boolean
+) => {
   const { session } = useAuth();
 
   return useQuery({
@@ -73,7 +82,7 @@ export interface UserProfile {
  * Hook to fetch the current user's profile.
  * Will cache the profile details until invalidated.
  */
-export const useProfile = () => {
+export const useProfileQuery = () => {
   return useQuery({
     queryKey: [CacheKey.CURRENT_USER_PROFILE],
     staleTime: Infinity,

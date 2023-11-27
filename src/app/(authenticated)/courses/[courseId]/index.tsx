@@ -7,17 +7,17 @@ import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
 import EmptyState from '@/components/utils/EmptyState';
-import { useAnnouncements } from '@/services/announcements';
-import { useCourseAssignments } from '@/services/assignments';
+import { useCourseAnnouncementsQuery } from '@/services/announcements';
+import { useCourseAssignmentsQuery } from '@/services/assignments';
 import {
   CourseBoard,
   CourseRole,
-  useCourse,
+  useCourseQuery,
   useCourseBoards,
-  useCourseDescription,
-  useCourseMembership,
-  useDeleteCourseBoard,
+  useCourseDescriptionQuery,
+  useDeleteCourseBoardMutation,
 } from '@/services/courses';
+import { useCourseMembership } from '@/services/membership';
 import {
   Actionsheet,
   ActionsheetBackdrop,
@@ -53,16 +53,16 @@ const CourseScreen = () => {
   const [showBoardSheet, setShowBoardSheet] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState<CourseBoard>();
   const { leave, data: membership } = useCourseMembership(courseId);
-  const { data: course, isLoading: isCourseLoading } = useCourse(courseId);
+  const { data: course, isLoading: isCourseLoading } = useCourseQuery(courseId);
   const { data: announcements, isLoading: isAnnouncementLoading } =
-    useAnnouncements(courseId);
+    useCourseAnnouncementsQuery(courseId);
   const { data: courseDescription, isLoading: isCourseDescriptionLoading } =
-    useCourseDescription(courseId);
+    useCourseDescriptionQuery(courseId);
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId);
-  const { data: assignments } = useCourseAssignments(courseId, true);
+  const { data: assignments } = useCourseAssignmentsQuery(courseId, true);
 
-  const deleteBoard = useDeleteCourseBoard(courseId);
+  const deleteBoard = useDeleteCourseBoardMutation(courseId);
 
   const onDeleteBoard = async (boardId: string) => {
     try {

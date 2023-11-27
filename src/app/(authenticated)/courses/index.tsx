@@ -1,7 +1,7 @@
 import Header from '@/components/navigation/Header';
 import EmptyState from '@/components/utils/EmptyState';
 import { IconType } from '@/icon';
-import { useCourses } from '@/services/courses';
+import { useCoursesQuery } from '@/services/courses';
 import { formatDuration } from '@/util/date';
 import {
   Box,
@@ -14,13 +14,13 @@ import {
 } from '@gluestack-ui/themed';
 import { useRouter } from 'expo-router';
 import { t } from 'i18next';
-import { BookXIcon, ChevronRightIcon } from 'lucide-react-native';
+import { ChevronRightIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 
 const CoursesScreen = () => {
   const [personalTab, setPersonalTab] = useState(true);
-  const { data: courses, isLoading } = useCourses({ enrolled: personalTab });
+  const { data: courses, isLoading } = useCoursesQuery({ enrolled: personalTab });
   const router = useRouter();
 
   const handleCoursePressed = (courseId: string) => {

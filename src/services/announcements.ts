@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CacheKey } from './cache';
-import { useCourseMembership } from './courses';
+import { useCourseMembership } from './membership';
 import { supabase } from './supabase';
 
 export interface Announcement {
@@ -15,7 +15,7 @@ export interface Announcement {
  *
  * @returns a mutation object with methods for creating an announcement.
  */
-export const useCreateCourseAnnouncement = (courseId: string) => {
+export const useCreateCourseAnnouncementMutation = (courseId: string) => {
   const qc = useQueryClient();
   const { data: membership } = useCourseMembership(courseId);
 
@@ -59,7 +59,7 @@ export interface AnnouncementWithCreatedBy {
  * @param courseId the course id
  * @returns a query object with the result of the query
  */
-export const useAnnouncements = (courseId: string) => {
+export const useCourseAnnouncementsQuery = (courseId: string) => {
   return useQuery({
     queryKey: [CacheKey.ANNOUNCEMENTS, courseId],
     queryFn: async () => {
@@ -83,7 +83,7 @@ export const useAnnouncements = (courseId: string) => {
  * @param announcementId the announcement id
  * @returns a query object with the result of the query
  */
-export const useAnnouncement = (announcementId: string) => {
+export const useAnnouncementQuery = (announcementId: string) => {
   return useQuery({
     queryKey: [CacheKey.INDIVIDUAL_ANNOUNCEMENT, announcementId],
     queryFn: async () => {
@@ -108,7 +108,9 @@ export interface UseAllAnnouncementsQueryParams {
 /**
  * Hook to fetch announcements for all courses the user is enrolled in
  */
-export const useAllAnnouncements = (params: UseAllAnnouncementsQueryParams) => {
+export const useAllAnnouncementsQuery = (
+  params: UseAllAnnouncementsQueryParams
+) => {
   const { limit } = params;
 
   return useQuery({

@@ -1,7 +1,7 @@
 import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import Header from '@/components/navigation/Header';
-import { useCourseAssignments } from '@/services/assignments';
-import { useCourse } from '@/services/courses';
+import { useCourseAssignmentsQuery } from '@/services/assignments';
+import { useCourseQuery } from '@/services/courses';
 import { Box, Divider } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -9,9 +9,9 @@ import { FlatList } from 'react-native';
 
 const AssignmentsScreen = () => {
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
-  const { data: course } = useCourse(courseId);
+  const { data: course } = useCourseQuery(courseId);
   const { t } = useTranslation();
-  const { data: assignments } = useCourseAssignments(courseId);
+  const { data: assignments } = useCourseAssignmentsQuery(courseId);
 
   return (
     <>

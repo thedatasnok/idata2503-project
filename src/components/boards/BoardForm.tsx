@@ -1,4 +1,4 @@
-import { useUpsertCourseBoard } from '@/services/courses';
+import { useUpsertCourseBoardMutation } from '@/services/courses';
 import {
   Button,
   ButtonText,
@@ -39,7 +39,7 @@ const BoardForm: React.FC<BoardFormProps> = ({
   boardDescription,
   onSuccess,
 }) => {
-  const { mutateAsync: upsertBoard } = useUpsertCourseBoard(courseId);
+  const { mutateAsync: upsertBoard } = useUpsertCourseBoardMutation(courseId);
   const { t } = useTranslation();
 
   const {

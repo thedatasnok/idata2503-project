@@ -1,5 +1,5 @@
 import Header from '@/components/navigation/Header';
-import { useCourse } from '@/services/courses';
+import { useCourseQuery } from '@/services/courses';
 import { CourseMember, useCourseMembers } from '@/services/membership';
 import { useAuth } from '@/store/global';
 import { getToken } from '@/theme';
@@ -22,7 +22,7 @@ const SECTIONLIST_STYLE = {
 
 const CourseMembersScreen = () => {
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
-  const { data: course } = useCourse(courseId);
+  const { data: course } = useCourseQuery(courseId);
   const { data: members } = useCourseMembers(courseId);
   const { t } = useTranslation();
 

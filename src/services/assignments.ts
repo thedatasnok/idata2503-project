@@ -13,7 +13,9 @@ interface UseAllAssignmentsQueryParams {
 /**
  * Hook to fetch all assignments for all courses the user is enrolled in
  */
-export const useAllAssignments = (params: UseAllAssignmentsQueryParams) => {
+export const useAllAssignmentsQuery = (
+  params: UseAllAssignmentsQueryParams
+) => {
   const {
     sortBy = 'due_at',
     submitted = false,
@@ -65,8 +67,11 @@ export interface CourseAssignment {
 
 /**
  * Hook to fetch course assignments for a specific course
+ *
+ * @param courseId the course id
+ * @param ascending whether to sort ascending or descending, defaults to ascending (true)
  */
-export const useCourseAssignments = (
+export const useCourseAssignmentsQuery = (
   courseId: string,
   ascending: boolean = true
 ) => {
@@ -87,8 +92,10 @@ export const useCourseAssignments = (
 
 /**
  * Hook to fetch a single course assignment
+ *
+ * @param assignmentId the assignment id
  */
-export const useCourseAssignment = (assignmentId: string) => {
+export const useCourseAssignmentQuery = (assignmentId: string) => {
   return useQuery({
     queryKey: [CacheKey.INDIVIDUAL_ASSIGNMENT, assignmentId],
     queryFn: async () => {

@@ -2,9 +2,9 @@ import CourseAnnouncementCard from '@/components/course/CourseAnnouncementCard';
 import CourseAssignmentCard from '@/components/course/CourseAssignmentCard';
 import Header from '@/components/navigation/Header';
 import EmptyState from '@/components/utils/EmptyState';
-import { useAllAnnouncements } from '@/services/announcements';
-import { useAllAssignments } from '@/services/assignments';
-import { useProfile } from '@/services/users';
+import { useAllAnnouncementsQuery } from '@/services/announcements';
+import { useAllAssignmentsQuery } from '@/services/assignments';
+import { useProfileQuery } from '@/services/users';
 import {
   Box,
   Divider,
@@ -26,13 +26,13 @@ import { FlatList } from 'react-native';
 
 const HomeScreen = () => {
   const { data: announcements, isLoading: isLoadingAnnouncements } =
-    useAllAnnouncements({ limit: 4 });
-  const { data: user } = useProfile();
+    useAllAnnouncementsQuery({ limit: 4 });
+  const { data: user } = useProfileQuery();
 
   const {
     data: completedAssignments,
     isLoading: isLoadingCompletedAssignments,
-  } = useAllAssignments({
+  } = useAllAssignmentsQuery({
     limit: 4,
     sortBy: 'submitted_at',
     ascending: true,
@@ -40,7 +40,7 @@ const HomeScreen = () => {
   });
 
   const { data: upcomingAssignments, isLoading: isLoadingUpcomingAssignments } =
-    useAllAssignments({
+    useAllAssignmentsQuery({
       limit: 4,
       sortBy: 'due_at',
       ascending: true,

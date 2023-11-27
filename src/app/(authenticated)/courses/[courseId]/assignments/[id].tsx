@@ -1,7 +1,7 @@
 import CourseAssignmentGradePill from '@/components/course/CourseAssignmentGradePill';
 import Header from '@/components/navigation/Header';
-import { useCourseAssignment } from '@/services/assignments';
-import { useCourse } from '@/services/courses';
+import { useCourseAssignmentQuery } from '@/services/assignments';
+import { useCourseQuery } from '@/services/courses';
 import {
   Avatar,
   AvatarFallbackText,
@@ -17,15 +17,15 @@ import {
 import dayjs from 'dayjs';
 import { useLocalSearchParams } from 'expo-router';
 import { t } from 'i18next';
-import { ClockIcon, FileIcon } from 'lucide-react-native';
+import { FileIcon } from 'lucide-react-native';
 
 const AssignmentScreen = () => {
   const { courseId, id: assignmentId } = useLocalSearchParams<{
     courseId: string;
     id: string;
   }>();
-  const { data: course } = useCourse(courseId);
-  const { data: assignment } = useCourseAssignment(assignmentId);
+  const { data: course } = useCourseQuery(courseId);
+  const { data: assignment } = useCourseAssignmentQuery(assignmentId);
 
   return (
     <>

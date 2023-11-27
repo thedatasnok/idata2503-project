@@ -1,4 +1,4 @@
-import { useCourses } from '@/services/courses';
+import { useCoursesQuery } from '@/services/courses';
 import { useDrawer } from '@/store/global';
 import { getToken } from '@/theme';
 import {
@@ -49,8 +49,8 @@ interface DrawerContentProps {
  * Drawer content that is displayed when the drawer is open.
  */
 const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
-  const { data: activeCourses } = useCourses({ active: true, enrolled: true });
-  const { data: otherCourses } = useCourses({ active: false, limit: 10, enrolled: true });
+  const { data: activeCourses } = useCoursesQuery({ active: true, enrolled: true });
+  const { data: otherCourses } = useCoursesQuery({ active: false, limit: 10, enrolled: true });
   const router = useRouter();
 
   const gotoCourse = (courseId: string) => {

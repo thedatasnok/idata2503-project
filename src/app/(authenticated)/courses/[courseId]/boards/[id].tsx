@@ -3,7 +3,7 @@ import { MessageInput } from '@/components/message/MessageInput';
 import Header from '@/components/navigation/Header';
 import ConfiguredKeyboardAvoidingView from '@/components/utils/ConfiguredKeyboardAvoidingView';
 import KeyboardDismissingView from '@/components/utils/KeyboardDismissingView';
-import { useCourseBoard, useCourseDescription } from '@/services/courses';
+import { useCourseBoard, useCourseDescriptionQuery } from '@/services/courses';
 import { useCourseBoardMessages } from '@/services/messaging';
 import { Box, Text } from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
@@ -18,7 +18,7 @@ const BoardMessageScreen = () => {
   }>();
 
   const { messages, isSending, sendMessage } = useCourseBoardMessages(id, true);
-  const { data: courseDescription } = useCourseDescription(courseId);
+  const { data: courseDescription } = useCourseDescriptionQuery(courseId);
   const { data: board } = useCourseBoard(id);
 
   const handleSendMessage = async (content: string) => {

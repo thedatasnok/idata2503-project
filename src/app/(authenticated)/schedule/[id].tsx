@@ -1,4 +1,4 @@
-import { useEvent } from '@/services/schedule';
+import { useEventQuery } from '@/services/schedule';
 import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { XIcon } from 'lucide-react-native';
@@ -7,7 +7,7 @@ import { WebView } from 'react-native-webview';
 const ScheduleEventScreen = () => {
   const { id: eventId } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { data } = useEvent(eventId);
+  const { data } = useEventQuery(eventId);
 
   const onCancel = () => {
     router.back();

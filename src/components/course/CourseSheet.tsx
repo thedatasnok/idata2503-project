@@ -1,8 +1,8 @@
 import {
   CourseRole,
-  useCourseDescription,
-  useCourseMembership,
+  useCourseDescriptionQuery,
 } from '@/services/courses';
+import { useCourseMembership } from '@/services/membership';
 import { getToken } from '@/theme';
 import { formatDuration } from '@/util/date';
 import {
@@ -62,7 +62,7 @@ const CourseSheet: React.FC<CourseSheetProps> = ({
   onNewTextChannelPressed,
   onLeavePressed,
 }) => {
-  const { data: description } = useCourseDescription(courseId);
+  const { data: description } = useCourseDescriptionQuery(courseId);
   const { t } = useTranslation();
   const router = useRouter();
   const { bottom } = useSafeAreaInsets();

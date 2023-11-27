@@ -1,7 +1,8 @@
 import Header from '@/components/navigation/Header';
 import EmptyState from '@/components/utils/EmptyState';
-import { useAnnouncements } from '@/services/announcements';
-import { CourseRole, useCourse, useCourseMembership } from '@/services/courses';
+import { useCourseAnnouncementsQuery } from '@/services/announcements';
+import { CourseRole, useCourseQuery } from '@/services/courses';
+import { useCourseMembership } from '@/services/membership';
 import {
   Box,
   Divider,
@@ -29,8 +30,8 @@ const FLATLIST_STYLE = {
 
 const AnnouncementsScreen = () => {
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
-  const { data: course } = useCourse(courseId);
-  const { data: announcements, isLoading } = useAnnouncements(courseId);
+  const { data: course } = useCourseQuery(courseId);
+  const { data: announcements, isLoading } = useCourseAnnouncementsQuery(courseId);
   const { data: membership } = useCourseMembership(courseId);
   const router = useRouter();
   const { t } = useTranslation();

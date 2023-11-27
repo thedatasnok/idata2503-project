@@ -353,7 +353,7 @@ export interface DirectMessageThread extends DirectMessage {
  *
  * @returns an object containing the most recent message for each counterpart.
  */
-export const useRecentDirectMessages = () => {
+export const useRecentDirectMessagesQuery = () => {
   return useQuery({
     queryKey: [CacheKey.RECENT_DIRECT_MESSAGES],
     queryFn: async () => {

@@ -1,6 +1,6 @@
 import Header from '@/components/navigation/Header';
-import { useCreateCourseAnnouncement } from '@/services/announcements';
-import { useCourse } from '@/services/courses';
+import { useCreateCourseAnnouncementMutation } from '@/services/announcements';
+import { useCourseQuery } from '@/services/courses';
 import {
   Box,
   Button,
@@ -30,8 +30,8 @@ type CreateAnnouncementForm = z.infer<typeof announcementValidationSchema>;
 
 const CreateAnnouncementScreen = () => {
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
-  const { data: course } = useCourse(courseId);
-  const { mutateAsync: createAnnouncement } = useCreateCourseAnnouncement(courseId);
+  const { data: course } = useCourseQuery(courseId);
+  const { mutateAsync: createAnnouncement } = useCreateCourseAnnouncementMutation(courseId);
   const router = useRouter();
   const { t } = useTranslation();
 

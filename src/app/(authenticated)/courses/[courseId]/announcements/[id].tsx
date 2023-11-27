@@ -1,6 +1,6 @@
 import Header from '@/components/navigation/Header';
-import { useAnnouncement } from '@/services/announcements';
-import { useCourse } from '@/services/courses';
+import { useAnnouncementQuery } from '@/services/announcements';
+import { useCourseQuery } from '@/services/courses';
 import { Box, ScrollView, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useLocalSearchParams } from 'expo-router';
@@ -12,8 +12,8 @@ const AnnouncementScreen = () => {
     id: string;
   }>();
 
-  const { data: course } = useCourse(courseId);
-  const { data: announcement } = useAnnouncement(announcementId);
+  const { data: course } = useCourseQuery(courseId);
+  const { data: announcement } = useAnnouncementQuery(announcementId);
   const { t } = useTranslation();
 
   return (

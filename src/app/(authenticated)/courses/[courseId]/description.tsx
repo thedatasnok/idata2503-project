@@ -1,8 +1,7 @@
 import Lecturer from '@/components/course/Lecturer';
 import Header from '@/components/navigation/Header';
-import EmptyState from '@/components/utils/EmptyState';
-import { CacheKey } from '@/services/cache';
-import { useCourseDescription, useCourseMembership } from '@/services/courses';
+import { useCourseDescriptionQuery } from '@/services/courses';
+import { useCourseMembership } from '@/services/membership';
 import {
   Box,
   Button,
@@ -25,7 +24,7 @@ import { FlatList } from 'react-native';
  */
 const CourseDescriptionScreen = () => {
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
-  const { data: courseDescription, isLoading } = useCourseDescription(courseId);
+  const { data: courseDescription, isLoading } = useCourseDescriptionQuery(courseId);
   const { signUp, isSigningUp } = useCourseMembership(courseId);
   const { t } = useTranslation();
   const router = useRouter();

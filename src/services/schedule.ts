@@ -37,10 +37,8 @@ export interface ScheduleEvent {
  * Hook to fetch scheduled events from Supabase.
  *
  * @param params query parameters to filter events
- *
- * @returns
  */
-export const useEvents = (params: UseEventsParams) => {
+export const useEventsQuery = (params: UseEventsParams) => {
   const { month } = params;
 
   return useQuery({
@@ -62,10 +60,8 @@ export const useEvents = (params: UseEventsParams) => {
  * Hook to fetch a single event from Supabase.
  *
  * @param eventId the event id
- *
- * @returns
  */
-export const useEvent = (eventId: string) => {
+export const useEventQuery = (eventId: string) => {
   return useQuery({
     queryKey: [CacheKey.INDIVIDUAL_EVENT, eventId],
     queryFn: async () => {

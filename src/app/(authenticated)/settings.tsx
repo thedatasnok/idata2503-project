@@ -1,8 +1,9 @@
 import ToastMessage, { Severity } from '@/components/feedback/ToastMessage';
 import RadioInput from '@/components/input/RadioInput';
 import Header from '@/components/navigation/Header';
+import { useSignoutMutation } from '@/services/auth';
 import { disassociateUserId } from '@/services/onesignal';
-import { useProfile, useUpdateProfileMutation } from '@/services/users';
+import { useProfileQuery, useUpdateProfileMutation } from '@/services/users';
 import { useAuth } from '@/store/global';
 import {
   AlertDialog,
@@ -62,8 +63,9 @@ type UserProfileForm = z.infer<typeof profileValidationSchema>;
 const SettingsScreen = () => {
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const { t, i18n } = useTranslation();
-  const { logout, session } = useAuth();
-  const { data: userProfile } = useProfile();
+  const { session } = useAuth();
+  const { mutateAsync: logout } = useSignoutMutation();
+  const { data: userProfile } = useProfileQuery();
   const updateProfileMutation = useUpdateProfileMutation();
   const toast = useToast();
 

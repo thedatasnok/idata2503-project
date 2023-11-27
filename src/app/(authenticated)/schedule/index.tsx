@@ -1,7 +1,7 @@
 import Header from '@/components/navigation/Header';
 import EmptyState from '@/components/utils/EmptyState';
 import { IconType } from '@/icon';
-import { EventType, useEvents, type ScheduleEvent } from '@/services/schedule';
+import { EventType, useEventsQuery, type ScheduleEvent } from '@/services/schedule';
 import { Box, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
@@ -20,7 +20,7 @@ import { FlatList } from 'react-native';
 
 const ScheduleScreen = () => {
   const [period, setPeriod] = useState(new Date());
-  const { data: events, isLoading } = useEvents({ month: period });
+  const { data: events, isLoading } = useEventsQuery({ month: period });
   const listRef = useRef<FlatList>(null);
   const router = useRouter();
   const { t } = useTranslation();
