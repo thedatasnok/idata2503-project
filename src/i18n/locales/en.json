@@ -46,7 +46,8 @@
       "TITLE": "Title",
       "CONTENT": "Content",
       "CREATE_ANNOUNCEMENT": "Create announcement",
-      "NEW_ANNOUNCEMENT": "New announcement"
+      "NEW_ANNOUNCEMENT": "New announcement",
+      "RECENT_ANNOUNCEMENTS": "Recent announcements"
     },
     "COURSES": {
       "ACTIVE_COURSES": "Active courses",

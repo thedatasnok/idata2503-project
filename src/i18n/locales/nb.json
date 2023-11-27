@@ -46,7 +46,8 @@
       "TITLE": "Tittel",
       "CONTENT": "Innhold",
       "CREATE_ANNOUNCEMENT": "Lag kunngjøring",
-      "NEW_ANNOUNCEMENT": "Ny kunngjøring"
+      "NEW_ANNOUNCEMENT": "Ny kunngjøring",
+      "RECENT_ANNOUNCEMENTS": "Nylige kunngjøringer"
     },
     "COURSES": {
       "ACTIVE_COURSES": "Aktive emner",
