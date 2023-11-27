@@ -10,6 +10,19 @@
 
 ## Architecture
 
+The following figure shows a rough overview of the backend architecture of the application.
+
+![architecture](docs/diagrams/architecture.drawio.svg)
+
+The backend is based on Supabase and uses their database, authentication and realtime services.
+To handle push notifications OneSignal is used.
+
+- [Supabase Auth](https://supabase.io/docs/guides/auth)
+- [Supabase Database](https://supabase.com/docs/guides/database)
+- [Supabase Realtime](https://supabase.com/docs/guides/realtime)
+- [Supabase Vault](https://supabase.com/docs/guides/database/vault)
+- [OneSignal](https://documentation.onesignal.com/docs)
+
 ## Contributing
 
 ### Prerequisites
@@ -25,6 +38,10 @@ Note: To use a real device you need to install [Expo Go](https://expo.dev/client
 [wsa]: https://docs.microsoft.com/en-us/windows/android/wsa/
 [avd]: https://developer.android.com/studio/run/managing-avds
 
+### Code style
+
+Code should be formatted using [Prettier](https://prettier.io/) and the provided configuration file.
+
 ### Getting started
 
 1. Clone the repository
@@ -33,3 +50,15 @@ Note: To use a real device you need to install [Expo Go](https://expo.dev/client
 4. Start the development server with `pnpm start`
 
 You can start using Expo Go or a development client by postfixing the start command using `-g` for Expo Go, and `-d` for a development client.
+
+### Supabase OneSignal integration
+
+To enable push notifications you need to add a few secrets to the Supabase project.
+This can be accomplished through running the following commands in the query console:
+
+```sql
+SELECT vault.create_secret('onesignal_token', 'token');
+SELECT vault.create_secret('onesignal_app_id', 'app_id');
+```
+
+See their [docs](https://supabase.com/docs/guides/database/vault) for more information.

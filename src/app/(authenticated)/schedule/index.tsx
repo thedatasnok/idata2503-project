@@ -5,7 +5,6 @@ import { EventType, useEvents, type ScheduleEvent } from '@/services/schedule';
 import { Box, Divider, Icon, Pressable, Text } from '@gluestack-ui/themed';
 import dayjs from 'dayjs';
 import { useRouter } from 'expo-router';
-import { t } from 'i18next';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -16,6 +15,7 @@ import {
   PresentationIcon,
 } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
 const ScheduleScreen = () => {
@@ -23,6 +23,7 @@ const ScheduleScreen = () => {
   const { data: events } = useEvents({ month: period });
   const listRef = useRef<FlatList>(null);
   const router = useRouter();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!events) return;
@@ -47,7 +48,7 @@ const ScheduleScreen = () => {
 
   return (
     <>
-      <Header title='Schedule' />
+      <Header title={t('NAVIGATION.SCHEDULE')} />
 
       <PeriodSelector
         date={period}
@@ -62,7 +63,7 @@ const ScheduleScreen = () => {
         data={events}
         ListEmptyComponent={() => (
           <EmptyState
-            pt="$8"
+            pt='$8'
             icon={PalmtreeIcon}
             description={t('FEATURES.EVENTS.NO_EVENTS_THIS_PERIOD')}
           />
@@ -106,18 +107,23 @@ const PeriodSelector: React.FC<PeriodSelectorProps> = ({
       alignItems='center'
       justifyContent='center'
       gap='$4'
-      mt='$2'
     >
-      <Pressable onPress={onPrevious}>
-        <Icon as={ChevronLeftIcon} color='$gray950' />
+      <Pressable onPress={onPrevious} p='$2'>
+        <Icon as={ChevronLeftIcon} size='xl' color='$gray950' />
       </Pressable>
 
-      <Text color='$gray950' fontWeight='$semibold' fontSize='$md'>
+      <Text
+        color='$gray950'
+        fontWeight='$semibold'
+        fontSize='$md'
+        w='$32'
+        textAlign='center'
+      >
         {dayjs(date).format('MMMM YYYY')}
       </Text>
 
-      <Pressable onPress={onNext}>
-        <Icon as={ChevronRightIcon} color='$gray950' />
+      <Pressable onPress={onNext} p='$2'>
+        <Icon as={ChevronRightIcon} size='xl' color='$gray950' />
       </Pressable>
     </Box>
   );
@@ -152,6 +158,8 @@ const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
   locationCode,
   onPress,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       {(previousEventDate === undefined ||
@@ -177,7 +185,7 @@ const ScheduleEventEntry: React.FC<ScheduleEventEntryProps> = ({
             {courseCode}
           </Text>
           <Text fontSize='$xs'>
-            {eventType} | {formatDuration(startsAt, endsAt)}
+            {t(`FEATURES.EVENTS.EVENT_TYPE.${eventType}`)} | {formatDuration(startsAt, endsAt)}
           </Text>
         </Box>
 

@@ -71,7 +71,13 @@
       "SIGN_UP": "Sign up"
     },
     "EVENTS": {
-      "NO_EVENTS_THIS_PERIOD": "No events scheduled for this period"
+      "NO_EVENTS_THIS_PERIOD": "No events scheduled for this period",
+      "EVENT_TYPE": {
+        "EXAM": "Exam",
+        "LAB": "Lab",
+        "LECTURE": "Lecture",
+        "ASSIGNMENT": "Assignment"
+      }
     },
     "ASSIGNMENT": {
       "ASSIGNMENT_GRADED": "Assignment graded",

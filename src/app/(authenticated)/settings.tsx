@@ -23,6 +23,7 @@ import {
   FormControlLabel,
   FormControlLabelText,
   Heading,
+  Icon,
   Input,
   InputField,
   ScrollView,
@@ -31,6 +32,7 @@ import {
   SelectContent,
   SelectDragIndicator,
   SelectDragIndicatorWrapper,
+  SelectIcon,
   SelectInput,
   SelectItem,
   SelectPortal,
@@ -40,10 +42,11 @@ import {
 } from '@gluestack-ui/themed';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
-import { BellIcon, BellOffIcon } from 'lucide-react-native';
+import { BellIcon, BellOffIcon, ChevronDownIcon } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { z } from 'zod';
 
 const profileValidationSchema = z.object({
@@ -287,6 +290,7 @@ const SelectLanguageView: React.FC<SelectLanguageViewProps> = ({
   handleLanguageChange,
 }) => {
   const { i18n, t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const defaultLabel = LANGUAGE_OPTIONS.find(
     ({ value }) => value === i18n.language
@@ -299,18 +303,21 @@ const SelectLanguageView: React.FC<SelectLanguageViewProps> = ({
           <SelectInput
             placeholder={t('FEATURES.SETTINGS.NO_LANGUAGE_SELECTED')}
           />
-          <SelectPortal>
-            <SelectBackdrop />
-            <SelectContent>
-              <SelectDragIndicatorWrapper>
-                <SelectDragIndicator />
-              </SelectDragIndicatorWrapper>
-              {LANGUAGE_OPTIONS.map(({ label, value }) => (
-                <SelectItem key={value} label={label} value={value} />
-              ))}
-            </SelectContent>
-          </SelectPortal>
+          <SelectIcon mr='$3'>
+            <Icon as={ChevronDownIcon} />
+          </SelectIcon>
         </SelectTrigger>
+        <SelectPortal>
+          <SelectBackdrop />
+          <SelectContent pb={insets.bottom}>
+            <SelectDragIndicatorWrapper>
+              <SelectDragIndicator />
+            </SelectDragIndicatorWrapper>
+            {LANGUAGE_OPTIONS.map(({ label, value }) => (
+              <SelectItem key={value} label={label} value={value} />
+            ))}
+          </SelectContent>
+        </SelectPortal>
       </Select>
     </Box>
   );

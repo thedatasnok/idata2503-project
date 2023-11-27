@@ -50,14 +50,16 @@ const RadioInput = <T extends string>({
         >
           <Icon as={option.icon} size='lg' color='$primary600' mr='$1' />
 
-          <Box gap='-$2' flex={1}>
+          <Box gap='-$1' flex={1}>
             {/* @ts-ignore too complex type */}
             <StyledRadioLabel states={{ active: option.value === value }}>
               {option.label}
             </StyledRadioLabel>
 
             {option.description && (
-              <Text fontSize='$xs'>{option.description}</Text>
+              <Text fontSize='$xs' lineHeight='$2xs'>
+                {option.description}
+              </Text>
             )}
           </Box>
 
