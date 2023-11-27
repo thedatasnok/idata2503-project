@@ -91,7 +91,7 @@ BEGIN
       ELSE NEW.content
     END)::JSONB,
     ARRAY_AGG(NEW.fk_receiver_user_id),
-    'whiteboardapp://messages/' || up.fk_user_id;
+    'whiteboardapp://messages/' || up.fk_user_id
   )
   FROM user_profile up
   WHERE NEW.fk_sender_user_id = up.fk_user_id
