@@ -131,7 +131,9 @@ const Message: React.FC<MessageProps> = ({
   counterPartAvatarUrl,
   onPress,
 }) => {
-  const formatAsCalendar = dayjs().subtract(1, 'day').isSame(createdAt, 'day');
+  const formatAsCalendar =
+    dayjs().subtract(1, 'day').isSame(createdAt, 'day') ||
+    dayjs().isSame(createdAt, 'day');
 
   return (
     <Pressable
@@ -159,7 +161,7 @@ const Message: React.FC<MessageProps> = ({
         </Text>
       </Box>
 
-      <Text fontSize='$sm' textAlign='center'>
+      <Text fontSize='$sm' textAlign='center' w='$20'>
         {formatAsCalendar ? (
           // replaces the space before the time with a newline
           dayjs(createdAt)
