@@ -83,7 +83,7 @@ For our font we use [Inter](https://rsms.me/inter/)
 ## Layout
 - Title bar at the top of every page
   - Burger menu on the left as default, changes to back arrow when applicable
-  - Notifications icon on the right
+  - Optional icon on the right
 - Navigation bar at the bottom of every page (sign in is an exception)
 
 ## Icongraphy
