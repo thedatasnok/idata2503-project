@@ -49,8 +49,8 @@ interface DrawerContentProps {
  * Drawer content that is displayed when the drawer is open.
  */
 const DrawerContent: React.FC<DrawerContentProps> = ({ onNavigate }) => {
-  const { data: activeCourses } = useCourses({ active: true });
-  const { data: otherCourses } = useCourses({ active: false, limit: 10 });
+  const { data: activeCourses } = useCourses({ active: true, enrolled: true });
+  const { data: otherCourses } = useCourses({ active: false, limit: 10, enrolled: true });
   const router = useRouter();
 
   const gotoCourse = (courseId: string) => {

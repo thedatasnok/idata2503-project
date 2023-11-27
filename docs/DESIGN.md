@@ -1,6 +1,7 @@
 # Design guidelines
 
 ## General theme
+
 Minimalistic
 
 ## Colors
@@ -78,19 +79,24 @@ Minimalistic
 </div>
 
 ## Typography
+
 For our font we use [Inter](https://rsms.me/inter/)
 
 ## Layout
+
 - Title bar at the top of every page
   - Burger menu on the left as default, changes to back arrow when applicable
-  - Notifications icon on the right
+  - Optional icon on the right
 - Navigation bar at the bottom of every page (sign in is an exception)
 
 ## Icongraphy
+
 We use [Lucide icons](https://lucide.dev/) for our icons
 
 ## Border rounding
+
 Minimal border rounding
 
 ## Shadows
+
 Minimal use of shadows
