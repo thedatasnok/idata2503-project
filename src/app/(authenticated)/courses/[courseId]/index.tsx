@@ -62,7 +62,7 @@ const CourseScreen = () => {
     useCourseBoards(courseId);
   const { data: assignments } = useCourseAssignmentsQuery(courseId, true);
 
-  const deleteBoard = useDeleteCourseBoardMutation(courseId);
+  const deleteBoard = useDeleteCourseBoardMutation();
 
   const onDeleteBoard = async (boardId: string) => {
     try {
