@@ -1,4 +1,20 @@
-# Project meetings
+# Methodology
+
+During the project, our work has been organized in two week sprints.
+Tasks have been planned and tracked using GitHub issues in our [project](https://github.com/users/thedatasnok/projects/4/views/1).
+
+## Reviews & retros
+
+Every 2nd thursday we've had a review and retrospective meeting, followed by planning tasks for the next sprint.
+
+- [Sprint 1 (Sep 14 - Sep 27)](sprints/SPRINT01.md)
+- [Sprint 2 (Sep 28 - Oct 11)](sprints/SPRINT02.md)
+- [Sprint 3 (Oct 12 - Oct 25)](sprints/SPRINT03.md)
+- [Sprint 4 (Oct 26 - Nov 8)](sprints/SPRINT04.md)
+- [Sprint 5 (Nov 9 - Nov 22)](sprints/SPRINT05.md)
+- [Sprint 6 (Nov 23 - Nov 30)](sprints/SPRINT06.md)
+
+## Meeting minutes
 
 | Date              | From-to     | Participants                         | Agenda                                                                    | Notes                                        |
 | ----------------- | ----------- | ------------------------------------ | ------------------------------------------------------------------------- | -------------------------------------------- |
