@@ -40,6 +40,22 @@ Note: To use a real device you need to install [Expo Go](https://expo.dev/client
 [wsa]: https://docs.microsoft.com/en-us/windows/android/wsa/
 [avd]: https://developer.android.com/studio/run/managing-avds
 
+### Project structure
+
+```bash
+├───docs            # documentation
+├───src
+│   ├───app         # routes/screens
+│   ├───components  # shared components
+│   ├───i18n        # translations
+│   ├───icon        # icon helpers
+│   ├───services    # services
+│   ├───store       # state
+│   └───util        # utilities
+└───supabase        # supabase project
+    └───migrations  # database migrations (DDL)
+```
+
 ### Code style
 
 Code should be formatted using [Prettier](https://prettier.io/) and the provided configuration file.
@@ -52,6 +68,15 @@ Code should be formatted using [Prettier](https://prettier.io/) and the provided
 4. Start the development server with `pnpm start`
 
 You can start using Expo Go or a development client by postfixing the start command using `-g` for Expo Go, and `-d` for a development client.
+
+If you start with a new Supabase project, you need to run the migrations and seed the database manually.
+For our project migrations are run in GitHub Actions.
+
+Running the migrations can be done by running the following command:
+
+```bash
+pnpm supabase db push
+```
 
 ### Supabase OneSignal integration
 
