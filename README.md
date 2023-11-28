@@ -7,6 +7,8 @@
 - [ER diagram](docs/diagrams/er-diagram.drawio.svg)
 - [Hierarchy diagram](docs/diagrams/hierarchy.drawio.svg)
 - [Figma wireframe](https://www.figma.com/file/bxtclztaQN2EbRWWXXD8Kh/Wireframe?type=design&node-id=0-1&mode=design)
+- [Design guidelines](docs/DESIGN.md)
+- [Methodology & meeting minutes](docs/METHOD.md)
 
 ## Showcase
 
