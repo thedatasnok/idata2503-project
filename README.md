@@ -12,6 +12,10 @@
 
 ## Showcase
 
+![showcase](docs/assets/showcase.png)
+
+See [full showcase](https://www.figma.com/file/bxtclztaQN2EbRWWXXD8Kh/Wireframe?type=design&node-id=836%3A733&mode=design&t=og1wpWwoxlbpacWc-1) for more screenshots.
+
 ## Architecture
 
 The following figure shows a rough overview of the backend architecture of the application.
