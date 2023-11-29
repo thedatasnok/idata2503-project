@@ -65,25 +65,46 @@ export interface CourseAssignment {
   created_by: JsonUserProfile;
 }
 
+export interface UseCourseAssignmentsQueryParams {
+  courseId: string;
+  submitted?: boolean;
+  ascending?: boolean;
+  limit?: number;
+}
+
 /**
  * Hook to fetch course assignments for a specific course
  *
  * @param courseId the course id
  * @param ascending whether to sort ascending or descending, defaults to ascending (true)
+ * @param submitted whether to filter by submitted or not submitted, defaults to undefined (no filter)
+ * @param limit the maximum number of assignments to fetch
  */
 export const useCourseAssignmentsQuery = (
-  courseId: string,
-  ascending: boolean = true
+  params: UseCourseAssignmentsQueryParams
 ) => {
+  const { courseId, submitted, ascending = true, limit } = params;
+
   return useQuery({
-    queryKey: [CacheKey.ASSIGNMENTS, courseId, ascending],
+    queryKey: [CacheKey.ASSIGNMENTS, courseId, ascending, submitted, limit],
     queryFn: async () => {
-      const result = await supabase
+      let query = supabase
         .from('current_user_assignment_view')
         .select('*')
-        .order('due_at', { ascending: ascending })
-        .eq('fk_course_id', courseId)
-        .throwOnError();
+        .order('due_at', { ascending })
+        .eq('fk_course_id', courseId);
+
+      if (submitted !== undefined) {
+        if (submitted) {
+          query = query.not('submitted_at', 'is', null);
+        } else {
+          query = query.filter('submitted_at', 'is', null);
+        }
+      }
+
+      if (limit) query = query.limit(limit);
+
+      const result = await query.throwOnError();
 
       return result.data as CourseAssignment[];
     },
