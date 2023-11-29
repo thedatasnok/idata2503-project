@@ -59,7 +59,6 @@
       "NO_ANNOUNCEMENTS_YET": "Ingen kunngjøringer enda",
       "NO_TEXT_CHANNEL_CREATED": "Ingen tekst kanal opprettet",
       "NO_LECTURERS_ASSIGNED": "Ingen forelesere tildelt",
-      "NO_ASSIGNMENTS_YET": "Ingen innleveringer enda",
       "NO_COURSES_SIGNED_UP": "Du er ikke påmeldt noen emner",
       "NO_COURSES_AVAILABLE": "Ingen emner tilgjengelig",
       "NEW_ANNOUNCEMENT": "Ny kunngjøring",
@@ -88,6 +87,9 @@
       "RECENTLY_SUBMITTED_ASSIGNMENTS": "Nylig innleverte innleveringer",
       "NO_RECENTLY_SUBMITTED_ASSIGNMENTS": "Ingen nylig innleverte innleveringer",
       "WAITING_FOR_GRADE": "Venter på vurdering",
+      "NO_ASSIGNMENTS_YET": "Ingen innleveringer enda",
+      "NO_UPCOMING_ASSIGNMENTS": "Ingen kommende innleveringer",
+      "NO_ASSIGNMENTS": "Ingen innleveringer tildelt for dette emnet",
       "ASSIGNMENT": "Innlevering",
       "ASSIGNMENT_STATUS": {
         "OPEN": "Åpen",

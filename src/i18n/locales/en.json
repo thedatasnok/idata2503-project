@@ -59,7 +59,6 @@
       "NO_ANNOUNCEMENTS_YET": "No announcements yet",
       "NO_TEXT_CHANNEL_CREATED": "No text channel created",
       "NO_LECTURERS_ASSIGNED": "No lecturers assigned",
-      "NO_ASSIGNMENTS_YET": "No assignments yet",
       "NO_COURSES_SIGNED_UP": "You are not signed up for any courses",
       "NO_COURSES_AVAILABLE": "No courses available",
       "NEW_ANNOUNCEMENT": "New announcement",
@@ -88,6 +87,9 @@
       "RECENTLY_SUBMITTED_ASSIGNMENTS": "Recently submitted assignments",
       "NO_RECENTLY_SUBMITTED_ASSIGNMENTS": "No recently submitted assignments",
       "WAITING_FOR_GRADE": "Currently waiting for grading",
+      "NO_ASSIGNMENTS_YET": "No assignments yet",
+      "NO_UPCOMING_ASSIGNMENTS": "No upcoming assignments",
+      "NO_ASSIGNMENTS": "No assignments available for this course",
       "ASSIGNMENT": "Assignment",
       "ASSIGNMENT_STATUS": {
         "OPEN": "Open",

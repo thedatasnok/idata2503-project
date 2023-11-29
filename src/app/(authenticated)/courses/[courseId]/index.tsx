@@ -12,9 +12,9 @@ import { useCourseAssignmentsQuery } from '@/services/assignments';
 import {
   CourseBoard,
   CourseRole,
-  useCourseQuery,
   useCourseBoards,
   useCourseDescriptionQuery,
+  useCourseQuery,
   useDeleteCourseBoardMutation,
 } from '@/services/courses';
 import { useCourseMembership } from '@/services/membership';
@@ -60,7 +60,13 @@ const CourseScreen = () => {
     useCourseDescriptionQuery(courseId);
   const { data: courseBoards, isLoading: isCourseBoardLoading } =
     useCourseBoards(courseId);
-  const { data: assignments } = useCourseAssignmentsQuery(courseId, true);
+  const { data: assignments, isLoading: isAssignmentsLoading } =
+    useCourseAssignmentsQuery({
+      courseId: courseId,
+      ascending: true,
+      submitted: false,
+      limit: 4,
+    });
 
   const deleteBoard = useDeleteCourseBoardMutation();
 
@@ -86,6 +92,7 @@ const CourseScreen = () => {
     isCourseLoading ||
     isAnnouncementLoading ||
     isCourseDescriptionLoading ||
+    isAssignmentsLoading ||
     isCourseBoardLoading;
 
   return (
@@ -99,7 +106,7 @@ const CourseScreen = () => {
 
       {isLoading ? (
         <Box flex={1} alignItems='center' justifyContent='center'>
-          <Spinner size="large" />
+          <Spinner size='large' />
         </Box>
       ) : (
         <ScrollView nestedScrollEnabled px='$4'>
@@ -134,8 +141,8 @@ const CourseScreen = () => {
             />
           )}
           <ComponentHeader
-            title={t('GENERAL.ASSIGNMENTS')}
-            showAll={assignments && assignments.length > 0}
+            title={t('FEATURES.ASSIGNMENT.UPCOMING_ASSIGNMENTS')}
+            showAll
             route={`/courses/${courseId}/assignments/`}
           />
           {assignments && assignments.length > 0 ? (
@@ -157,7 +164,7 @@ const CourseScreen = () => {
             </Box>
           ) : (
             <EmptyState
-              description={t('FEATURES.COURSES.NO_ASSIGNMENTS_YET')}
+              description={t('FEATURES.ASSIGNMENT.NO_UPCOMING_ASSIGNMENTS')}
               icon={ClipboardListIcon}
             />
           )}
