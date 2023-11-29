@@ -34,15 +34,13 @@ import {
 } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
-import { PalmtreeIcon } from 'lucide-react-native';
 import {
   ArrowRight,
-  ClipboardListIcon,
   GraduationCap,
   Hash,
   Megaphone,
   MoreVerticalIcon,
-  Palmtree,
+  PalmtreeIcon,
 } from 'lucide-react-native';
 import { useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
