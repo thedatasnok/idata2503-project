@@ -5,7 +5,7 @@ import { useCourseAssignmentsQuery } from '@/services/assignments';
 import { useCourseQuery } from '@/services/courses';
 import { Box, Divider, Spinner } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ClipboardListIcon } from 'lucide-react-native';
+import { ClipboardListIcon, PalmtreeIcon } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
 
@@ -38,7 +38,6 @@ const AssignmentsScreen = () => {
             ListEmptyComponent={() => (
               <EmptyState
                 description={t('FEATURES.ASSIGNMENT.NO_ASSIGNMENTS')}
-                icon={ClipboardListIcon}
               />
             )}
             renderItem={({ item: assignment }) => (

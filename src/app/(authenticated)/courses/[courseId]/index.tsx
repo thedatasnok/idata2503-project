@@ -34,6 +34,7 @@ import {
 } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import { t } from 'i18next';
+import { PalmtreeIcon } from 'lucide-react-native';
 import {
   ArrowRight,
   ClipboardListIcon,
@@ -41,6 +42,7 @@ import {
   Hash,
   Megaphone,
   MoreVerticalIcon,
+  Palmtree,
 } from 'lucide-react-native';
 import { useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
@@ -165,7 +167,7 @@ const CourseScreen = () => {
           ) : (
             <EmptyState
               description={t('FEATURES.ASSIGNMENT.NO_UPCOMING_ASSIGNMENTS')}
-              icon={ClipboardListIcon}
+              icon={PalmtreeIcon}
             />
           )}
 
