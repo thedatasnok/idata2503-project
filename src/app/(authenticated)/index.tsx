@@ -9,10 +9,8 @@ import {
   Box,
   Divider,
   Heading,
-  Icon,
   ScrollView,
-  Spinner,
-  Text,
+  Spinner
 } from '@gluestack-ui/themed';
 import { router } from 'expo-router';
 import { t } from 'i18next';
@@ -58,7 +56,7 @@ const HomeScreen = () => {
 
       {isLoading ? (
         <Box flex={1} alignItems='center' justifyContent='center'>
-          <Spinner size="large" />
+          <Spinner size='large' />
         </Box>
       ) : (
         <ScrollView>
@@ -90,7 +88,9 @@ const HomeScreen = () => {
                     createdAt={item.created_at}
                     author={item.created_by_full_name}
                     onPress={() =>
-                      router.push(`/courses/${item.fk_course_id}/`)
+                      router.push(
+                        `/courses/${item.fk_course_id}/announcements/${item.announcement_id}`
+                      )
                     }
                   />
                 )}
